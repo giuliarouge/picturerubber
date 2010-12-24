@@ -1,0 +1,10 @@
+﻿CodeStyle
+=========
+
+1. CodeStyle vom Prof. Sahm verwenden
+2. Jede Member Variable in eine Zeile, Präfix m_
+3. Übergabeparameter Präfix _
+4. Klassen haben den Präfix PR_
+5. this. ist Pflicht
+6. Dokumentieren
+7. Bei Zuwiderhandlung, gibt es aufs Maul :-)
