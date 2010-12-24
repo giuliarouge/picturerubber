@@ -24,7 +24,7 @@ namespace PictureRubber
         /// <summary>
         /// The Spritebatch
         /// </summary>
-        private SpriteBatch m_SpriteBatch;
+        public SpriteBatch m_SpriteBatch;
 
         /// <summary>
         /// The Input Manager
@@ -35,6 +35,11 @@ namespace PictureRubber
         /// The Pictures
         /// </summary>
         private PR_Pictures m_Pictures;
+
+        /// <summary>
+        /// The Mouse
+        /// </summary>
+        private PR_Mouse m_Mouse;
 
         /// <summary>
         /// Initializes a new Instance of PR_Main
@@ -67,6 +72,7 @@ namespace PictureRubber
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.m_InputManager = new PR_InputManager(this);
             this.m_Pictures = new PR_Pictures(this, "Images");
+            this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
         }
 
         /// <summary>
@@ -98,8 +104,8 @@ namespace PictureRubber
         {
             GraphicsDevice.Clear(Color.Black);
 
-
-
+            this.m_Pictures.Draw(_gameTime);
+            this.m_Mouse.Draw(_gameTime);
             base.Draw(_gameTime);
         }
     }

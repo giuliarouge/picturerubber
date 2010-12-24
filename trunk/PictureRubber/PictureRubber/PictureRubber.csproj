@@ -111,6 +111,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PR_InputManager.cs" />
+    <Compile Include="PR_Mouse.cs" />
     <Compile Include="PR_Pictures.cs" />
     <Compile Include="PR_Program.cs" />
     <Compile Include="PR_Main.cs" />

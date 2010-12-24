@@ -43,6 +43,11 @@ namespace PictureRubber
             this.m_Root = _root;
         }
 
+        public MouseState GetMouseState()
+        {
+            return this.m_ActualMouseState;
+        }
+        
         public void HandleInput(GameTime _gameTime)
         {
             this.m_ActualKeyboardState = Keyboard.GetState();
