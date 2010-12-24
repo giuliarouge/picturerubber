@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace PictureRubber
 {
@@ -124,6 +125,17 @@ namespace PictureRubber
                 }
             }
             return success;
+        }
+
+        public void Draw(GameTime _gameTime)
+        {
+            this.m_Root.m_SpriteBatch.Begin();
+            Microsoft.Xna.Framework.Rectangle rec = new Microsoft.Xna.Framework.Rectangle(0, 0, this.m_Root.GraphicsDevice.Viewport.Width, this.m_Root.GraphicsDevice.Viewport.Height);
+            foreach (Texture2D tex in this.m_Textures)
+            {
+                this.m_Root.m_SpriteBatch.Draw(tex, rec, Microsoft.Xna.Framework.Color.White);
+            }
+            this.m_Root.m_SpriteBatch.End();
         }
     }
 }
