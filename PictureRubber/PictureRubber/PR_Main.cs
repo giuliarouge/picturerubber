@@ -19,17 +19,22 @@ namespace PictureRubber
         /// <summary>
         /// The GraphicsDeviceManager
         /// </summary>
-        GraphicsDeviceManager m_Graphics;
+        private GraphicsDeviceManager m_Graphics;
 
         /// <summary>
         /// The Spritebatch
         /// </summary>
-        SpriteBatch m_SpriteBatch;
+        private SpriteBatch m_SpriteBatch;
 
         /// <summary>
         /// The Input Manager
         /// </summary>
-        PR_InputManager m_InputManager;
+        private PR_InputManager m_InputManager;
+
+        /// <summary>
+        /// The Pictures
+        /// </summary>
+        private PR_Pictures m_Pictures;
 
         /// <summary>
         /// Initializes a new Instance of PR_Main
@@ -61,7 +66,7 @@ namespace PictureRubber
         {
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.m_InputManager = new PR_InputManager(this);
-            
+            this.m_Pictures = new PR_Pictures(this, "Images");
         }
 
         /// <summary>
