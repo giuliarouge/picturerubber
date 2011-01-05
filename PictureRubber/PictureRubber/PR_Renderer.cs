@@ -125,6 +125,8 @@ namespace PictureRubber
 
             //clear rendertarget and return new texture
             this.m_Graphics.SetRenderTarget(null);
+            //FileStream data = new FileStream("Rendertarget.jpg",FileMode.Create);
+            //this.m_RenderTarget.SaveAsJpeg(data,this.m_RenderTarget.Width,this.m_RenderTarget.Height);
 
             return this.m_RenderTarget;
         }
