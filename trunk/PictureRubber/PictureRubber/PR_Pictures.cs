@@ -139,6 +139,12 @@ namespace PictureRubber
             return success;
         }
 
+        public void DeleteLastPicture()
+        {
+            this.m_Pictures[this.m_Pictures.Length - 1] = null;
+            this.m_Textures[this.m_Textures.Length - 1] = null;
+        }
+
         public void Draw(GameTime _gameTime)
         {
             this.m_Root.m_SpriteBatch.Begin();
@@ -156,7 +162,8 @@ namespace PictureRubber
             }
             foreach (Texture2D tex in this.m_Textures)
             {
-                this.m_Root.m_SpriteBatch.Draw(tex, rec, Microsoft.Xna.Framework.Color.White);
+                if (tex != null)
+                    this.m_Root.m_SpriteBatch.Draw(tex, rec, Microsoft.Xna.Framework.Color.White);
             }
             this.m_Root.m_SpriteBatch.End();
         }

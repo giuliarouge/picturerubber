@@ -63,6 +63,12 @@ namespace PictureRubber
         private Texture2D test;
         public bool shader;
 
+        public void DeletePicture()
+        {
+            this.m_Pictures.DeleteLastPicture();
+        }
+
+
         /// <summary>
         /// Variable for Build Mode Selection
         /// </summary>
@@ -75,7 +81,7 @@ namespace PictureRubber
         {
             this.m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            this.m_Modus = Modus.Debug;
+            this.m_Modus = Modus.Release;
         }
 
         /// <summary>
