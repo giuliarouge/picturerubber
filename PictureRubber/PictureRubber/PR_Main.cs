@@ -47,6 +47,11 @@ namespace PictureRubber
         public PR_Kinect m_Kinect;
 
         /// <summary>
+        /// The Renderer
+        /// </summary>
+        private PR_Renderer m_Renderer;
+
+        /// <summary>
         /// The Build Modes
         /// </summary>
         public enum Modus
@@ -110,6 +115,7 @@ namespace PictureRubber
             
             this.m_Pictures = new PR_Pictures(this, "Images",this.m_Kinect);
             this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
+            //this.m_Renderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice, this);
         }
 
         /// <summary>
