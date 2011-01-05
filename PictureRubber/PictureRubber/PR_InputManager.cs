@@ -34,13 +34,16 @@ namespace PictureRubber
         /// </summary>
         private MouseState m_ActualMouseState;
 
+        private PR_Kinect m_Kinect;
+
         /// <summary>
         /// Initializes a new Instance of PR_InputManager
         /// </summary>
         /// <param name="_root">The Root Pointer</param>
-        public PR_InputManager(PR_Main _root)
+        public PR_InputManager(PR_Main _root, PR_Kinect _kinect)
         {
             this.m_Root = _root;
+            this.m_Kinect = _kinect;
         }
 
         public MouseState GetMouseState()
@@ -56,6 +59,7 @@ namespace PictureRubber
             //Exiting of Program
             if (this.m_ActualKeyboardState.IsKeyDown(Keys.Escape))
             {
+                this.m_Kinect.DeleteKinect();
                 this.m_Root.Exit();
             }
 
