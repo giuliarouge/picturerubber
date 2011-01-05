@@ -42,16 +42,18 @@ Input VS_Main(Input input)
 float4 PS_AlphaFader(Input input) : COLOR0
 {  
 	float4 textureColor = tex2D( Image, input.TexCoord0 );
-	float4 mouseColor = tex2D( Image, input.TexCoord0 );
-	float4 white = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	float4 mouseColor = tex2D( MouseImage, input.TexCoord0 );
 
-	if(mouseColor == white)
+	if(mouseColor.r == 1.0f &&
+		mouseColor.g == 1.0f &&
+		mouseColor.b == 1.0f &&
+		mouseColor.a == 1.0f)
 	{
 		//reduce saturation
-		//textureColor *= saturate(textureColor.a - alphaAmount);
+		textureColor *= saturate(textureColor.a - alphaAmount);
 	}
     
-    return tex;
+    return textureColor;
 }
 
 technique AlphaFader

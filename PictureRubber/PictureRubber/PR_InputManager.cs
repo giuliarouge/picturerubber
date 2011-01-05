@@ -62,6 +62,10 @@ namespace PictureRubber
                 this.m_Kinect.DeleteKinect();
                 this.m_Root.Exit();
             }
+            if (this.m_ActualKeyboardState.IsKeyDown(Keys.B))
+            {
+                this.m_Root.shader = true;
+            }
 
             this.m_LastKeyboardState = this.m_ActualKeyboardState;
             this.m_LastMouseState = this.m_ActualMouseState;

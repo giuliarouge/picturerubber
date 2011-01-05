@@ -22,11 +22,6 @@ namespace PictureRubber
         internal const byte Adjustment = 4;
 
         /// <summary>
-        /// actual texture to manupulate
-        /// </summary>
-        private Texture2D m_Texture;
-
-        /// <summary>
         /// alpha-effect to make parts of an image invisible
         /// </summary>
         private Effect m_Effect;
@@ -51,6 +46,10 @@ namespace PictureRubber
         /// </summary>
         private RenderTarget2D m_RenderTarget;
 
+
+        private VertexPositionTexture[] quadVex;
+        private short[] quadIdx;
+
         /// <summary>
         /// initializes a new instance of PR_Renderer
         /// </summary>
@@ -70,6 +69,24 @@ namespace PictureRubber
                 throw new Exception("Could not load effectfile" + _effect);
             }
             this.m_Effect.CurrentTechnique = this.m_Effect.Techniques[this.m_Technique];
+
+            this.InitQuad();
+        }
+
+        /// <summary>
+        /// Init the quad vertex
+        /// Note: code from Frank Nagl, SBIP, http://code.google.com/p/sbip/
+        /// </summary>
+        private void InitQuad()
+        {
+            //init quad
+            quadVex = new VertexPositionTexture[4];
+            quadVex[0] = new VertexPositionTexture(-Vector3.UnitX - Vector3.UnitY, Vector2.UnitY);
+            quadVex[1] = new VertexPositionTexture(Vector3.UnitX - Vector3.UnitY, Vector2.One);
+            quadVex[2] = new VertexPositionTexture(Vector3.UnitX + Vector3.UnitY, Vector2.UnitX);
+            quadVex[3] = new VertexPositionTexture(-Vector3.UnitX + Vector3.UnitY, Vector2.Zero);
+
+            quadIdx = new short[] { 0, 3, 1, 2 };
         }
 
         /// <summary>
@@ -79,7 +96,7 @@ namespace PictureRubber
         /// <param param name="_mouseTexture">black/white texture of mouse to calculate rubbing-area easily</param>
         /// <param name="_aplhaAmount">amount of alphablending 0 == all, 1 == nothing</param>
         /// <returns>the new texture</returns>
-        public Texture2D ApplyFilter(Texture2D _texture, Texture2D _mouseTexture,  int _aplhaAmount)
+        public Texture2D ApplyFilter(Texture2D _texture, Texture2D _mouseTexture,  int _alphaAmount)
         {
             //initialize rendertarget
             this.m_RenderTarget = new RenderTarget2D(
@@ -92,14 +109,18 @@ namespace PictureRubber
             //apply variables
             this.m_Effect.Parameters["ImageTexture"].SetValue(_texture);
             this.m_Effect.Parameters["MouseTexture"].SetValue(_mouseTexture);
-            this.m_Effect.Parameters["alphaAmoount"].SetValue(_aplhaAmount);
+            this.m_Effect.Parameters["alphaAmount"].SetValue(_alphaAmount);
             this.m_Effect.Parameters["Adjustment"].SetValue(Adjustment);
             this.m_Effect.Parameters["Delta"].SetValue(delta);
 
             foreach (EffectPass pass in this.m_Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                //draw something...
+                //code from Frank Nagl, SBIP, http://code.google.com/p/sbip/
+                this.m_Graphics.DrawUserIndexedPrimitives(
+                    PrimitiveType.TriangleStrip,
+                    quadVex, 0, 4,
+                    quadIdx, 0, 2); 
             }
 
             //clear rendertarget and return new texture
