@@ -41,6 +41,15 @@ namespace PictureRubber
         /// </summary>
         private PR_Mouse m_Mouse;
 
+
+        public enum Modus
+        {
+            Debug,
+            Release
+        };
+
+        public Modus m_Modus;
+        
         /// <summary>
         /// Initializes a new Instance of PR_Main
         /// </summary>
@@ -48,6 +57,7 @@ namespace PictureRubber
         {
             this.m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            this.m_Modus = Modus.Release;
         }
 
         /// <summary>
@@ -69,6 +79,16 @@ namespace PictureRubber
         /// </summary>
         protected override void LoadContent()
         {
+            m_Graphics.PreferredBackBufferHeight = 480;
+            if (this.m_Modus == Modus.Debug)
+            {
+                m_Graphics.PreferredBackBufferWidth = 1280;
+            }
+            else
+            {
+                m_Graphics.PreferredBackBufferWidth = 640;
+            }
+            m_Graphics.ApplyChanges();
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.m_InputManager = new PR_InputManager(this);
             this.m_Pictures = new PR_Pictures(this, "Images");
