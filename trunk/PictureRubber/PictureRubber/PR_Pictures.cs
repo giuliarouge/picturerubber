@@ -32,12 +32,15 @@ namespace PictureRubber
         /// </summary>
         private Texture2D[] m_Textures;
 
+        private PR_Kinect m_Kinect;
+
         /// <summary>
         /// Initializes a new Instance of PR_Pictures
         /// </summary>
-        public PR_Pictures(PR_Main _root, string _folderPath)
+        public PR_Pictures(PR_Main _root, string _folderPath, PR_Kinect _kinect)
         {
             this.m_Root = _root;
+            this.m_Kinect = _kinect;
             this.m_FolderPath = _folderPath;
             if (!this.LoadPictures())
             {
@@ -60,7 +63,7 @@ namespace PictureRubber
         /// </summary>
         /// <param name="picture">The Picture</param>
         /// <returns>The Texture</returns>
-        private Texture2D CreateTexture(Bitmap _picture)
+        public Texture2D CreateTexture(Bitmap _picture)
         {
             Texture2D tex;
 
@@ -134,6 +137,9 @@ namespace PictureRubber
             if (this.m_Root.m_Modus == PR_Main.Modus.Debug)
             {
                 rec = new Microsoft.Xna.Framework.Rectangle(0, 0, this.m_Root.GraphicsDevice.Viewport.Width/2, this.m_Root.GraphicsDevice.Viewport.Height);
+                Microsoft.Xna.Framework.Rectangle depth;
+                depth = new Microsoft.Xna.Framework.Rectangle(this.m_Root.GraphicsDevice.Viewport.Width / 2, 0, this.m_Root.GraphicsDevice.Viewport.Width / 2, this.m_Root.GraphicsDevice.Viewport.Height);
+                this.m_Root.m_SpriteBatch.Draw(this.m_Kinect.GetDepthImageTexture(), depth, Microsoft.Xna.Framework.Color.White);
             }
             else
             {

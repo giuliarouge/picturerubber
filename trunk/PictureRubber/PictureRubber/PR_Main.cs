@@ -41,13 +41,23 @@ namespace PictureRubber
         /// </summary>
         private PR_Mouse m_Mouse;
 
+        /// <summary>
+        /// The Kinect
+        /// </summary>
+        public PR_Kinect m_Kinect;
 
+        /// <summary>
+        /// The Build Modes
+        /// </summary>
         public enum Modus
         {
             Debug,
             Release
         };
 
+        /// <summary>
+        /// Variable for Build Mode Selection
+        /// </summary>
         public Modus m_Modus;
         
         /// <summary>
@@ -57,7 +67,7 @@ namespace PictureRubber
         {
             this.m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            this.m_Modus = Modus.Release;
+            this.m_Modus = Modus.Debug;
         }
 
         /// <summary>
@@ -77,6 +87,7 @@ namespace PictureRubber
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
+        [STAThread()]
         protected override void LoadContent()
         {
             m_Graphics.PreferredBackBufferHeight = 480;
@@ -90,8 +101,14 @@ namespace PictureRubber
             }
             m_Graphics.ApplyChanges();
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
-            this.m_InputManager = new PR_InputManager(this);
-            this.m_Pictures = new PR_Pictures(this, "Images");
+            
+            this.m_Kinect = new PR_Kinect(this);
+            
+            m_InputManager = new PR_InputManager(this,this.m_Kinect);
+
+            
+            
+            this.m_Pictures = new PR_Pictures(this, "Images",this.m_Kinect);
             this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
         }
 
