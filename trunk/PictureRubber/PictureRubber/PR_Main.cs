@@ -60,6 +60,9 @@ namespace PictureRubber
             Release
         };
 
+        private Texture2D test;
+        public bool shader;
+
         /// <summary>
         /// Variable for Build Mode Selection
         /// </summary>
@@ -115,7 +118,9 @@ namespace PictureRubber
             
             this.m_Pictures = new PR_Pictures(this, "Images",this.m_Kinect);
             this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
-            //this.m_Renderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice, this);
+            this.m_Renderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice, this);
+            this.test = Content.Load<Texture2D>("test");
+            this.shader = false;
         }
 
         /// <summary>
@@ -146,6 +151,14 @@ namespace PictureRubber
         protected override void Draw(GameTime _gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+
+            if (this.shader)
+            {
+                Texture2D texture = this.m_Pictures.getFirstTexture();
+                this.m_Pictures.setFirstTexture(
+                    this.m_Renderer.ApplyFilter(texture, this.test, 100));
+                this.shader = false;
+            }
 
             this.m_Pictures.Draw(_gameTime);
             this.m_Mouse.Draw(_gameTime);

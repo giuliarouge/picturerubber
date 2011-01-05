@@ -76,6 +76,15 @@ namespace PictureRubber
             return tex;
         }
 
+        public void setFirstTexture(Texture2D _texture)
+        {
+            this.m_Textures[this.m_Pictures.Length-1] = _texture;
+        }
+
+        public Texture2D getFirstTexture()
+        {
+            return this.m_Textures[this.m_Pictures.Length-1];
+        }
 
 
         /// <summary>
