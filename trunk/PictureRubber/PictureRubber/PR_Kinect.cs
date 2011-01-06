@@ -215,7 +215,7 @@ namespace PictureRubber
                 Image img = new Image();
                 img.Source = this.m_DepthImage.BitmapSource;
                 System.Drawing.Image image = ConvertWpfImageToImage(img);
-                System.Drawing.Bitmap bit = new System.Drawing.Bitmap(image, image.Size);
+                //System.Drawing.Bitmap bit = new System.Drawing.Bitmap(image, image.Size);
                 Texture2D tex;
                 using (System.IO.MemoryStream s = new System.IO.MemoryStream())
                 {
