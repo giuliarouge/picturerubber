@@ -1,0 +1,55 @@
+﻿<Window x:Class="kinectNite.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:kinectNite"
+        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
+        Title="MainWindow" x:Name="main" WindowState="Maximized"
+        
+        >
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
+    </Window.Resources>
+    <Grid >
+
+        <Image x:Name="imgImage"   Stretch="UniformToFill" Source="Images/Jellyfish.jpg" >
+            <Image.Effect >
+                
+                <ee:RippleEffect x:Name="myRipple" Frequency="0" Magnitude="0"   Phase="0"/>
+              
+            </Image.Effect>
+        </Image>
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0" Visibility="{Binding ElementName=main, Path=HandDetected, Converter={StaticResource cnvBoolToVisibility} }">
+
+            <TextBlock Text="Wave to Kinect to start tracking..."  HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light" Foreground="White"></TextBlock>
+            <Image Source="Images/wave1.png" Width="90" Margin="10" ></Image>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="0,50,0,0" Visibility="{Binding ElementName=main, Path=ReFocus, Converter={StaticResource cnvBoolToVisibility} }">
+
+            <TextBlock Text="Raise your hand to return tracking..."  HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light" Foreground="White"></TextBlock>
+            <Image Source="Images/raise.png" Width="90" Margin="10" ></Image>
+        </StackPanel>
+
+        <ListBox x:Name="lstHands" Background="Transparent" Grid.Column="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding ElementName=main,Path=AvailableHands}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Canvas Background="Transparent">
+                        <Image Canvas.Top="{Binding Top}" Canvas.Left="{Binding Left}" Source="Images/hand.png" Width="80"  ></Image>
+                        <!--<Button Canvas.Top="{Binding Top}" Canvas.Left="{Binding Left}"   Content="{Binding ID}" Margin="20"></Button>-->
+                        
+                    </Canvas>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Background="Transparent">
+                    </Canvas>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+
+        <TextBlock Text="Use 'M' to toggle maximize/minimize" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Segoe UI Light" Foreground="White" FontSize="16" Margin="10" ></TextBlock>
+
+    </Grid>
+</Window>

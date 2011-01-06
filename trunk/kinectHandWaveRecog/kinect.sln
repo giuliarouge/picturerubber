@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kinect", "kinect\kinect.csproj", "{086A68B1-45F2-44BF-8BA0-49F9D24E9377}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kinectNite", "kinectNite\kinectNite.csproj", "{0C5DF58E-4508-46FF-BA06-6DBDDE419A5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{086A68B1-45F2-44BF-8BA0-49F9D24E9377}.Debug|x86.ActiveCfg = Debug|x86
+		{086A68B1-45F2-44BF-8BA0-49F9D24E9377}.Debug|x86.Build.0 = Debug|x86
+		{086A68B1-45F2-44BF-8BA0-49F9D24E9377}.Release|x86.ActiveCfg = Release|x86
+		{086A68B1-45F2-44BF-8BA0-49F9D24E9377}.Release|x86.Build.0 = Release|x86
+		{0C5DF58E-4508-46FF-BA06-6DBDDE419A5A}.Debug|x86.ActiveCfg = Debug|x86
+		{0C5DF58E-4508-46FF-BA06-6DBDDE419A5A}.Debug|x86.Build.0 = Debug|x86
+		{0C5DF58E-4508-46FF-BA06-6DBDDE419A5A}.Release|x86.ActiveCfg = Release|x86
+		{0C5DF58E-4508-46FF-BA06-6DBDDE419A5A}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
