@@ -51,6 +51,14 @@ namespace PictureRubber
         /// </summary>
         private PR_Renderer m_Renderer;
 
+
+        /// <summary>
+        /// The Intro
+        /// </summary>
+        private PR_Intro m_Intro;
+
+        private bool m_PlayIntro;
+
         /// <summary>
         /// The Build Modes
         /// </summary>
@@ -82,6 +90,7 @@ namespace PictureRubber
             this.m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.m_Modus = Modus.Release;
+            this.m_PlayIntro = true;
         }
 
         /// <summary>
@@ -125,6 +134,11 @@ namespace PictureRubber
             this.m_Pictures = new PR_Pictures(this, "Images",this.m_Kinect);
             this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
             this.m_Renderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice, this);
+            this.m_Intro = new PR_Intro(this, "intro");
+            if (this.m_PlayIntro)
+            {
+                this.m_Intro.Play();
+            }
             this.test = Content.Load<Texture2D>("test");
             this.shader = false;
         }
@@ -145,8 +159,7 @@ namespace PictureRubber
         /// <param name="_gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime _gameTime)
         {
-            this.m_InputManager.HandleInput(_gameTime);                       
-
+            this.m_InputManager.HandleInput(_gameTime);
             base.Update(_gameTime);
         }
 
@@ -158,16 +171,23 @@ namespace PictureRubber
         {
             GraphicsDevice.Clear(Color.Black);
 
-            if (this.shader)
+            if (this.m_Intro.isActive())
             {
-                Texture2D texture = this.m_Pictures.getFirstTexture();
-                this.m_Pictures.setFirstTexture(
-                    this.m_Renderer.ApplyFilter(texture, this.test, 100));
-                this.shader = false;
+                this.m_Intro.Draw(_gameTime);
             }
+            else
+            {
+                if (this.shader)
+                {
+                    Texture2D texture = this.m_Pictures.getFirstTexture();
+                    this.m_Pictures.setFirstTexture(
+                        this.m_Renderer.ApplyFilter(texture, this.test, 100));
+                    this.shader = false;
+                }
 
-            this.m_Pictures.Draw(_gameTime);
-            this.m_Mouse.Draw(_gameTime);
+                this.m_Pictures.Draw(_gameTime);
+                this.m_Mouse.Draw(_gameTime);
+            }
             base.Draw(_gameTime);
         }
     }
