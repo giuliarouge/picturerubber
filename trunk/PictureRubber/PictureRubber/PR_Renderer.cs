@@ -96,22 +96,31 @@ namespace PictureRubber
         /// <param param name="_mouseTexture">black/white texture of mouse to calculate rubbing-area easily</param>
         /// <param name="_aplhaAmount">amount of alphablending 0 == all, 1 == nothing</param>
         /// <returns>the new texture</returns>
-        public Texture2D ApplyFilter(Texture2D _texture, Texture2D _mouseTexture,  int _alphaAmount)
+        public void ApplyFilter(ref Texture2D _texture, Texture2D _mouseTexture,  int _alphaAmount, Texture2D _compareTexture = null)
         {
+            //http://msdn.microsoft.com/en-us/library/bb509700(v=vs.85).aspx
             //initialize rendertarget
             this.m_RenderTarget = new RenderTarget2D(
                 this.m_Graphics, _texture.Width, _texture.Height, false, this.m_Graphics.DisplayMode.Format, DepthFormat.Depth24Stencil8);
             //set the rendertarget to our texture
             this.m_Graphics.SetRenderTarget(this.m_RenderTarget);
+            this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Transparent);
             Vector2 delta = new Vector2(1.0f /_texture.Width, 1.0f / _texture.Height);
 
             //process shader
             //apply variables
-            this.m_Effect.Parameters["ImageTexture"].SetValue(_texture);
-            this.m_Effect.Parameters["MouseTexture"].SetValue(_mouseTexture);
+            this.m_Effect.Parameters["imageTexture"].SetValue(_texture);
+            this.m_Effect.Parameters["mouseTexture"].SetValue(_mouseTexture);
             this.m_Effect.Parameters["alphaAmount"].SetValue(_alphaAmount);
-            this.m_Effect.Parameters["Adjustment"].SetValue(Adjustment);
-            this.m_Effect.Parameters["Delta"].SetValue(delta);
+            this.m_Effect.Parameters["adjustment"].SetValue(Adjustment);
+            this.m_Effect.Parameters["delta"].SetValue(delta);
+            this.m_Effect.Parameters["textureIndex"].SetValue(0);
+
+            if (_compareTexture != null)
+            {
+                this.m_Effect.Parameters["compareTexture"].SetValue(_compareTexture);
+                this.m_Effect.Parameters["textureIndex"].SetValue(1);
+            }
 
             foreach (EffectPass pass in this.m_Effect.CurrentTechnique.Passes)
             {
@@ -125,10 +134,8 @@ namespace PictureRubber
 
             //clear rendertarget and return new texture
             this.m_Graphics.SetRenderTarget(null);
-            //FileStream data = new FileStream("Rendertarget.jpg",FileMode.Create);
-            //this.m_RenderTarget.SaveAsJpeg(data,this.m_RenderTarget.Width,this.m_RenderTarget.Height);
 
-            return this.m_RenderTarget;
+            _texture = this.m_RenderTarget;
         }
     }
 }

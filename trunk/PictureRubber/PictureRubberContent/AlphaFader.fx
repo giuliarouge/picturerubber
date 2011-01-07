@@ -4,24 +4,33 @@
 // Stefan Benischke, Eric Jahn, Erik Müller
 
 //variables
-texture ImageTexture;
-texture MouseTexture;
+texture imageTexture;
+texture compareTexture;
+texture mouseTexture;
+int textureIndex;
 int alphaAmount;
-int Adjustment;
-float2 Delta;
+int adjustment;
+float2 delta;
 
 sampler2D Image = sampler_state
 {
   AddressU = Clamp;
   AddressV = Clamp;
-  Texture = (ImageTexture);
+  Texture = (imageTexture);
+};
+
+sampler2D CompareImage = sampler_state
+{
+  AddressU = Clamp;
+  AddressV = Clamp;
+  Texture = (compareTexture);
 };
 
 sampler2D MouseImage = sampler_state
 {
   AddressU = Clamp;
   AddressV = Clamp;
-  Texture = (MouseTexture);
+  Texture = (mouseTexture);
 };
 
 struct Input
@@ -30,28 +39,59 @@ struct Input
     float2 TexCoord0 : TEXCOORD0;
 };
 
+bool compareColors(float4 _color, float _value)
+{
+	bool isEqual = false;
+	if(_color.r == _value &&
+		_color.g == _value &&
+		_color.b == _value &&
+		_color.a == _value)
+	{
+		isEqual = true;
+	}
+	return isEqual;
+}
+
 Input VS_Main(Input input)
 {
 	//code from Frank Nagl, SBIP, http://code.google.com/p/sbip/
 	 Input output;	 
 	 output.Position = float4(sign(input.Position.xy), 0.0f, 1.0f);	 
-	 output.TexCoord0 = input.TexCoord0 + Adjustment * Delta * 0.125;
+	 output.TexCoord0 = input.TexCoord0 + adjustment * delta * 0.125;
 	 return output;
 }
 
 float4 PS_AlphaFader(Input input) : COLOR0
 {  
-	float4 textureColor = tex2D( Image, input.TexCoord0 );
-	float4 mouseColor = tex2D( MouseImage, input.TexCoord0 );
+	//work on first layer
+	float4 textureColor, mouseColor, compareColor;
 
-	if(mouseColor.r == 1.0f &&
-		mouseColor.g == 1.0f &&
-		mouseColor.b == 1.0f &&
-		mouseColor.a == 1.0f)
+	//get pixelcolor
+	textureColor = tex2D(Image, input.TexCoord0);
+	mouseColor = tex2D(MouseImage, input.TexCoord0);
+
+	if(textureIndex == 0)
 	{
-		//reduce saturation
-		textureColor *= saturate(textureColor.a - alphaAmount);
+		if(compareColors(mouseColor, 1.0f) &&
+		!compareColors(textureColor, 0.0f))
+		{
+			//reduce saturation
+			//textureColor *= saturate(textureColor.a - alphaAmount);
+			textureColor = 0;
+		}
 	}
+	else
+	{
+		compareColor = tex2D(CompareImage, input.TexCoord0);
+		if(compareColors(mouseColor, 1.0f) &&
+			compareColors(compareColor, 0.0f) &&
+			!compareColors(textureColor, 0.0f))
+		{
+			//reduce saturation
+			//textureColor *= saturate(textureColor.a - alphaAmount);
+			textureColor = 0;
+		}
+	}	
     
     return textureColor;
 }
