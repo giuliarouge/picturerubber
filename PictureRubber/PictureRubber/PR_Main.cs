@@ -179,9 +179,18 @@ namespace PictureRubber
             {
                 if (this.shader)
                 {
-                    Texture2D texture = this.m_Pictures.getFirstTexture();
-                    this.m_Pictures.setFirstTexture(
-                        this.m_Renderer.ApplyFilter(texture, this.test, 100));
+                    Texture2D[] texture = this.m_Pictures.getTextures();
+                    for (int i = this.m_Pictures.getTextureCount() - 1; i > 0; --i)
+                    {
+                        if (i == this.m_Pictures.getTextureCount() - 1)
+                        {
+                            this.m_Renderer.ApplyFilter(ref texture[i], this.test, 255);
+                        }
+                        else
+                        {
+                            this.m_Renderer.ApplyFilter(ref texture[i], this.test, 255, texture[i + 1]);
+                        }
+                    }
                     this.shader = false;
                 }
 
