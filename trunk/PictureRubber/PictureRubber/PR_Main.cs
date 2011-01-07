@@ -90,7 +90,7 @@ namespace PictureRubber
             this.m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.m_Modus = Modus.Release;
-            this.m_PlayIntro = true;
+            this.m_PlayIntro = false;
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace PictureRubber
                 if (this.shader)
                 {
                     Texture2D[] texture = this.m_Pictures.getTextures();
-                    for (int i = this.m_Pictures.getTextureCount() - 1; i > 0; --i)
+                    for (int i = 1; i < this.m_Pictures.getTextureCount(); i++)
                     {
                         if (i == this.m_Pictures.getTextureCount() - 1)
                         {
