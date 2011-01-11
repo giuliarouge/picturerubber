@@ -182,9 +182,19 @@ namespace PictureRubber
             this.m_Mouse.SetWaitingTime(_waitingTime);
         }
 
-        public void StartShow()
+        /// <summary>
+        /// get and set the flag to show menu oder game
+        /// </summary>
+        public bool ShowMenu
         {
-            this.m_MainMenu.m_Visible = false;
+            get
+            {
+                return this.m_MainMenu.m_Visible;
+            }
+            set
+            {
+                this.m_MainMenu.m_Visible = value;
+            }
         }
 
         /// <summary>
@@ -201,20 +211,22 @@ namespace PictureRubber
             }
             else
             {
-                if (this.m_CreateMouseTexture && !this.m_MainMenu.m_Visible)
+                if (this.m_CreateMouseTexture && !this.ShowMenu)
                 {
                     //create mouse-texture for rubbing-areas
                     Texture2D blankTexture = new Texture2D(this.m_Graphics.GraphicsDevice, this.m_Graphics.GraphicsDevice.Viewport.Width, this.m_Graphics.GraphicsDevice.Viewport.Height);
                     Texture2D mouseTexture = this.m_Mouse.GetMouseTexture();
                     List<Vector2> positions = this.m_Mouse.GetMousePositions();
+                    //set rendertarger
                     this.m_MouseTextureRenderer.SetRenderTarget(ref blankTexture);
+                    //calculate rubbing-areas with DynamicMouse-shader
                     foreach(Vector2 position in positions)
                     {
                         this.m_MouseTextureRenderer.CreateMouseTexture(ref blankTexture, mouseTexture, position);
                     }
                     this.m_MouseTextureRenderer.ResetRenderTarget(ref blankTexture);
 
-                    //delete areas
+                    //delete areas AlphaFader-Shader
                     Texture2D[] texture = this.m_Pictures.getTextures();
                     for (int i = 1; i < this.m_Pictures.getTextureCount(); i++)
                     {

@@ -75,10 +75,10 @@ namespace PictureRubber
 
             if (this.m_ActualKeyboardState.IsKeyDown(Keys.S) && this.m_LastKeyboardState.IsKeyUp(Keys.S))
             {
-                this.m_Root.StartShow();
+                this.m_Root.ShowMenu = false;
             }
 
-            if (this.m_ActualMouseState.LeftButton == ButtonState.Pressed)
+            if (this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu)
             {
                 this.m_Root.Mouse.MousePosition = this.GetMousePosition();
             }
