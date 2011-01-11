@@ -16,7 +16,7 @@ using System.Threading;
 using System.IO;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
-//using System.Windows.Media.Animation;
+using System.Windows.Media.Animation;
 
 namespace kinectNite
 {
@@ -30,13 +30,13 @@ namespace kinectNite
         XnMPushDetector pushpoint;
         XnMPointDenoiser pointdenoise;
         private int count = 1;
+
      
         public MainWindow()
         {
-            this.WindowState = WindowState.Minimized;
             InitializeComponent();
-      //      this.Closing += new System.ComponentModel.CancelEventHandler(MainWindow_Closing);
-       //     this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+            this.Closing += new System.ComponentModel.CancelEventHandler(MainWindow_Closing);
+            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
             AvailableHands = new ObservableCollection<Hand>();
             context = new XnMOpenNIContext();
             this.shouldRun=true;
@@ -53,7 +53,7 @@ namespace kinectNite
             pointdenoise.PrimaryPointDestroy += new EventHandler<PointDestroyEventArgs>(detectPoint_PrimaryPointDestroy);
            
             //Session
-            sessionManager = new XnMSessionManager(context, "Wave", "Wave");
+            sessionManager = new XnMSessionManager(context, "Wave", "RaiseHand");
             sessionManager.AddListener(pointdenoise);
             sessionManager.AddListener(pushpoint);
             sessionManager.FocusStartDetected += new EventHandler<FocusStartEventArgs>(sessionManager_FocusStartDetected);
@@ -64,9 +64,9 @@ namespace kinectNite
             this.readerThread = new Thread(ReaderThread);
             this.readerThread.Start();
 
-            this.Hide();
+
             //this is to animate the background
-            //CompositionTarget.Rendering += new EventHandler(CompositionTarget_Rendering);
+            CompositionTarget.Rendering += new EventHandler(CompositionTarget_Rendering);
          
         
         }
@@ -81,6 +81,37 @@ namespace kinectNite
                     sessionManager.Update(context);
             }
         }
+     
+        #region Window Events
+        void CompositionTarget_Rendering(object sender, EventArgs e)
+        {
+
+            Point mousePos = Mouse.GetPosition(imgImage);
+            mouse = GetPos(mouse, mousePos, speed);
+            if (oldpos == mouse)
+                IsMouseMoving = false;
+            else
+                IsMouseMoving = true;
+
+            AnimateBackground();
+
+            oldpos = mouse;
+        }
+        void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.M)
+            {
+                MaximizeMinimize();
+            }
+        }
+        void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.shouldRun = false;
+            this.context.Close();
+            this.context.Dispose();
+            base.OnClosing(e);
+        } 
+        #endregion
       
         #region Push
 
@@ -269,7 +300,33 @@ namespace kinectNite
         #endregion
 
         #region Helpers
-       
+        private void MaximizeMinimize()
+        {
+            if (this.WindowState == WindowState.Maximized)
+                this.WindowState = System.Windows.WindowState.Minimized;
+            else
+                this.WindowState = System.Windows.WindowState.Maximized;
+        }
+        private void AnimateBackground()
+        {
+
+            if (IsMouseMoving && !HandDetected && !ReFocus)
+            {
+                myRipple.Center = new Point((1 / imgImage.ActualWidth) * mouse.X, (1 / imgImage.ActualHeight) * mouse.Y);
+
+                if (frequency == 0)
+                {
+                    frequency = 40;
+                    magnitude = 0;
+                }
+                if (frequency == 30)
+                    magnitude = 0.02;
+                myRipple.Magnitude = magnitude;
+                myRipple.Frequency = frequency;
+                frequency--;
+
+            }
+        }
         Point GetPos(Point pt, Point target, double speed)
         {
             double xdif = target.X - pt.X;
