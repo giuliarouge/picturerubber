@@ -34,7 +34,12 @@ namespace PictureRubber
             if (!this.m_Root.IsMouseVisible)
             {
                 this.m_Root.m_SpriteBatch.Begin();
-                Microsoft.Xna.Framework.Rectangle rec = new Microsoft.Xna.Framework.Rectangle(this.m_InputManager.GetMouseState().X - this.m_Texture.Width / 2, this.m_InputManager.GetMouseState().Y - this.m_Texture.Height / 2, this.m_Texture.Width, this.m_Texture.Height);
+                float value = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
+                Rectangle rec = new Rectangle(
+                    (int)(this.m_InputManager.GetMouseState().X - this.m_Texture.Width / 2 * value), 
+                    (int)(this.m_InputManager.GetMouseState().Y - this.m_Texture.Height / 2 * value), 
+                    (int)(this.m_Texture.Width * value),
+                    (int)(this.m_Texture.Height * value));
                 this.m_Root.m_SpriteBatch.Draw(m_Texture, rec, Microsoft.Xna.Framework.Color.White);
                 this.m_Root.m_SpriteBatch.End();
             }

@@ -68,6 +68,8 @@ namespace PictureRubber
             Release
         };
 
+        private PR_MainMenu m_MainMenu;
+
         private Texture2D test;
         public bool shader;
 
@@ -129,7 +131,7 @@ namespace PictureRubber
             
             m_InputManager = new PR_InputManager(this,this.m_Kinect);
 
-            
+            m_MainMenu = new PR_MainMenu(this, this.m_InputManager);
             
             this.m_Pictures = new PR_Pictures(this, "Images",this.m_Kinect);
             this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
@@ -141,6 +143,8 @@ namespace PictureRubber
             }
             this.test = Content.Load<Texture2D>("test");
             this.shader = false;
+            this.m_Graphics.IsFullScreen = true;
+            this.m_Graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -161,6 +165,11 @@ namespace PictureRubber
         {
             this.m_InputManager.HandleInput(_gameTime);
             base.Update(_gameTime);
+        }
+
+        public void StartShow()
+        {
+            this.m_MainMenu.m_Visible = false;
         }
 
         /// <summary>
@@ -193,8 +202,14 @@ namespace PictureRubber
                     }
                     this.shader = false;
                 }
-
-                this.m_Pictures.Draw(_gameTime);
+                if (this.m_MainMenu.m_Visible)
+                {
+                    this.m_MainMenu.Draw(_gameTime);
+                }
+                else
+                {
+                    this.m_Pictures.Draw(_gameTime);
+                }
                 this.m_Mouse.Draw(_gameTime);
             }
             base.Draw(_gameTime);
