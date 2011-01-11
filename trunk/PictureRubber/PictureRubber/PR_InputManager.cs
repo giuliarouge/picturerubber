@@ -98,7 +98,7 @@ namespace PictureRubber
             switch (_index)
             {
                 case 0:
-                    this.m_Root.StartShow();
+                    this.m_Root.ShowMenu = false;
                     break;
                 case 2:
                     this.m_Kinect.DeleteKinect();
