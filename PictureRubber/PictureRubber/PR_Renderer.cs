@@ -66,7 +66,7 @@ namespace PictureRubber
             this.m_Effect = this.m_Main.Content.Load<Effect>(_effect);
             if (this.m_Effect == null)
             {
-                throw new Exception("Could not load effectfile" + _effect);
+                throw new Exception("Could not load effectfile " + _effect);
             }
             this.m_Effect.CurrentTechnique = this.m_Effect.Techniques[this.m_Technique];
 
@@ -93,12 +93,12 @@ namespace PictureRubber
         /// with this function we will pass our alphafader-shader
         /// </summary>
         /// <param name="_texture">texture on which a specific region will be manupulated</param>
-        /// <param param name="_mouseTexture">black/white texture of mouse to calculate rubbing-area easily</param>
+        /// <param param name="_mouseTexture">black/white texture of mouse to calculate rubbing-area</param>
         /// <param name="_aplhaAmount">amount of alphablending 0 == all, 1 == nothing</param>
+        /// <param name="_compareTexture">texture to compare</param>
         /// <returns>the new texture</returns>
         public void ApplyFilter(ref Texture2D _texture, Texture2D _mouseTexture,  int _alphaAmount, Texture2D _compareTexture = null)
         {
-            //http://msdn.microsoft.com/en-us/library/bb509700(v=vs.85).aspx
             //initialize rendertarget
             this.m_RenderTarget = new RenderTarget2D(
                 this.m_Graphics, _texture.Width, _texture.Height, false, this.m_Graphics.DisplayMode.Format, DepthFormat.Depth24Stencil8);
@@ -136,6 +136,83 @@ namespace PictureRubber
             this.m_Graphics.SetRenderTarget(null);
 
             _texture = this.m_RenderTarget;
+            this.m_RenderTarget = null;
+        }
+
+        /// <summary>
+        /// create a black/white texture of rubbing area
+        /// </summary>
+        /// <param name="_texture">output texture</param>
+        /// <param name="_mouseTexture">ingame mouse texture</param>
+        /// <param name="_actualPosition"></param>
+        /// <param name="_startPosition"></param>
+        public void CreateMouseTexture(ref Texture2D _texture, Texture2D _mouseTexture, Vector2 _mousePosition)
+        {            
+            Vector2 delta = new Vector2(1.0f / _texture.Width, 1.0f / _texture.Height);
+
+            Vector2 topLeft, bottomRight, dimensions;
+            topLeft = new Vector2(
+                _mousePosition.X - _mouseTexture.Width / 2,
+                _mousePosition.Y - _mouseTexture.Height / 2);
+            topLeft.X /= _texture.Width;
+            topLeft.Y /= _texture.Height;
+
+            bottomRight = new Vector2(
+                _mousePosition.X + _mouseTexture.Width / 2,
+                _mousePosition.Y + _mouseTexture.Height / 2);
+            bottomRight.X /= _texture.Width;
+            bottomRight.Y /= _texture.Height;
+
+            dimensions = new Vector2(
+                _mouseTexture.Width,
+                _mouseTexture.Height);
+
+            //process shader
+            //apply variables
+            this.m_Effect.Parameters["backgroundTexture"].SetValue(_texture);
+            this.m_Effect.Parameters["mouseTexture"].SetValue(_mouseTexture);
+            this.m_Effect.Parameters["adjustment"].SetValue(Adjustment);
+            this.m_Effect.Parameters["delta"].SetValue(delta);
+            this.m_Effect.Parameters["topLeft"].SetValue(topLeft);
+            this.m_Effect.Parameters["bottomRight"].SetValue(bottomRight);
+            this.m_Effect.Parameters["dimensions"].SetValue(dimensions);
+
+            foreach (EffectPass pass in this.m_Effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                //code from Frank Nagl, SBIP, http://code.google.com/p/sbip/
+                this.m_Graphics.DrawUserIndexedPrimitives(
+                    PrimitiveType.TriangleStrip,
+                    quadVex, 0, 4,
+                    quadIdx, 0, 2);
+            }            
+        }
+
+        /// <summary>
+        /// set actual rendertarget
+        /// </summary>
+        /// <param name="_texture">textureinformation for rendertarget</param>
+        public void SetRenderTarget(ref Texture2D _texture)
+        {
+            //initialize rendertarget
+            this.m_RenderTarget = new RenderTarget2D(
+                this.m_Graphics, _texture.Width, _texture.Height, false, this.m_Graphics.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            //set the rendertarget to our texture
+            this.m_Graphics.SetRenderTarget(this.m_RenderTarget);
+            this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Black);
+        }
+
+        /// <summary>
+        /// reset rendertarget to null
+        /// </summary>
+        /// <param name="_texture">texture to save the new texture</param>
+        public void ResetRenderTarget(ref Texture2D _texture)
+        {
+            //clear rendertarget and return new texture
+            this.m_Graphics.SetRenderTarget(null);
+
+            _texture = this.m_RenderTarget;
+            this.m_RenderTarget = null;
         }
     }
 }

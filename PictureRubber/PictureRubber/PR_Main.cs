@@ -47,16 +47,23 @@ namespace PictureRubber
         public PR_Kinect m_Kinect;
 
         /// <summary>
-        /// The Renderer
+        /// The Renderer for rubbing-areas
         /// </summary>
-        private PR_Renderer m_Renderer;
+        private PR_Renderer m_RubberRenderer;
 
+        /// <summary>
+        /// The Renderer to calculate the black/white texture
+        /// </summary>
+        private PR_Renderer m_MouseTextureRenderer;
 
         /// <summary>
         /// The Intro
         /// </summary>
         private PR_Intro m_Intro;
 
+        /// <summary>
+        /// specifics, if the intro will be played
+        /// </summary>
         private bool m_PlayIntro;
 
         /// <summary>
@@ -71,7 +78,11 @@ namespace PictureRubber
         private PR_MainMenu m_MainMenu;
 
         private Texture2D test;
-        public bool shader;
+
+        /// <summary>
+        /// speficis, if there was a new rubbing-gesture
+        /// </summary>
+        private bool m_CreateMouseTexture;
 
         public void DeletePicture()
         {
@@ -92,7 +103,8 @@ namespace PictureRubber
             this.m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.m_Modus = Modus.Release;
-            this.m_PlayIntro = true;
+            this.m_PlayIntro = false;
+            this.m_CreateMouseTexture = false;
         }
 
         /// <summary>
@@ -135,14 +147,14 @@ namespace PictureRubber
             
             this.m_Pictures = new PR_Pictures(this, "Images",this.m_Kinect);
             this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
-            this.m_Renderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice, this);
+            this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice, this);
+            this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice, this);
             this.m_Intro = new PR_Intro(this, "intro");
             if (this.m_PlayIntro)
             {
                 this.m_Intro.Play();
             }
             this.test = Content.Load<Texture2D>("test");
-            this.shader = false;
             //this.m_Graphics.IsFullScreen = true;
             //this.m_Graphics.ApplyChanges();
         }
@@ -186,21 +198,34 @@ namespace PictureRubber
             }
             else
             {
-                if (this.shader)
+                if (this.m_CreateMouseTexture && !this.m_MainMenu.m_Visible)
                 {
+                    //create mouse-texture for rubbing-areas
+                    Texture2D blankTexture = new Texture2D(this.m_Graphics.GraphicsDevice, this.m_Graphics.GraphicsDevice.Viewport.Width, this.m_Graphics.GraphicsDevice.Viewport.Height);
+                    Texture2D mouseTexture = this.m_Mouse.GetMouseTexture();
+                    List<Vector2> positions = this.m_Mouse.GetMousePositions();
+                    this.m_MouseTextureRenderer.SetRenderTarget(ref blankTexture);
+                    foreach(Vector2 position in positions)
+                    {
+                        this.m_MouseTextureRenderer.CreateMouseTexture(ref blankTexture, mouseTexture, position);
+                    }
+                    this.m_MouseTextureRenderer.ResetRenderTarget(ref blankTexture);
+
+                    //delete areas
                     Texture2D[] texture = this.m_Pictures.getTextures();
                     for (int i = 1; i < this.m_Pictures.getTextureCount(); i++)
                     {
                         if (i == this.m_Pictures.getTextureCount() - 1)
                         {
-                            this.m_Renderer.ApplyFilter(ref texture[i], this.test, 100);
+                            this.m_RubberRenderer.ApplyFilter(ref texture[i], blankTexture, 100);
                         }
                         else
                         {
-                            this.m_Renderer.ApplyFilter(ref texture[i], this.test, 100, texture[i + 1]);
+                            this.m_RubberRenderer.ApplyFilter(ref texture[i], blankTexture, 100, texture[i + 1]);
                         }
                     }
-                    this.shader = false;
+                    this.m_CreateMouseTexture = false;
+                    this.m_Mouse.ResetMousePositions();
                 }
                 if (this.m_MainMenu.m_Visible)
                 {
@@ -213,6 +238,26 @@ namespace PictureRubber
                 this.m_Mouse.Draw(_gameTime);
             }
             base.Draw(_gameTime);
+        }
+
+        public bool IsGesture
+        {
+            get
+            {
+                return this.m_CreateMouseTexture;
+            }
+            set
+            {
+                this.m_CreateMouseTexture = value;
+            }
+        }
+
+        public PR_Mouse Mouse
+        {
+            get
+            {
+                return this.m_Mouse;
+            }
         }
     }
 }
