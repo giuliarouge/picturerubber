@@ -92,7 +92,7 @@ namespace PictureRubber
             this.m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.m_Modus = Modus.Release;
-            this.m_PlayIntro = false;
+            this.m_PlayIntro = true;
         }
 
         /// <summary>
@@ -115,14 +115,14 @@ namespace PictureRubber
         [STAThread()]
         protected override void LoadContent()
         {
-            m_Graphics.PreferredBackBufferHeight = 480;
+            m_Graphics.PreferredBackBufferHeight = 768;
             if (this.m_Modus == Modus.Debug)
             {
                 m_Graphics.PreferredBackBufferWidth = 1280;
             }
             else
             {
-                m_Graphics.PreferredBackBufferWidth = 640;
+                m_Graphics.PreferredBackBufferWidth = 1024;
             }
             m_Graphics.ApplyChanges();
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
@@ -143,8 +143,8 @@ namespace PictureRubber
             }
             this.test = Content.Load<Texture2D>("test");
             this.shader = false;
-            this.m_Graphics.IsFullScreen = true;
-            this.m_Graphics.ApplyChanges();
+            //this.m_Graphics.IsFullScreen = true;
+            //this.m_Graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -193,11 +193,11 @@ namespace PictureRubber
                     {
                         if (i == this.m_Pictures.getTextureCount() - 1)
                         {
-                            this.m_Renderer.ApplyFilter(ref texture[i], this.test, 255);
+                            this.m_Renderer.ApplyFilter(ref texture[i], this.test, 100);
                         }
                         else
                         {
-                            this.m_Renderer.ApplyFilter(ref texture[i], this.test, 255, texture[i + 1]);
+                            this.m_Renderer.ApplyFilter(ref texture[i], this.test, 100, texture[i + 1]);
                         }
                     }
                     this.shader = false;
