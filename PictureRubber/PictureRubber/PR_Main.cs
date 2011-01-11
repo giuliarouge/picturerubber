@@ -174,6 +174,7 @@ namespace PictureRubber
         protected override void Update(GameTime _gameTime)
         {
             this.m_InputManager.HandleInput(_gameTime);
+            this.m_MainMenu.Update(_gameTime);
             base.Update(_gameTime);
         }
 

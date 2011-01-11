@@ -95,6 +95,16 @@ namespace PictureRubber
         public void HandleMenuInput(int _index)
         {
             //do something
+            switch (_index)
+            {
+                case 0:
+                    this.m_Root.StartShow();
+                    break;
+                case 2:
+                    this.m_Kinect.DeleteKinect();
+                    this.m_Root.Exit();
+                    break;
+            }
         }
 
         

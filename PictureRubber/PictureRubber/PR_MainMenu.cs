@@ -25,8 +25,8 @@ namespace PictureRubber
 
         public bool m_Visible;
         private int[] m_SelectedIndex;
-        private byte m_Delay = 10;
-        private byte m_CurrentDelay;
+        private int m_Delay = 120;
+        private int m_CurrentDelay;
 
         public PR_MainMenu(PR_Main _root, PR_InputManager _input)
         {
@@ -70,16 +70,19 @@ namespace PictureRubber
 
         public void Update(GameTime _gameTime)
         {
-            if (this.m_CurrentDelay >= this.m_Delay)
+            if (this.m_Visible)
             {
-                for (int i = 0; i < 3; i++)
+                if (this.m_CurrentDelay >= this.m_Delay)
                 {
-                    if (this.m_SelectedIndex[i] == 360)
+                    for (int i = 0; i < 3; i++)
                     {
-                        this.m_InputManager.HandleMenuInput(i);
-                        this.ClearUpCounter();
-                        break;
-                        
+                        if (this.m_SelectedIndex[i] >= 360)
+                        {
+                            this.m_InputManager.HandleMenuInput(i);
+                            this.ClearUpCounter();
+                            break;
+
+                        }
                     }
                 }
             }
@@ -177,12 +180,7 @@ namespace PictureRubber
 
         private bool Intersects(Vector2 _position, Rectangle _rectangle)
         {
-            bool intersects = false;
-            if (_rectangle.Intersects(new Rectangle((int)_position.X,(int)_position.Y,1,1)))
-            {
-                intersects = true;
-            }
-            return intersects;
+            return _rectangle.Intersects(new Rectangle((int)_position.X,(int)_position.Y,1,1));
         }
     }
 }
