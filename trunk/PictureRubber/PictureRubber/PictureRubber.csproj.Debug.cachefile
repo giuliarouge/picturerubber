@@ -1,8 +1,6 @@
 Content\mouse.xnb
 Content\kinect.xnb
 Content\test.xnb
-Content\AlphaFader.xnb
-Content\Intro.xnb
 Content\menu\background.xnb
 Content\menu\left_line.xnb
 Content\menu\menu_frame.xnb
@@ -20,7 +18,11 @@ Content\menu\buttons\optionen_pressed.xnb
 Content\menu\buttons\starten_normal.xnb
 Content\menu\buttons\starten_over.xnb
 Content\menu\buttons\starten_pressed.xnb
-Content\Intro.wmv
+Content\AlphaFader.xnb
+Content\DynamicMouse.xnb
+Content\intro.xnb
+Content\waiting_logo_part.xnb
+Content\intro.wmv
 CLNUIDevice.dll
 Images\001.png
 Images\002.png

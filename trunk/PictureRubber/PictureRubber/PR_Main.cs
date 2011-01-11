@@ -115,8 +115,6 @@ namespace PictureRubber
         /// </summary>
         protected override void Initialize()
         {
-            
-
             base.Initialize();
         }
 
@@ -177,6 +175,11 @@ namespace PictureRubber
         {
             this.m_InputManager.HandleInput(_gameTime);
             base.Update(_gameTime);
+        }
+
+        public void SetMouseWaitingTime(int _waitingTime)
+        {
+            this.m_Mouse.SetWaitingTime(_waitingTime);
         }
 
         public void StartShow()
