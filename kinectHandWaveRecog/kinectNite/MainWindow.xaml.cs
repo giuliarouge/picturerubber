@@ -16,7 +16,7 @@ using System.Threading;
 using System.IO;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
-using System.Windows.Media.Animation;
+//using System.Windows.Media.Animation;
 
 namespace kinectNite
 {
@@ -30,7 +30,6 @@ namespace kinectNite
         XnMPushDetector pushpoint;
         XnMPointDenoiser pointdenoise;
         private int count = 1;
-
      
         public MainWindow()
         {
@@ -54,7 +53,7 @@ namespace kinectNite
             pointdenoise.PrimaryPointDestroy += new EventHandler<PointDestroyEventArgs>(detectPoint_PrimaryPointDestroy);
            
             //Session
-            sessionManager = new XnMSessionManager(context, "Wave", "RaiseHand");
+            sessionManager = new XnMSessionManager(context, "Wave", "Wave");
             sessionManager.AddListener(pointdenoise);
             sessionManager.AddListener(pushpoint);
             sessionManager.FocusStartDetected += new EventHandler<FocusStartEventArgs>(sessionManager_FocusStartDetected);
@@ -65,9 +64,9 @@ namespace kinectNite
             this.readerThread = new Thread(ReaderThread);
             this.readerThread.Start();
 
-
+            this.Hide();
             //this is to animate the background
-            CompositionTarget.Rendering += new EventHandler(CompositionTarget_Rendering);
+            //CompositionTarget.Rendering += new EventHandler(CompositionTarget_Rendering);
          
         
         }
@@ -82,21 +81,6 @@ namespace kinectNite
                     sessionManager.Update(context);
             }
         }
-     
-        #region Window Events
-        void CompositionTarget_Rendering(object sender, EventArgs e)
-        {
-
-            Point mousePos = Mouse.GetPosition(imgImage);
-            mouse = GetPos(mouse, mousePos, speed);
-            if (oldpos == mouse)
-                IsMouseMoving = false;
-            else
-                IsMouseMoving = true;
-
-            oldpos = mouse;
-        } 
-        #endregion
       
         #region Push
 
@@ -285,13 +269,6 @@ namespace kinectNite
         #endregion
 
         #region Helpers
-        private void MaximizeMinimize()
-        {
-            if (this.WindowState == WindowState.Maximized)
-                this.WindowState = System.Windows.WindowState.Minimized;
-            else
-                this.WindowState = System.Windows.WindowState.Maximized;
-        }
        
         Point GetPos(Point pt, Point target, double speed)
         {
