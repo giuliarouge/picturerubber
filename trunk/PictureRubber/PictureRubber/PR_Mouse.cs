@@ -72,7 +72,7 @@ namespace PictureRubber
                     this.m_Texture.Width,
                     this.m_Texture.Height);
                 this.m_Root.m_SpriteBatch.Draw(m_Texture, rec, Microsoft.Xna.Framework.Color.White);
-
+                /*
                 for (int i = this.m_WaitingTime / 45; i > 0; i--)
                 {
                     float angle = MathHelper.ToRadians(this.m_WaitingTime - 45.0f * i);
@@ -86,6 +86,13 @@ namespace PictureRubber
                         SpriteEffects.None,
                         0f);
                 }
+                */
+                for (int i = 0; i < this.m_WaitingTime / 45; i++)
+                {
+                    float angle = MathHelper.ToRadians(45.0f * i);
+                    this.m_Root.m_SpriteBatch.Draw(m_WaitingTexture, new Vector2(this.m_InputManager.GetMouseState().X, this.m_InputManager.GetMouseState().Y), null, Color.White, angle, new Vector2(this.m_WaitingTexture.Width / 2, this.m_WaitingTexture.Height / 2), value, SpriteEffects.None, 0f);
+                }
+
                 this.m_WaitingTime = 0;
                 this.m_Root.m_SpriteBatch.End();
             }
