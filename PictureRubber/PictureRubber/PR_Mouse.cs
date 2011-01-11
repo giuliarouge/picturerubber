@@ -65,7 +65,6 @@ namespace PictureRubber
             if (!this.m_Root.IsMouseVisible)
             {
                 this.m_Root.m_SpriteBatch.Begin();
-                float value = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
                 Rectangle rec = new Rectangle(
                     this.m_InputManager.GetMouseState().X - this.m_Texture.Width / 2, 
                     this.m_InputManager.GetMouseState().Y - this.m_Texture.Height / 2, 
@@ -90,7 +89,15 @@ namespace PictureRubber
                 for (int i = 0; i < this.m_WaitingTime / 45; i++)
                 {
                     float angle = MathHelper.ToRadians(45.0f * i);
-                    this.m_Root.m_SpriteBatch.Draw(m_WaitingTexture, new Vector2(this.m_InputManager.GetMouseState().X, this.m_InputManager.GetMouseState().Y), null, Color.White, angle, new Vector2(this.m_WaitingTexture.Width / 2, this.m_WaitingTexture.Height / 2), value, SpriteEffects.None, 0f);
+                    this.m_Root.m_SpriteBatch.Draw(m_WaitingTexture,
+                        new Vector2(this.m_InputManager.GetMouseState().X, this.m_InputManager.GetMouseState().Y),
+                        null,
+                        Color.White,
+                        angle,
+                        new Vector2(this.m_WaitingTexture.Width / 2, this.m_WaitingTexture.Height / 2),
+                        this.m_ScalingValue,
+                        SpriteEffects.None,
+                        0f);
                 }
 
                 this.m_WaitingTime = 0;

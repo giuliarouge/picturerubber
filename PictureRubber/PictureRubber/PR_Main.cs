@@ -212,7 +212,7 @@ namespace PictureRubber
             }
             else
             {
-                if (this.m_CreateMouseTexture && !this.ShowMenu)
+                if (this.IsGesture && !this.ShowMenu)
                 {
                     //create mouse-texture for rubbing-areas
                     Texture2D blankTexture = new Texture2D(this.m_Graphics.GraphicsDevice, this.m_Graphics.GraphicsDevice.Viewport.Width, this.m_Graphics.GraphicsDevice.Viewport.Height);
@@ -240,8 +240,10 @@ namespace PictureRubber
                             this.m_RubberRenderer.ApplyFilter(ref texture[i], blankTexture, 100, texture[i + 1]);
                         }
                     }
-                    this.m_CreateMouseTexture = false;
+                    //reset values
+                    this.IsGesture = false;
                     this.m_Mouse.ResetMousePositions();
+                    GC.Collect();
                 }
                 if (this.m_MainMenu.m_Visible)
                 {
@@ -256,6 +258,9 @@ namespace PictureRubber
             base.Draw(_gameTime);
         }
 
+        /// <summary>
+        /// set or get the value which specifics if someone tries to rubber
+        /// </summary>
         public bool IsGesture
         {
             get
@@ -268,6 +273,9 @@ namespace PictureRubber
             }
         }
 
+        /// <summary>
+        /// get instance of PR_Mouse
+        /// </summary>
         public PR_Mouse Mouse
         {
             get
