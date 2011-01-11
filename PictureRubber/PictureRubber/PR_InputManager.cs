@@ -76,8 +76,18 @@ namespace PictureRubber
                 this.m_Root.DeletePicture();
             }
 
+            if (this.m_ActualKeyboardState.IsKeyDown(Keys.S) && this.m_LastKeyboardState.IsKeyUp(Keys.S))
+            {
+                this.m_Root.StartShow();
+            }
+
             this.m_LastKeyboardState = this.m_ActualKeyboardState;
             this.m_LastMouseState = this.m_ActualMouseState;
+        }
+
+        public Vector2 GetMousePosition()
+        {
+            return new Vector2(this.m_ActualMouseState.X, this.m_ActualMouseState.Y);
         }
     }
 }
