@@ -78,7 +78,11 @@ namespace PictureRubber
                 this.m_Root.ShowMenu = false;
             }
 
-            if (this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu)
+            if (this.GetMousePosition().X >= 0 &&
+                this.GetMousePosition().X <= this.m_Root.GraphicsDevice.Viewport.Width &&
+                this.GetMousePosition().Y >= 0 &&
+                this.GetMousePosition().Y <= this.m_Root.GraphicsDevice.Viewport.Height &&
+                this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu)
             {
                 this.m_Root.Mouse.MousePosition = this.GetMousePosition();
             }
