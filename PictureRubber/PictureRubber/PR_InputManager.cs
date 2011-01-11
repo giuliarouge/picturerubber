@@ -92,6 +92,12 @@ namespace PictureRubber
             this.m_LastMouseState = this.m_ActualMouseState;
         }
 
+        public void HandleMenuInput(int _index)
+        {
+            //do something
+        }
+
+        
         public Vector2 GetMousePosition()
         {
             return new Vector2(this.m_ActualMouseState.X, this.m_ActualMouseState.Y);

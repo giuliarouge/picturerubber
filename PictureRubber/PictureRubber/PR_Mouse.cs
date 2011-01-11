@@ -11,7 +11,9 @@ namespace PictureRubber
     {
         private PR_Main m_Root;
         private Texture2D m_Texture;
+        private Texture2D m_WaitingTexture;
         private PR_InputManager m_InputManager;
+        private int m_WaitingTime;
 
         /// <summary>
         /// List of actual position of the mouse to generate a texture with rubbing areas
@@ -31,6 +33,7 @@ namespace PictureRubber
             try
             {
                 m_Texture = this.m_Root.Content.Load<Texture2D>("mouse");
+                m_WaitingTexture = this.m_Root.Content.Load<Texture2D>("waiting_logo_part");
                 this.m_Root.IsMouseVisible = false;
             }
             catch (Exception e)
@@ -38,6 +41,12 @@ namespace PictureRubber
                 System.Console.WriteLine(e.Message);
                 this.m_Root.IsMouseVisible = true;
             }
+        }
+
+        
+        public void SetWaitingTime(int _waitingTime)
+        {
+            this.m_WaitingTime = _waitingTime;
         }
 
         /// <summary>
@@ -56,6 +65,13 @@ namespace PictureRubber
                     (int)(this.m_Texture.Width * value),
                     (int)(this.m_Texture.Height * value));
                 this.m_Root.m_SpriteBatch.Draw(m_Texture, rec, Microsoft.Xna.Framework.Color.White);
+
+                for (int i = this.m_WaitingTime / 45; i > 0; i--)
+                {
+                    float angle = MathHelper.ToRadians(this.m_WaitingTime - 45.0f * i);
+                    this.m_Root.m_SpriteBatch.Draw(m_WaitingTexture, new Vector2(this.m_InputManager.GetMouseState().X, this.m_InputManager.GetMouseState().Y), null, Color.White, angle, new Vector2(this.m_WaitingTexture.Width / 2, this.m_WaitingTexture.Height / 2), value, SpriteEffects.None, 0f);
+                }
+                this.m_WaitingTime = 0;
                 this.m_Root.m_SpriteBatch.End();
             }
         }
