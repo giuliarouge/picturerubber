@@ -36,7 +36,6 @@ namespace PictureRubber
 
         private PR_Kinect m_Kinect;
 
-        private int m_PositionCount;
 
         /// <summary>
         /// Initializes a new Instance of PR_InputManager
@@ -46,7 +45,6 @@ namespace PictureRubber
         {
             this.m_Root = _root;
             this.m_Kinect = _kinect;
-            this.m_PositionCount = 0;
         }
 
         public MouseState GetMouseState()
@@ -82,18 +80,12 @@ namespace PictureRubber
 
             if (this.m_ActualMouseState.LeftButton == ButtonState.Pressed)
             {
-                ++this.m_PositionCount;
-                if (this.m_PositionCount < 10)
-                {
-                    this.m_Root.Mouse.MousePosition = this.GetMousePosition();
-                    this.m_PositionCount = 0;
-                }
+                this.m_Root.Mouse.MousePosition = this.GetMousePosition();
             }
             if (this.m_ActualMouseState.LeftButton == ButtonState.Released &&
                 this.m_LastMouseState.LeftButton == ButtonState.Pressed)
             {
                 this.m_Root.IsGesture = true;
-                this.m_PositionCount = 0;
             }
 
             this.m_LastKeyboardState = this.m_ActualKeyboardState;
