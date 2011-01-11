@@ -76,7 +76,13 @@
       <Processor>VideoProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="DynamicMouse.fx">
+      <Name>DynamicMouse</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="menu\background.png">
       <Name>background</Name>
