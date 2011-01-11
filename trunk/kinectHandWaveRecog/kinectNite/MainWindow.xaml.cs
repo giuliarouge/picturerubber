@@ -34,9 +34,10 @@ namespace kinectNite
      
         public MainWindow()
         {
+            this.WindowState = WindowState.Minimized;
             InitializeComponent();
-            this.Closing += new System.ComponentModel.CancelEventHandler(MainWindow_Closing);
-            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+      //      this.Closing += new System.ComponentModel.CancelEventHandler(MainWindow_Closing);
+       //     this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
             AvailableHands = new ObservableCollection<Hand>();
             context = new XnMOpenNIContext();
             this.shouldRun=true;
@@ -93,23 +94,7 @@ namespace kinectNite
             else
                 IsMouseMoving = true;
 
-            AnimateBackground();
-
             oldpos = mouse;
-        }
-        void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.M)
-            {
-                MaximizeMinimize();
-            }
-        }
-        void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            this.shouldRun = false;
-            this.context.Close();
-            this.context.Dispose();
-            base.OnClosing(e);
         } 
         #endregion
       
@@ -307,26 +292,7 @@ namespace kinectNite
             else
                 this.WindowState = System.Windows.WindowState.Maximized;
         }
-        private void AnimateBackground()
-        {
-
-            if (IsMouseMoving && !HandDetected && !ReFocus)
-            {
-                myRipple.Center = new Point((1 / imgImage.ActualWidth) * mouse.X, (1 / imgImage.ActualHeight) * mouse.Y);
-
-                if (frequency == 0)
-                {
-                    frequency = 40;
-                    magnitude = 0;
-                }
-                if (frequency == 30)
-                    magnitude = 0.02;
-                myRipple.Magnitude = magnitude;
-                myRipple.Frequency = frequency;
-                frequency--;
-
-            }
-        }
+       
         Point GetPos(Point pt, Point target, double speed)
         {
             double xdif = target.X - pt.X;
