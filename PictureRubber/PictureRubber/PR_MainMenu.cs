@@ -27,6 +27,10 @@ namespace PictureRubber
         private int[] m_SelectedIndex;
         private int m_Delay = 120;
         private int m_CurrentDelay;
+        private int[] m_Animations;
+        private int m_AnimationDelay;
+        private int m_CurrentAnimationDelay;
+        private bool m_AnimationDirection;
 
         public PR_MainMenu(PR_Main _root, PR_InputManager _input)
         {
@@ -36,6 +40,12 @@ namespace PictureRubber
             this.m_SelectedIndex[0] = 0;
             this.m_SelectedIndex[1] = 0;
             this.m_SelectedIndex[2] = 0;
+            this.m_AnimationDirection = true;
+            this.m_AnimationDelay = 500;
+            this.m_CurrentAnimationDelay = 0;
+            this.m_Animations = new int[2];
+            this.m_Animations[0] = 0;
+            this.m_Animations[1] = 0;
             this.m_Root = _root;
             this.m_InputManager = _input;
             this.m_Background = this.m_Root.Content.Load<Texture2D>("menu\\background");

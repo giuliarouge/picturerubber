@@ -125,14 +125,14 @@ namespace PictureRubber
         [STAThread()]
         protected override void LoadContent()
         {
-            m_Graphics.PreferredBackBufferHeight = 768;
+            m_Graphics.PreferredBackBufferHeight = 480;
             if (this.m_Modus == Modus.Debug)
             {
                 m_Graphics.PreferredBackBufferWidth = 1280;
             }
             else
             {
-                m_Graphics.PreferredBackBufferWidth = 1024;
+                m_Graphics.PreferredBackBufferWidth = 640;
             }
             m_Graphics.ApplyChanges();
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
