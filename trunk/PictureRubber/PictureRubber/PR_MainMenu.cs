@@ -9,29 +9,76 @@ namespace PictureRubber
 {
     class PR_MainMenu
     {
+        /// <summary>
+        /// the root pointer
+        /// </summary>
         private PR_Main m_Root;
-        private Texture2D m_Background;
+
+        /// <summary>
+        /// the menu frame
+        /// </summary>
         private Texture2D m_MenuFrame;
-        private Texture2D m_LeftLine;
-        private Texture2D m_RightLine;
-        private Texture2D m_Rubber;
+
+        /// <summary>
+        /// Array holding textures of the start button
+        /// </summary>
         private Texture2D[] m_StartenButton;
+
+        /// <summary>
+        /// Array holding textures of the options button
+        /// </summary>
         private Texture2D[] m_OptionenButton;
+
+        /// <summary>
+        /// Array holding textures of the close button
+        /// </summary>
         private Texture2D[] m_BeendenButton;
+
+        /// <summary>
+        /// Rectangle representing the start button
+        /// </summary>
         private Rectangle m_StartButtonRect;
+
+        /// <summary>
+        /// Rectangle representing the options button
+        /// </summary>
         private Rectangle m_OptionenButtonRect;
+
+        /// <summary>
+        /// Rectangle representing the close button
+        /// </summary>
         private Rectangle m_BeendenButtonRect;
+
+        /// <summary>
+        /// the input manager
+        /// </summary>
         private PR_InputManager m_InputManager;
 
+        /// <summary>
+        /// Flag whether visible or not
+        /// </summary>
         public bool m_Visible;
-        private int[] m_SelectedIndex;
-        private int m_Delay = 120;
-        private int m_CurrentDelay;
-        private int[] m_Animations;
-        private int m_AnimationDelay;
-        private int m_CurrentAnimationDelay;
-        private bool m_AnimationDirection;
 
+        /// <summary>
+        /// Counter for the Control of the Buttons, holding on a button will increase the correspondating element
+        /// </summary>
+        private int[] m_SelectedIndex;
+
+        /// <summary>
+        /// waiting Delay
+        /// </summary>
+        private int m_Delay = 120;
+
+        /// <summary>
+        /// current waiting delay
+        /// </summary>
+        private int m_CurrentDelay;
+        
+        /// <summary>
+        /// Initializes a new instance of PR_MainMenu
+        /// </summary>
+        /// <param name="_root">the root pointer</param>
+        /// <param name="_input">the input manager</param>
         public PR_MainMenu(PR_Main _root, PR_InputManager _input)
         {
             this.m_Visible = true;
@@ -40,21 +87,12 @@ namespace PictureRubber
             this.m_SelectedIndex[0] = 0;
             this.m_SelectedIndex[1] = 0;
             this.m_SelectedIndex[2] = 0;
-            this.m_AnimationDirection = true;
-            this.m_AnimationDelay = 500;
-            this.m_CurrentAnimationDelay = 0;
-            this.m_Animations = new int[2];
-            this.m_Animations[0] = 0;
-            this.m_Animations[1] = 0;
+            
             this.m_Root = _root;
             this.m_InputManager = _input;
-            this.m_Background = this.m_Root.Content.Load<Texture2D>("menu\\background");
+            
             this.m_MenuFrame = this.m_Root.Content.Load<Texture2D>("menu\\menu_frame");
-            this.m_LeftLine = this.m_Root.Content.Load<Texture2D>("menu\\left_line");
-            this.m_RightLine = this.m_Root.Content.Load<Texture2D>("menu\\right_line");
-            this.m_Rubber = this.m_Root.Content.Load<Texture2D>("menu\\rubber");
-            this.m_MenuFrame = this.m_Root.Content.Load<Texture2D>("menu\\menu_frame");
-
+            
             this.m_BeendenButton = new Texture2D[3];
             this.m_OptionenButton = new Texture2D[3];
             this.m_StartenButton = new Texture2D[3];
@@ -78,6 +116,10 @@ namespace PictureRubber
             this.m_BeendenButtonRect = new Rectangle((int)(196 * value), (int)(832 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
         }
 
+        /// <summary>
+        /// Updates the Menu if visible
+        /// </summary>
+        /// <param name="_gameTime">the actual gametime</param>
         public void Update(GameTime _gameTime)
         {
             if (this.m_Visible)
@@ -91,13 +133,15 @@ namespace PictureRubber
                             this.m_InputManager.HandleMenuInput(i);
                             this.ClearUpCounter();
                             break;
-
                         }
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Clears the counter m_SelectedIndex
+        /// </summary>
         private void ClearUpCounter()
         {
             for (int i = 0; i < 3; i++)
@@ -107,17 +151,19 @@ namespace PictureRubber
             this.m_Delay = 0;
         }
 
+        /// <summary>
+        /// Draws the menu if visible
+        /// </summary>
+        /// <param name="_gameTime">the actual gametime</param>
         public void Draw(GameTime _gameTime)
         {
             if (this.m_Visible)
             {
                 Vector2 mousePosition = this.m_InputManager.GetMousePosition();
-                this.m_Root.m_SpriteBatch.Begin();
+
+                this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);                
                 Rectangle rec = new Rectangle(0, 0, this.m_Root.GraphicsDevice.Viewport.Width, this.m_Root.GraphicsDevice.Viewport.Height);
-                this.m_Root.m_SpriteBatch.Draw(m_Background, rec, Microsoft.Xna.Framework.Color.White);
-                this.m_Root.m_SpriteBatch.Draw(m_LeftLine, rec, Microsoft.Xna.Framework.Color.White);
-                this.m_Root.m_SpriteBatch.Draw(m_RightLine, rec, Microsoft.Xna.Framework.Color.White);
-                this.m_Root.m_SpriteBatch.Draw(m_Rubber, rec, Microsoft.Xna.Framework.Color.White);
+                
                 this.m_Root.m_SpriteBatch.Draw(m_MenuFrame, rec, Microsoft.Xna.Framework.Color.White);
                 bool intersects = false;
                 if (Intersects(mousePosition, m_StartButtonRect))
@@ -127,14 +173,13 @@ namespace PictureRubber
                     {
                         this.m_Root.m_SpriteBatch.Draw(m_StartenButton[1], m_StartButtonRect, Microsoft.Xna.Framework.Color.White);
                         this.m_SelectedIndex[0]+=2;
-                        this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[0]);
                     }
                     else
                     {
                         this.m_Root.m_SpriteBatch.Draw(m_StartenButton[2], m_StartButtonRect, Microsoft.Xna.Framework.Color.White);
                         this.m_CurrentDelay++;
-                        this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[0]);
                     }
+                    this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[0]);
                 }
                 else
                 {
@@ -147,14 +192,13 @@ namespace PictureRubber
                     {
                         this.m_Root.m_SpriteBatch.Draw(m_OptionenButton[1], m_OptionenButtonRect, Microsoft.Xna.Framework.Color.White);
                         this.m_SelectedIndex[1]+=2;
-                        this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[1]);
                     }
                     else
                     {
                         this.m_Root.m_SpriteBatch.Draw(m_OptionenButton[2], m_OptionenButtonRect, Microsoft.Xna.Framework.Color.White);
                         this.m_CurrentDelay++;
-                        this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[1]);
                     }
+                    this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[1]);
                 }
                 else
                 {
@@ -167,14 +211,13 @@ namespace PictureRubber
                     {
                         this.m_Root.m_SpriteBatch.Draw(m_BeendenButton[1], m_BeendenButtonRect, Microsoft.Xna.Framework.Color.White);
                         this.m_SelectedIndex[2]+=2;
-                        this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[2]);
                     }
                     else
                     {
                         this.m_Root.m_SpriteBatch.Draw(m_BeendenButton[2], m_BeendenButtonRect, Microsoft.Xna.Framework.Color.White);
                         this.m_CurrentDelay++;
-                        this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[2]);
                     }
+                    this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[2]);
                 }
                 else
                 {

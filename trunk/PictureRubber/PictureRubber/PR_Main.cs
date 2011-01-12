@@ -75,7 +75,7 @@ namespace PictureRubber
             Release
         };
 
-        private PR_MainMenu m_MainMenu;
+        private PR_Menu m_Menu;
 
         private Texture2D test;
 
@@ -141,8 +141,8 @@ namespace PictureRubber
             
             m_InputManager = new PR_InputManager(this,this.m_Kinect);
 
-            m_MainMenu = new PR_MainMenu(this, this.m_InputManager);
-            
+            m_Menu = new PR_Menu(this, this.m_InputManager);
+            m_Menu.m_Visible = true;
             this.m_Pictures = new PR_Pictures(this, "Images",this.m_Kinect);
             this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
             this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice, this);
@@ -174,7 +174,7 @@ namespace PictureRubber
         protected override void Update(GameTime _gameTime)
         {
             this.m_InputManager.HandleInput(_gameTime);
-            this.m_MainMenu.Update(_gameTime);
+            this.m_Menu.Update(_gameTime);
             base.Update(_gameTime);
         }
 
@@ -190,11 +190,11 @@ namespace PictureRubber
         {
             get
             {
-                return this.m_MainMenu.m_Visible;
+                return this.m_Menu.m_Visible;
             }
             set
             {
-                this.m_MainMenu.m_Visible = value;
+                this.m_Menu.m_Visible = value;
             }
         }
 
@@ -245,9 +245,9 @@ namespace PictureRubber
                     this.m_Mouse.ResetMousePositions();
                     GC.Collect();
                 }
-                if (this.m_MainMenu.m_Visible)
+                if (this.m_Menu.m_Visible)
                 {
-                    this.m_MainMenu.Draw(_gameTime);
+                    this.m_Menu.Draw(_gameTime);
                 }
                 else
                 {
