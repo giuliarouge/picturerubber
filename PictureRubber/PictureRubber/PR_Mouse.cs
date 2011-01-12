@@ -9,10 +9,29 @@ namespace PictureRubber
 {
     public class PR_Mouse
     {
+        /// <summary>
+        /// the root pointer
+        /// </summary>
         private PR_Main m_Root;
+
+        /// <summary>
+        /// The Mouse Teture
+        /// </summary>
         private Texture2D m_Texture;
+
+        /// <summary>
+        /// The Waiting Part Texture
+        /// </summary>
         private Texture2D m_WaitingTexture;
+
+        /// <summary>
+        /// The Input Manager
+        /// </summary>
         private PR_InputManager m_InputManager;
+
+        /// <summary>
+        /// Holds the current Waiting Time
+        /// </summary>
         private int m_WaitingTime;
 
         /// <summary>
@@ -50,7 +69,10 @@ namespace PictureRubber
             }
         }
 
-        
+        /// <summary>
+        /// Sets the Waiting Time for the animation direction
+        /// </summary>
+        /// <param name="_waitingTime">the time, given in angles</param>
         public void SetWaitingTime(int _waitingTime)
         {
             this.m_WaitingTime = _waitingTime;
@@ -71,21 +93,7 @@ namespace PictureRubber
                     this.m_Texture.Width,
                     this.m_Texture.Height);
                 this.m_Root.m_SpriteBatch.Draw(m_Texture, rec, Microsoft.Xna.Framework.Color.White);
-                /*
-                for (int i = this.m_WaitingTime / 45; i > 0; i--)
-                {
-                    float angle = MathHelper.ToRadians(this.m_WaitingTime - 45.0f * i);
-                    this.m_Root.m_SpriteBatch.Draw(m_WaitingTexture,
-                        new Vector2(this.m_InputManager.GetMouseState().X, this.m_InputManager.GetMouseState().Y),
-                        null,
-                        Color.White,
-                        angle,
-                        new Vector2(this.m_WaitingTexture.Width / 2, this.m_WaitingTexture.Height / 2),
-                        this.m_ScalingValue,
-                        SpriteEffects.None,
-                        0f);
-                }
-                */
+                
                 for (int i = 0; i < this.m_WaitingTime / 45; i++)
                 {
                     float angle = MathHelper.ToRadians(45.0f * i);
