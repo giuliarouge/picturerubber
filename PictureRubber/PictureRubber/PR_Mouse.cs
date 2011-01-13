@@ -88,8 +88,8 @@ namespace PictureRubber
             {
                 this.m_Root.m_SpriteBatch.Begin();
                 Rectangle rec = new Rectangle(
-                    this.m_InputManager.GetMouseState().X - this.m_Texture.Width / 2, 
-                    this.m_InputManager.GetMouseState().Y - this.m_Texture.Height / 2, 
+                    this.m_InputManager.GetActualMouseState().X - this.m_Texture.Width / 2,
+                    this.m_InputManager.GetActualMouseState().Y - this.m_Texture.Height / 2, 
                     this.m_Texture.Width,
                     this.m_Texture.Height);
                 this.m_Root.m_SpriteBatch.Draw(m_Texture, rec, Microsoft.Xna.Framework.Color.White);
@@ -98,7 +98,7 @@ namespace PictureRubber
                 {
                     float angle = MathHelper.ToRadians(45.0f * i);
                     this.m_Root.m_SpriteBatch.Draw(m_WaitingTexture,
-                        new Vector2(this.m_InputManager.GetMouseState().X, this.m_InputManager.GetMouseState().Y),
+                        new Vector2(this.m_InputManager.GetActualMouseState().X, this.m_InputManager.GetActualMouseState().Y),
                         null,
                         Color.White,
                         angle,

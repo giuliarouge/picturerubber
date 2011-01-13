@@ -13,7 +13,7 @@ namespace PictureRubber
     /// <summary>
     /// this class will manage realtime rendering of rubber-effect
     /// </summary>
-    class PR_Renderer
+    public class PR_Renderer
     {
         //constants
         /// <summary>When HLSL rendering the texture coordinates have a little shifting. This value corrects this.
@@ -192,14 +192,14 @@ namespace PictureRubber
         /// set actual rendertarget
         /// </summary>
         /// <param name="_texture">textureinformation for rendertarget</param>
-        public void SetRenderTarget(ref Texture2D _texture)
+        public void SetRenderTarget(Texture2D _texture)
         {
             //initialize rendertarget
             this.m_RenderTarget = new RenderTarget2D(
                 this.m_Graphics, _texture.Width, _texture.Height, false, this.m_Graphics.DisplayMode.Format, DepthFormat.Depth24Stencil8);
             //set the rendertarget to our texture
             this.m_Graphics.SetRenderTarget(this.m_RenderTarget);
-            this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Black);
+            this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Transparent);
         }
 
         /// <summary>

@@ -34,8 +34,10 @@ namespace PictureRubber
         /// </summary>
         private MouseState m_ActualMouseState;
 
+        /// <summary>
+        /// instance of Kinect class
+        /// </summary>
         private PR_Kinect m_Kinect;
-
 
         /// <summary>
         /// Initializes a new Instance of PR_InputManager
@@ -47,9 +49,22 @@ namespace PictureRubber
             this.m_Kinect = _kinect;
         }
 
-        public MouseState GetMouseState()
+        /// <summary>
+        /// get actual mousestate
+        /// </summary>
+        /// <returns>m_ActualMouseState</returns>
+        public MouseState GetActualMouseState()
         {
             return this.m_ActualMouseState;
+        }
+
+        /// <summary>
+        /// get last mousestate
+        /// </summary>
+        /// <returns>m_LastMouseState</returns>
+        public MouseState GetLastMouseState()
+        {
+            return this.m_LastMouseState;
         }
         
         public void HandleInput(GameTime _gameTime)
@@ -63,15 +78,6 @@ namespace PictureRubber
                 this.m_Kinect.DeleteKinect();
                 this.m_Root.Exit();
             }
-            if (this.m_ActualKeyboardState.IsKeyDown(Keys.B) && this.m_LastKeyboardState.IsKeyUp(Keys.B))
-            {
-                this.m_Root.IsGesture = true;
-            }
-
-            if (this.m_ActualKeyboardState.IsKeyDown(Keys.R) && this.m_LastKeyboardState.IsKeyUp(Keys.R))
-            {
-                this.m_Root.DeletePicture();
-            }
 
             if (this.m_ActualKeyboardState.IsKeyDown(Keys.S) && this.m_LastKeyboardState.IsKeyUp(Keys.S))
             {
@@ -84,12 +90,27 @@ namespace PictureRubber
                 this.GetMousePosition().Y <= this.m_Root.GraphicsDevice.Viewport.Height &&
                 this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu)
             {
+                if (this.m_Root.ShaderModus == PR_Main.RubberModus.Path)
+                {
+                    this.m_Root.RunningGesture = true;
+                }
+                else if (this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime)
+                {
+                    this.m_Root.IsGesture = true;
+                }
                 this.m_Root.Mouse.MousePosition = this.GetMousePosition();
             }
             if (this.m_ActualMouseState.LeftButton == ButtonState.Released &&
                 this.m_LastMouseState.LeftButton == ButtonState.Pressed)
             {
-                this.m_Root.IsGesture = true;
+                if (this.m_Root.ShaderModus == PR_Main.RubberModus.Path)
+                {
+                    this.m_Root.IsGesture = true;
+                }
+                else if (this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime)
+                {
+                    this.m_Root.IsGesture = false;
+                }
             }
 
             this.m_LastKeyboardState = this.m_ActualKeyboardState;
@@ -111,7 +132,10 @@ namespace PictureRubber
             }
         }
 
-        
+        /// <summary>
+        /// get actual mouse-position on the screen
+        /// </summary>
+        /// <returns></returns>
         public Vector2 GetMousePosition()
         {
             return new Vector2(this.m_ActualMouseState.X, this.m_ActualMouseState.Y);
