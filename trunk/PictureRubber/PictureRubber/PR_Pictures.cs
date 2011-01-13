@@ -76,24 +76,13 @@ namespace PictureRubber
             return tex;
         }
 
-        public void setTexture(Texture2D _texture, int _index)
-        {
-            this.m_Textures[_index] = _texture;
-        }
-
-        public Texture2D getTexture(int _index)
-        {
-            return this.m_Textures[_index];
-        }
-
+        /// <summary>
+        /// get all available textures
+        /// </summary>
+        /// <returns></returns>
         public Texture2D[] getTextures()
         {
             return this.m_Textures;
-        }
-
-        public int getTextureCount()
-        {
-            return this.m_Textures.Count();
         }
 
         /// <summary>
@@ -148,12 +137,10 @@ namespace PictureRubber
             return success;
         }
 
-        public void DeleteLastPicture()
-        {
-            this.m_Pictures[this.m_Pictures.Length - 1] = null;
-            this.m_Textures[this.m_Textures.Length - 1] = null;
-        }
-
+        /// <summary>
+        /// draw pictures on the screen
+        /// </summary>
+        /// <param name="_gameTime"></param>
         public void Draw(GameTime _gameTime)
         {
             this.m_Root.m_SpriteBatch.Begin();

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace PictureRubber
 {
@@ -57,6 +58,35 @@ namespace PictureRubber
         private PR_Renderer m_MouseTextureRenderer;
 
         /// <summary>
+        /// initial Texture for Mouse-Texture Shader
+        /// </summary>
+        private Texture2D m_MouseTexture;
+
+        /// <summary>
+        /// real texture of the mouse seen on the screen
+        /// </summary>
+        private Texture2D m_RealMouseTexture;
+
+        /// <summary>
+        /// texture to generate rubber-areas
+        /// </summary>
+        public Texture2D m_BlankTexture;
+
+        /// <summary>
+        /// enumeration-type to specific the way, how the DynamicMouse-Shader works
+        /// </summary>
+        public enum RubberModus
+        {
+            Realtime,
+            Path
+        };
+
+        /// <summary>
+        /// variable which specifics the actual shader modus
+        /// </summary>
+        private RubberModus m_MouseShaderModus;
+
+        /// <summary>
         /// The Intro
         /// </summary>
         private PR_Intro m_Intro;
@@ -75,20 +105,25 @@ namespace PictureRubber
             Release
         };
 
-        private PR_Menu m_Menu;
+        /// <summary>
+        /// specifics if an rendertarget is set or not
+        /// </summary>
+        private bool m_InitBlankTexture;
 
-        private Texture2D test;
+        /// <summary>
+        /// specifics if an rubbing-gesture ist running
+        /// </summary>
+        private bool m_IsGestureRunning;
+
+        /// <summary>
+        /// instance of menu
+        /// </summary>
+        private PR_Menu m_Menu;
 
         /// <summary>
         /// speficis, if there was a new rubbing-gesture
         /// </summary>
         private bool m_CreateMouseTexture;
-
-        public void DeletePicture()
-        {
-            this.m_Pictures.DeleteLastPicture();
-        }
-
 
         /// <summary>
         /// Variable for Build Mode Selection
@@ -105,6 +140,9 @@ namespace PictureRubber
             this.m_Modus = Modus.Release;
             this.m_PlayIntro = false;
             this.m_CreateMouseTexture = false;
+            this.m_IsGestureRunning = false;
+            this.m_InitBlankTexture = true;
+            this.ShaderModus = RubberModus.Path;
         }
 
         /// <summary>
@@ -142,17 +180,19 @@ namespace PictureRubber
             m_InputManager = new PR_InputManager(this,this.m_Kinect);
 
             m_Menu = new PR_Menu(this, this.m_InputManager);
-            m_Menu.m_Visible = true;
+            this.ShowMenu = true;
             this.m_Pictures = new PR_Pictures(this, "Images",this.m_Kinect);
             this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
             this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice, this);
             this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice, this);
+            this.m_MouseTexture = new Texture2D(this.m_Graphics.GraphicsDevice, this.m_Graphics.GraphicsDevice.Viewport.Width, this.m_Graphics.GraphicsDevice.Viewport.Height);
+            this.m_BlankTexture = this.m_MouseTexture;
+            this.m_RealMouseTexture = this.m_Mouse.GetMouseTexture();
             this.m_Intro = new PR_Intro(this, "intro");
             if (this.m_PlayIntro)
             {
                 this.m_Intro.Play();
             }
-            this.test = Content.Load<Texture2D>("test");
             //this.m_Graphics.IsFullScreen = true;
             //this.m_Graphics.ApplyChanges();
         }
@@ -175,6 +215,29 @@ namespace PictureRubber
         {
             this.m_InputManager.HandleInput(_gameTime);
             this.m_Menu.Update(_gameTime);
+
+            if (this.IsGesture && this.m_MouseShaderModus == RubberModus.Realtime ||
+                this.RunningGesture && this.m_MouseShaderModus == RubberModus.Path)
+            {
+                if (this.m_InitBlankTexture && this.m_MouseShaderModus == RubberModus.Path)
+                {
+                    //draw a path, where the user wants to delete something of the image
+                    this.m_BlankTexture = this.m_MouseTexture;
+                    this.m_InitBlankTexture = false;
+                }
+                else if (this.m_MouseShaderModus == RubberModus.Realtime)
+                {
+                    //reset m_BlankTexture every update-call
+                    this.m_BlankTexture = this.m_MouseTexture;
+                }
+                //process DynamicMouse-Shader to calculate the texture
+                this.m_MouseTextureRenderer.SetRenderTarget(this.m_BlankTexture);
+                this.m_MouseTextureRenderer.CreateMouseTexture(ref this.m_BlankTexture,
+                    this.m_RealMouseTexture,
+                    this.m_Mouse.GetMousePositions().ElementAt(this.m_Mouse.GetMousePositions().Count - 1));
+                this.m_MouseTextureRenderer.ResetRenderTarget(ref this.m_BlankTexture);
+            }
+
             base.Update(_gameTime);
         }
 
@@ -212,47 +275,36 @@ namespace PictureRubber
             }
             else
             {
-                if (this.IsGesture && !this.ShowMenu)
-                {
-                    //create mouse-texture for rubbing-areas
-                    Texture2D blankTexture = new Texture2D(this.m_Graphics.GraphicsDevice, this.m_Graphics.GraphicsDevice.Viewport.Width, this.m_Graphics.GraphicsDevice.Viewport.Height);
-                    Texture2D mouseTexture = this.m_Mouse.GetMouseTexture();
-                    List<Vector2> positions = this.m_Mouse.GetMousePositions();
-                    //set rendertarger
-                    this.m_MouseTextureRenderer.SetRenderTarget(ref blankTexture);
-                    //calculate rubbing-areas with DynamicMouse-shader
-                    foreach(Vector2 position in positions)
-                    {
-                        this.m_MouseTextureRenderer.CreateMouseTexture(ref blankTexture, mouseTexture, position);
-                    }
-                    this.m_MouseTextureRenderer.ResetRenderTarget(ref blankTexture);
-
-                    //delete areas AlphaFader-Shader
-                    Texture2D[] texture = this.m_Pictures.getTextures();
-                    for (int i = 1; i < this.m_Pictures.getTextureCount(); i++)
-                    {
-                        if (i == this.m_Pictures.getTextureCount() - 1)
-                        {
-                            this.m_RubberRenderer.ApplyFilter(ref texture[i], blankTexture, 100);
-                        }
-                        else
-                        {
-                            this.m_RubberRenderer.ApplyFilter(ref texture[i], blankTexture, 100, texture[i + 1]);
-                        }
-                    }
-                    //reset values
-                    this.IsGesture = false;
-                    this.m_Mouse.ResetMousePositions();
-                    GC.Collect();
-                }
-                if (this.m_Menu.m_Visible)
+                if (this.ShowMenu)
                 {
                     this.m_Menu.Draw(_gameTime);
                 }
                 else
                 {
+                    if (this.IsGesture)
+                    {
+                        //if there was a gesture recognized, delete the areas of the image
+                        if(this.m_MouseShaderModus == RubberModus.Path)
+                        {
+                            this.m_InitBlankTexture = true;
+                            this.RunningGesture = false;
+                        }
+                        this.ProcessAlphaFaderShader();
+                        this.ResetValues();
+                    }             
+                    
                     this.m_Pictures.Draw(_gameTime);
+                    if (this.RunningGesture)
+                    {
+                        //draw a path, where the user wants to delete something of the image
+                        this.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                        this.m_SpriteBatch.Draw(this.m_BlankTexture,
+                            new Rectangle(0, 0, this.m_BlankTexture.Width, this.m_BlankTexture.Height),
+                            new Color(0, 0, 0, 255/5));
+                        this.m_SpriteBatch.End();
+                    }
                 }
+
                 this.m_Mouse.Draw(_gameTime);
             }
             base.Draw(_gameTime);
@@ -273,6 +325,18 @@ namespace PictureRubber
             }
         }
 
+        public bool RunningGesture
+        {
+            get
+            {
+                return this.m_IsGestureRunning;
+            }
+            set
+            {
+                this.m_IsGestureRunning = value;
+            }
+        }
+
         /// <summary>
         /// get instance of PR_Mouse
         /// </summary>
@@ -281,6 +345,52 @@ namespace PictureRubber
             get
             {
                 return this.m_Mouse;
+            }
+        }
+
+        /// <summary>
+        /// process the alphafader shader to clean the ares
+        /// </summary>
+        private void ProcessAlphaFaderShader()
+        {
+            //delete areas AlphaFader-Shader
+            Texture2D[] texture = this.m_Pictures.getTextures();
+            for (int i = 1; i < texture.Count(); i++)
+            {
+                if (i == texture.Count() - 1)
+                {
+                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_BlankTexture, 100);
+                }
+                else
+                {
+                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_BlankTexture, 100, texture[i + 1]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// reset values and call the garbage collector
+        /// </summary>
+        private void ResetValues()
+        {
+            //reset values
+            this.IsGesture = false;
+            this.m_Mouse.ResetMousePositions();
+            GC.Collect();
+        }
+
+        /// <summary>
+        /// gets or sets the actual shadermodus
+        /// </summary>
+        public RubberModus ShaderModus
+        {
+            get
+            {
+                return this.m_MouseShaderModus;
+            }
+            set
+            {
+                this.m_MouseShaderModus = value;
             }
         }
     }
