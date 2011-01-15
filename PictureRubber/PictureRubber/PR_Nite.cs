@@ -5,6 +5,7 @@ using System.Text;
 using ManagedNite;
 using System.Diagnostics;
 using System.Threading;
+using Microsoft.Xna.Framework;
 
 namespace PictureRubber
 {
@@ -13,11 +14,13 @@ namespace PictureRubber
         private XnMOpenNIContext m_Context;
         private XnMSessionManager m_SessionManager;
         private XnMPointDenoiser m_PointDenoiser;
+        private XnMPushDetector m_PushDetector;
 
         public void NiteInitialize()
         {
-            m_Context = new XnMOpenNIContext();
             this.shouldRun = true;
+
+            m_Context = new XnMOpenNIContext();
             m_Context.Init();
  
             m_PointDenoiser = new XnMPointDenoiser();
@@ -25,8 +28,12 @@ namespace PictureRubber
             m_PointDenoiser.PrimaryPointUpdate += new EventHandler<HandPointContextEventArgs>(sessionManager_PrimaryPointUpdate);
             m_PointDenoiser.PrimaryPointDestroy += new EventHandler<PointDestroyEventArgs>(sessionManager_PrimaryPointDestroy);
 
+            m_PushDetector = new XnMPushDetector();
+            m_PushDetector.Push += new EventHandler<PushDetectorEventArgs>(pushDetector_Push);
+
             m_SessionManager = new XnMSessionManager(m_Context, "Wave", "Wave");     
             m_SessionManager.AddListener(m_PointDenoiser);
+            m_SessionManager.AddListener(m_PushDetector);
 
             this.readerThread = new Thread(ReaderThread);
             this.readerThread.Start();
@@ -47,16 +54,17 @@ namespace PictureRubber
             float x = e.HPC.Position.X;
             float y = e.HPC.Position.Y;
             float z = e.HPC.Position.Z;
-            Trace.WriteLine("StartCoord(" + x + y + z + ")");
+            Trace.WriteLine("StartCoord(" + x + ";" + y + ";" + z + ")");
         }
 
         void sessionManager_PrimaryPointUpdate(object sender, HandPointContextEventArgs e)
         {
-            float x = e.HPC.Position.X;
-            float y = e.HPC.Position.Y;
+            int x = (int)((System.Windows.SystemParameters.PrimaryScreenWidth / 4) + e.HPC.Position.X);
+            int y = (int)((System.Windows.SystemParameters.PrimaryScreenHeight / 2) + e.HPC.Position.Y * -1);
             float z = e.HPC.Position.Z;
-            Trace.WriteLine("Coord(" + x + y + z + ")");
+            Trace.WriteLine("Hand(" + x + ";" + y + ";" + z + ")");
             //Update Pointer Position
+            PR_Glove.SetCursorPos(x, y);
         }
 
         void sessionManager_PrimaryPointDestroy(object sender, PointDestroyEventArgs e)
@@ -64,12 +72,13 @@ namespace PictureRubber
             Trace.WriteLine("~ID: " + e.ID);
         }
 
-        private void track_hands()
+        void pushDetector_Push(object sender, PushDetectorEventArgs e)
         {
+            Trace.WriteLine("Pushed!");
+            // send LeftClick_Event
         }
 
         private bool shouldRun = false;
         private Thread readerThread;
-        // private double precision = 0.025;
     }
 }

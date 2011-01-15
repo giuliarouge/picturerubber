@@ -120,6 +120,7 @@
     <Compile Include="CLNUIDevice.cs" />
     <Compile Include="NUIImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PR_Glove.cs" />
     <Compile Include="PR_InputManager.cs" />
     <Compile Include="PR_Intro.cs" />
     <Compile Include="PR_Kinect.cs" />
