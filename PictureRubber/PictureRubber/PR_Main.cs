@@ -163,6 +163,10 @@ namespace PictureRubber
         [STAThread()]
         protected override void LoadContent()
         {
+            // test for integrating Nite
+            PR_Nite nite = new PR_Nite();
+            nite.NiteInitialize();
+            
             m_Graphics.PreferredBackBufferHeight = 480;
             if (this.m_Modus == Modus.Debug)
             {
