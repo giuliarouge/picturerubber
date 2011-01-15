@@ -60,6 +60,10 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ManagedNite, Version=1.1.3928.31375, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\ManagedNite.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
@@ -123,6 +127,7 @@
     <Compile Include="PR_Menu.cs" />
     <Compile Include="PR_MenuBackground.cs" />
     <Compile Include="PR_Mouse.cs" />
+    <Compile Include="PR_Nite.cs" />
     <Compile Include="PR_Pictures.cs" />
     <Compile Include="PR_Program.cs" />
     <Compile Include="PR_Main.cs" />
@@ -133,6 +138,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="CodeStyle.txt" />
+    <Content Include="data\openni.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
     <Content Include="Images\001.png">
@@ -150,7 +158,11 @@
     <Content Include="Images\005.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ManagedNite.dll" />
     <Content Include="Readme.txt" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PictureRubberContent\PictureRubberContent.contentproj">
