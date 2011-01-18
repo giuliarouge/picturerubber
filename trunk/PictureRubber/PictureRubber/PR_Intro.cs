@@ -28,9 +28,9 @@ namespace PictureRubber
         /// Creates a new Instance from PR_Intro
         /// </summary>
         /// <param name="_root"></param>
-        public PR_Intro(PR_Main _root, string _videoPath)
+        public PR_Intro(string _videoPath)
         {
-            this.m_Root = _root;
+            this.m_Root = PR_Main.GetInstance();
             this.m_Player = new VideoPlayer();
             this.m_Video = this.m_Root.Content.Load<Video>(_videoPath);
         }

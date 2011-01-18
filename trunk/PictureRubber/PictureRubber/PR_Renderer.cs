@@ -46,8 +46,14 @@ namespace PictureRubber
         /// </summary>
         private RenderTarget2D m_RenderTarget;
 
-
+        /// <summary>
+        /// vertex for drawing the rendertarget
+        /// </summary>
         private VertexPositionTexture[] quadVex;
+
+        /// <summary>
+        /// ids
+        /// </summary>
         private short[] quadIdx;
 
         /// <summary>
@@ -57,11 +63,11 @@ namespace PictureRubber
         /// <param name="_technique">name of technique used in the effect-file</param>
         /// <param name="_graphics">instance of GRaphicsDevice</param>
         /// <param name="_main">instance of main-class</param>
-        public PR_Renderer(string _effect, string _technique, GraphicsDevice _graphics, PR_Main _main)
+        public PR_Renderer(string _effect, string _technique, GraphicsDevice _graphics)
         {
             this.m_Technique = _technique;
             this.m_Graphics = _graphics;
-            this.m_Main = _main;
+            this.m_Main = PR_Main.GetInstance();
 
             this.m_Effect = this.m_Main.Content.Load<Effect>(_effect);
             if (this.m_Effect == null)
@@ -101,7 +107,12 @@ namespace PictureRubber
         {
             //initialize rendertarget
             this.m_RenderTarget = new RenderTarget2D(
-                this.m_Graphics, _texture.Width, _texture.Height, false, this.m_Graphics.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+                this.m_Graphics,
+                _texture.Width,
+                _texture.Height,
+                false,
+                this.m_Graphics.DisplayMode.Format,
+                DepthFormat.Depth24Stencil8);
             //set the rendertarget to our texture
             this.m_Graphics.SetRenderTarget(this.m_RenderTarget);
             this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Transparent);
@@ -122,15 +133,7 @@ namespace PictureRubber
                 this.m_Effect.Parameters["textureIndex"].SetValue(1);
             }
 
-            foreach (EffectPass pass in this.m_Effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                //code from Frank Nagl, SBIP, http://code.google.com/p/sbip/
-                this.m_Graphics.DrawUserIndexedPrimitives(
-                    PrimitiveType.TriangleStrip,
-                    quadVex, 0, 4,
-                    quadIdx, 0, 2); 
-            }
+            this.DrawPrmitives(); 
 
             //clear rendertarget and return new texture
             this.m_Graphics.SetRenderTarget(null);
@@ -150,19 +153,23 @@ namespace PictureRubber
         {            
             Vector2 delta = new Vector2(1.0f / _texture.Width, 1.0f / _texture.Height);
 
+            //calculate variabls for shader
             Vector2 topLeft, bottomRight, dimensions;
+            //coordinates of topleft corner
             topLeft = new Vector2(
                 _mousePosition.X - _mouseTexture.Width / 2,
                 _mousePosition.Y - _mouseTexture.Height / 2);
             topLeft.X /= _texture.Width;
             topLeft.Y /= _texture.Height;
 
+            //coordinates of bottomright corner
             bottomRight = new Vector2(
                 _mousePosition.X + _mouseTexture.Width / 2,
                 _mousePosition.Y + _mouseTexture.Height / 2);
             bottomRight.X /= _texture.Width;
             bottomRight.Y /= _texture.Height;
 
+            //dimensions of the texture
             dimensions = new Vector2(
                 _mouseTexture.Width,
                 _mouseTexture.Height);
@@ -177,15 +184,7 @@ namespace PictureRubber
             this.m_Effect.Parameters["bottomRight"].SetValue(bottomRight);
             this.m_Effect.Parameters["dimensions"].SetValue(dimensions);
 
-            foreach (EffectPass pass in this.m_Effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                //code from Frank Nagl, SBIP, http://code.google.com/p/sbip/
-                this.m_Graphics.DrawUserIndexedPrimitives(
-                    PrimitiveType.TriangleStrip,
-                    quadVex, 0, 4,
-                    quadIdx, 0, 2);
-            }            
+            this.DrawPrmitives();        
         }
 
         /// <summary>
@@ -196,7 +195,12 @@ namespace PictureRubber
         {
             //initialize rendertarget
             this.m_RenderTarget = new RenderTarget2D(
-                this.m_Graphics, _texture.Width, _texture.Height, false, this.m_Graphics.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+                this.m_Graphics,
+                _texture.Width,
+                _texture.Height,
+                false,this.m_Graphics.DisplayMode.Format,
+                DepthFormat.Depth24Stencil8);
+
             //set the rendertarget to our texture
             this.m_Graphics.SetRenderTarget(this.m_RenderTarget);
             this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Transparent);
@@ -213,6 +217,22 @@ namespace PictureRubber
 
             _texture = this.m_RenderTarget;
             this.m_RenderTarget = null;
+        }
+
+        /// <summary>
+        /// draw the texture
+        /// </summary>
+        private void DrawPrmitives()
+        {
+            foreach (EffectPass pass in this.m_Effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                //code from Frank Nagl, SBIP, http://code.google.com/p/sbip/
+                this.m_Graphics.DrawUserIndexedPrimitives(
+                    PrimitiveType.TriangleStrip,
+                    quadVex, 0, 4,
+                    quadIdx, 0, 2);
+            }
         }
     }
 }

@@ -10,10 +10,8 @@ namespace PictureRubber
         [STAThread()]
         static void Main(string[] args)
         {
-            using (PR_Main game = new PR_Main())
-            {
-                game.Run();
-            }
+            PR_Main game = PR_Main.GetInstance();
+            game.Run();
         }
     }
 }

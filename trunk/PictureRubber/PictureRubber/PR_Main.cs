@@ -70,7 +70,12 @@ namespace PictureRubber
         /// <summary>
         /// texture to generate rubber-areas
         /// </summary>
-        public Texture2D m_BlankTexture;
+        private Texture2D m_BlankTexture;
+
+        /// <summary>
+        /// specify the alphaamount for alphafader-shader
+        /// </summary>
+        private const int m_AlphaAmount = 100;
 
         /// <summary>
         /// enumeration-type to specific the way, how the DynamicMouse-Shader works
@@ -82,7 +87,7 @@ namespace PictureRubber
         };
 
         /// <summary>
-        /// variable which specifics the actual shader modus
+        /// variable which specify the actual shader modus
         /// </summary>
         private RubberModus m_MouseShaderModus;
 
@@ -92,7 +97,7 @@ namespace PictureRubber
         private PR_Intro m_Intro;
 
         /// <summary>
-        /// specifics, if the intro will be played
+        /// specify, if the intro will be played
         /// </summary>
         private bool m_PlayIntro;
 
@@ -106,12 +111,12 @@ namespace PictureRubber
         };
 
         /// <summary>
-        /// specifics if an rendertarget is set or not
+        /// specify if an rendertarget is set or not
         /// </summary>
         private bool m_InitBlankTexture;
 
         /// <summary>
-        /// specifics if an rubbing-gesture ist running
+        /// specify if an rubbing-gesture ist running
         /// </summary>
         private bool m_IsGestureRunning;
 
@@ -129,6 +134,11 @@ namespace PictureRubber
         /// Variable for Build Mode Selection
         /// </summary>
         public Modus m_Modus;
+
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
+        private static PR_Main m_Object;
         
         /// <summary>
         /// Initializes a new Instance of PR_Main
@@ -143,6 +153,19 @@ namespace PictureRubber
             this.m_IsGestureRunning = false;
             this.m_InitBlankTexture = true;
             this.ShaderModus = RubberModus.Path;
+        }
+
+        /// <summary>
+        /// static function to get only one isntance of PR_Main
+        /// </summary>
+        /// <returns></returns>
+        static public PR_Main GetInstance()
+        {
+            if (m_Object == null)
+            {
+                m_Object = new PR_Main();
+            }
+            return m_Object;
         }
 
         /// <summary>
@@ -164,8 +187,8 @@ namespace PictureRubber
         protected override void LoadContent()
         {
             // test for integrating Nite
-            PR_Nite nite = new PR_Nite();
-            nite.NiteInitialize();
+            //PR_Nite nite = new PR_Nite();
+            //nite.NiteInitialize();
             
             m_Graphics.PreferredBackBufferHeight = 480;
             if (this.m_Modus == Modus.Debug)
@@ -179,20 +202,27 @@ namespace PictureRubber
             m_Graphics.ApplyChanges();
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
             
-            this.m_Kinect = new PR_Kinect(this);
+            //this.m_Kinect = new PR_Kinect(this);
             
-            m_InputManager = new PR_InputManager(this,this.m_Kinect);
+            m_InputManager = new PR_InputManager();
 
-            m_Menu = new PR_Menu(this, this.m_InputManager);
+            m_Menu = new PR_Menu(this.m_InputManager);
             this.ShowMenu = true;
-            this.m_Pictures = new PR_Pictures(this, "Images",this.m_Kinect);
-            this.m_Mouse = new PR_Mouse(this, this.m_InputManager);
-            this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice, this);
-            this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice, this);
-            this.m_MouseTexture = new Texture2D(this.m_Graphics.GraphicsDevice, this.m_Graphics.GraphicsDevice.Viewport.Width, this.m_Graphics.GraphicsDevice.Viewport.Height);
+            this.m_Pictures = new PR_Pictures("Images",this.m_Kinect);
+            this.m_Mouse = new PR_Mouse(this.m_InputManager);
+
+            //initialize renderer
+            this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice);
+            this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice);
+            //create textures for shader and rubbing-araes
+            this.m_MouseTexture = new Texture2D(
+                this.m_Graphics.GraphicsDevice,
+                this.m_Graphics.GraphicsDevice.Viewport.Width,
+                this.m_Graphics.GraphicsDevice.Viewport.Height);
             this.m_BlankTexture = this.m_MouseTexture;
             this.m_RealMouseTexture = this.m_Mouse.GetMouseTexture();
-            this.m_Intro = new PR_Intro(this, "intro");
+
+            this.m_Intro = new PR_Intro("intro");
             if (this.m_PlayIntro)
             {
                 this.m_Intro.Play();
@@ -315,7 +345,7 @@ namespace PictureRubber
         }
 
         /// <summary>
-        /// set or get the value which specifics if someone tries to rubber
+        /// set or get the value which specify if someone tries to rubber
         /// </summary>
         public bool IsGesture
         {
@@ -329,6 +359,9 @@ namespace PictureRubber
             }
         }
 
+        /// <summary>
+        /// get or set if a gesture is running
+        /// </summary>
         public bool RunningGesture
         {
             get
@@ -363,11 +396,11 @@ namespace PictureRubber
             {
                 if (i == texture.Count() - 1)
                 {
-                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_BlankTexture, 100);
+                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_BlankTexture, m_AlphaAmount);
                 }
                 else
                 {
-                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_BlankTexture, 100, texture[i + 1]);
+                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_BlankTexture, m_AlphaAmount, texture[i + 1]);
                 }
             }
         }

@@ -49,9 +49,9 @@ namespace PictureRubber
         /// </summary>
         /// <param name="_root">instance of mainclass</param>
         /// <param name="_input">instance of inputmanager</param>
-        public PR_Mouse(PR_Main _root, PR_InputManager _input)
+        public PR_Mouse(PR_InputManager _input)
         {
-            this.m_Root = _root;
+            this.m_Root = PR_Main.GetInstance();
             this.m_InputManager = _input;
             this.m_ScalingValue = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
             this.m_MousePositions = new List<Vector2>();

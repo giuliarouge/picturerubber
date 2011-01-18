@@ -43,10 +43,9 @@ namespace PictureRubber
         /// Initializes a new Instance of PR_InputManager
         /// </summary>
         /// <param name="_root">The Root Pointer</param>
-        public PR_InputManager(PR_Main _root, PR_Kinect _kinect)
+        public PR_InputManager()
         {
-            this.m_Root = _root;
-            this.m_Kinect = _kinect;
+            this.m_Root = PR_Main.GetInstance();
         }
 
         /// <summary>
