@@ -47,11 +47,6 @@ namespace PictureRubber
         private MouseState m_ActualMouseState;
 
         /// <summary>
-        /// kinect gesture
-        /// </summary>
-        private bool m_KinectGestureRecognized;
-
-        /// <summary>
         /// object for singleton
         /// </summary>
         private static PR_InputManager m_Object;

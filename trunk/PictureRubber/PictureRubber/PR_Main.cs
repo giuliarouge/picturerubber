@@ -137,7 +137,7 @@ namespace PictureRubber
             this.m_CreateMouseTexture = false;
             this.m_IsGestureRunning = false;
             this.m_InitBlankTexture = true;
-            this.ShaderModus = RubberModus.Realtime;
+            this.ShaderModus = RubberModus.Path;
         }
 
 
@@ -203,19 +203,17 @@ namespace PictureRubber
                 this.m_Graphics.GraphicsDevice.Viewport.Width,
                 this.m_Graphics.GraphicsDevice.Viewport.Height);
             this.m_ModelTexture = this.m_BlankTexture;
+            this.m_RealMouseTexture = this.m_Mouse.GetMouseTexture();
+
             //initialize renderer
             this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice);
-            this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice);
-            
-            this.m_RealMouseTexture = this.m_Mouse.GetMouseTexture();
+            this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice);            
 
             this.m_Intro = new PR_Intro("intro");
             if (this.m_PlayIntro)
             {
                 this.m_Intro.Play();
             }
-
-            //this.m_Graphics.ToggleFullScreen();
         }
 
         /// <summary>
@@ -224,7 +222,7 @@ namespace PictureRubber
         /// </summary>
         protected override void UnloadContent()
         {
-
+            GC.Collect();
         }
 
         /// <summary>
@@ -252,11 +250,11 @@ namespace PictureRubber
                     this.m_ModelTexture = this.m_BlankTexture;
                 }
                 //process DynamicMouse-Shader to calculate the texture
-                this.m_MouseTextureRenderer.SetRenderTarget(this.m_BlankTexture);
-                this.m_MouseTextureRenderer.CreateMouseTexture(ref this.m_BlankTexture,
+                this.m_MouseTextureRenderer.SetRenderTarget(this.m_ModelTexture);
+                this.m_MouseTextureRenderer.CreateMouseTexture(ref this.m_ModelTexture,
                     this.m_RealMouseTexture,
                     this.m_InputManager.GetMousePosition());
-                this.m_MouseTextureRenderer.ResetRenderTarget(ref this.m_BlankTexture);
+                this.m_MouseTextureRenderer.ResetRenderTarget(ref this.m_ModelTexture);
             }
 
             base.Update(_gameTime);
