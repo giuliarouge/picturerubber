@@ -35,11 +35,6 @@ namespace PictureRubber
         private MouseState m_ActualMouseState;
 
         /// <summary>
-        /// instance of Kinect class
-        /// </summary>
-        private PR_Kinect m_Kinect;
-
-        /// <summary>
         /// Initializes a new Instance of PR_InputManager
         /// </summary>
         /// <param name="_root">The Root Pointer</param>
@@ -74,15 +69,16 @@ namespace PictureRubber
             //Exiting of Program
             if (this.m_ActualKeyboardState.IsKeyDown(Keys.Escape))
             {
-                this.m_Kinect.DeleteKinect();
                 this.m_Root.Exit();
             }
 
+            //manually start game
             if (this.m_ActualKeyboardState.IsKeyDown(Keys.S) && this.m_LastKeyboardState.IsKeyUp(Keys.S))
             {
                 this.m_Root.ShowMenu = false;
             }
 
+            //rubbing gesture (start)
             if (this.GetMousePosition().X >= 0 &&
                 this.GetMousePosition().X <= this.m_Root.GraphicsDevice.Viewport.Width &&
                 this.GetMousePosition().Y >= 0 &&
@@ -99,6 +95,8 @@ namespace PictureRubber
                 }
                 this.m_Root.Mouse.MousePosition = this.GetMousePosition();
             }
+
+            //rubbing gesture (end)
             if (this.m_ActualMouseState.LeftButton == ButtonState.Released &&
                 this.m_LastMouseState.LeftButton == ButtonState.Pressed)
             {
@@ -125,7 +123,6 @@ namespace PictureRubber
                     this.m_Root.ShowMenu = false;
                     break;
                 case 2:
-                    this.m_Kinect.DeleteKinect();
                     this.m_Root.Exit();
                     break;
             }

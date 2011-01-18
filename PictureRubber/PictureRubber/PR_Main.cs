@@ -43,11 +43,6 @@ namespace PictureRubber
         private PR_Mouse m_Mouse;
 
         /// <summary>
-        /// The Kinect
-        /// </summary>
-        public PR_Kinect m_Kinect;
-
-        /// <summary>
         /// The Renderer for rubbing-areas
         /// </summary>
         private PR_Renderer m_RubberRenderer;
@@ -102,15 +97,6 @@ namespace PictureRubber
         private bool m_PlayIntro;
 
         /// <summary>
-        /// The Build Modes
-        /// </summary>
-        public enum Modus
-        {
-            Debug,
-            Release
-        };
-
-        /// <summary>
         /// specify if an rendertarget is set or not
         /// </summary>
         private bool m_InitBlankTexture;
@@ -131,11 +117,6 @@ namespace PictureRubber
         private bool m_CreateMouseTexture;
 
         /// <summary>
-        /// Variable for Build Mode Selection
-        /// </summary>
-        public Modus m_Modus;
-
-        /// <summary>
         /// Singleton instance
         /// </summary>
         private static PR_Main m_Object;
@@ -143,11 +124,10 @@ namespace PictureRubber
         /// <summary>
         /// Initializes a new Instance of PR_Main
         /// </summary>
-        public PR_Main()
+        private PR_Main()
         {
             this.m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            this.m_Modus = Modus.Release;
             this.m_PlayIntro = false;
             this.m_CreateMouseTexture = false;
             this.m_IsGestureRunning = false;
@@ -185,30 +165,18 @@ namespace PictureRubber
         /// </summary>
         [STAThread()]
         protected override void LoadContent()
-        {
-            // test for integrating Nite
-            //PR_Nite nite = new PR_Nite();
-            //nite.NiteInitialize();
-            
-            m_Graphics.PreferredBackBufferHeight = 480;
-            if (this.m_Modus == Modus.Debug)
-            {
-                m_Graphics.PreferredBackBufferWidth = 1280;
-            }
-            else
-            {
-                m_Graphics.PreferredBackBufferWidth = 640;
-            }
-            m_Graphics.ApplyChanges();
-            this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
-            
-            //this.m_Kinect = new PR_Kinect(this);
-            
-            m_InputManager = new PR_InputManager();
+        {            
+            this.m_Graphics.PreferredBackBufferHeight = 480;
+            this.m_Graphics.PreferredBackBufferWidth = 640;
 
-            m_Menu = new PR_Menu(this.m_InputManager);
+            this.m_Graphics.ApplyChanges();
+            this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
+           
+            this.m_InputManager = new PR_InputManager();
+
+            this.m_Menu = new PR_Menu(this.m_InputManager);
             this.ShowMenu = true;
-            this.m_Pictures = new PR_Pictures("Images",this.m_Kinect);
+            this.m_Pictures = new PR_Pictures("Images");
             this.m_Mouse = new PR_Mouse(this.m_InputManager);
 
             //initialize renderer
@@ -227,8 +195,6 @@ namespace PictureRubber
             {
                 this.m_Intro.Play();
             }
-            //this.m_Graphics.IsFullScreen = true;
-            //this.m_Graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -275,6 +241,10 @@ namespace PictureRubber
             base.Update(_gameTime);
         }
 
+        /// <summary>
+        /// time for animation between 0 and 360
+        /// </summary>
+        /// <param name="_waitingTime">wating time</param>
         public void SetMouseWaitingTime(int _waitingTime)
         {
             this.m_Mouse.SetWaitingTime(_waitingTime);
