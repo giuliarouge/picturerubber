@@ -207,9 +207,9 @@ namespace PictureRubber
                 this.m_Graphics.SetRenderTarget(this.m_RenderTarget);
                 this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Transparent);
             }
-            catch
+            catch (System.OutOfMemoryException e)
             {
-                System.Console.WriteLine("Nicht genügend Speicher vorhanden");
+                System.Console.Out.WriteLine("OutOfMemoryException " + e.Message);
             }
         }
 
