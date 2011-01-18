@@ -35,12 +35,32 @@ namespace PictureRubber
         private MouseState m_ActualMouseState;
 
         /// <summary>
+        /// kinect gesture
+        /// </summary>
+        private bool m_KinectGestureRecognized;
+
+        /// <summary>
+        /// object for singleton
+        /// </summary>
+        private static PR_InputManager m_Object;
+
+        /// <summary>
         /// Initializes a new Instance of PR_InputManager
         /// </summary>
         /// <param name="_root">The Root Pointer</param>
-        public PR_InputManager()
+        private PR_InputManager()
         {
             this.m_Root = PR_Main.GetInstance();
+            this.KinectGesture = false;
+        }
+
+        static public PR_InputManager GetInstance()
+        {
+            if (m_Object == null)
+            {
+                m_Object = new PR_InputManager();
+            }
+            return m_Object;
         }
 
         /// <summary>
@@ -79,11 +99,12 @@ namespace PictureRubber
             }
 
             //rubbing gesture (start)
-            if (this.GetMousePosition().X >= 0 &&
+            if ((this.GetMousePosition().X >= 0 &&
                 this.GetMousePosition().X <= this.m_Root.GraphicsDevice.Viewport.Width &&
                 this.GetMousePosition().Y >= 0 &&
-                this.GetMousePosition().Y <= this.m_Root.GraphicsDevice.Viewport.Height &&
-                this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu)
+                this.GetMousePosition().Y <= this.m_Root.GraphicsDevice.Viewport.Height) &&
+                ((this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu) ||
+                this.KinectGesture))
             {
                 if (this.m_Root.ShaderModus == PR_Main.RubberModus.Path)
                 {
@@ -97,8 +118,9 @@ namespace PictureRubber
             }
 
             //rubbing gesture (end)
-            if (this.m_ActualMouseState.LeftButton == ButtonState.Released &&
-                this.m_LastMouseState.LeftButton == ButtonState.Pressed)
+            if ((this.m_ActualMouseState.LeftButton == ButtonState.Released &&
+                this.m_LastMouseState.LeftButton == ButtonState.Pressed) ||
+                !this.KinectGesture)
             {
                 if (this.m_Root.ShaderModus == PR_Main.RubberModus.Path)
                 {
@@ -123,6 +145,7 @@ namespace PictureRubber
                     this.m_Root.ShowMenu = false;
                     break;
                 case 2:
+                    this.m_Root.DeleteKinect();
                     this.m_Root.Exit();
                     break;
             }
@@ -135,6 +158,21 @@ namespace PictureRubber
         public Vector2 GetMousePosition()
         {
             return new Vector2(this.m_ActualMouseState.X, this.m_ActualMouseState.Y);
+        }
+
+        /// <summary>
+        /// set or get status of kinect gesture
+        /// </summary>
+        public bool KinectGesture
+        {
+            get
+            {
+                return this.m_KinectGestureRecognized;
+            }
+            set
+            {
+                this.m_KinectGestureRecognized = value;
+            }
         }
     }
 }
