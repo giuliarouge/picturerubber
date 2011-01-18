@@ -180,6 +180,7 @@ namespace PictureRubber
             }
             catch
             {
+                this.m_Nite = null;
                 System.Console.WriteLine("Bitte Kinect anschliessen");
             }
 
@@ -196,15 +197,16 @@ namespace PictureRubber
             this.m_Pictures = new PR_Pictures("Images");
             this.m_Mouse = new PR_Mouse(this.m_InputManager);
 
-            //initialize renderer
-            this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice);
-            this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice);
             //create textures for shader and rubbing-araes
             this.m_MouseTexture = new Texture2D(
                 this.m_Graphics.GraphicsDevice,
                 this.m_Graphics.GraphicsDevice.Viewport.Width,
                 this.m_Graphics.GraphicsDevice.Viewport.Height);
             this.m_BlankTexture = this.m_MouseTexture;
+            //initialize renderer
+            this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice);
+            this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice);
+            
             this.m_RealMouseTexture = this.m_Mouse.GetMouseTexture();
 
             this.m_Intro = new PR_Intro("intro");
@@ -235,8 +237,8 @@ namespace PictureRubber
             this.m_InputManager.HandleInput(_gameTime);
             this.m_Menu.Update(_gameTime);
 
-            if (this.IsGesture && this.m_MouseShaderModus == RubberModus.Realtime ||
-                this.RunningGesture && this.m_MouseShaderModus == RubberModus.Path)
+            if ((this.IsGesture && this.m_MouseShaderModus == RubberModus.Realtime) ||
+                (this.RunningGesture && this.m_MouseShaderModus == RubberModus.Path))
             {
                 if (this.m_InitBlankTexture && this.m_MouseShaderModus == RubberModus.Path)
                 {
@@ -253,7 +255,7 @@ namespace PictureRubber
                 this.m_MouseTextureRenderer.SetRenderTarget(this.m_BlankTexture);
                 this.m_MouseTextureRenderer.CreateMouseTexture(ref this.m_BlankTexture,
                     this.m_RealMouseTexture,
-                    this.m_Mouse.GetMousePositions().ElementAt(this.m_Mouse.GetMousePositions().Count - 1));
+                    this.m_InputManager.GetMousePosition());
                 this.m_MouseTextureRenderer.ResetRenderTarget(ref this.m_BlankTexture);
             }
 
@@ -321,9 +323,12 @@ namespace PictureRubber
                     {
                         //draw a path, where the user wants to delete something of the image
                         this.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-                        this.m_SpriteBatch.Draw(this.m_BlankTexture,
-                            new Rectangle(0, 0, this.m_BlankTexture.Width, this.m_BlankTexture.Height),
-                            new Color(0, 0, 0, 255 / 5));
+                        if (this.m_BlankTexture != null)
+                        {
+                            this.m_SpriteBatch.Draw(this.m_BlankTexture,
+                                new Rectangle(0, 0, this.m_BlankTexture.Width, this.m_BlankTexture.Height),
+                                new Color(0, 0, 0, 255 / 5));
+                        }
                         this.m_SpriteBatch.End();
                     }
                 }
@@ -425,7 +430,8 @@ namespace PictureRubber
         /// </summary>
         public void DeleteKinect()
         {
-            this.m_Nite.Stop();
+            if (this.m_Nite != null)
+                this.m_Nite.Stop();
         }
     }
 }

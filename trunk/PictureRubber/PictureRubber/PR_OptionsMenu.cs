@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace PictureRubber
 {
-    class PR_MainMenu
+    class PR_OptionsMenu
     {
         /// <summary>
         /// the root pointer
@@ -15,44 +15,39 @@ namespace PictureRubber
         private PR_Main m_Root;
 
         /// <summary>
-        /// the menu frame
+        /// the options frame
         /// </summary>
-        private Texture2D m_MenuFrame;
+        private Texture2D m_OptionsFrame;
 
         /// <summary>
-        /// the glowing rubber
+        /// Array holding textures of the 640x480 button
         /// </summary>
-        private Texture2D m_rubber_glow;
+        private Texture2D[] m_640x480Button;
 
         /// <summary>
-        /// Array holding textures of the start button
+        /// Array holding textures of the 800x600 button
         /// </summary>
-        private Texture2D[] m_StartenButton;
+        private Texture2D[] m_800x600Button;
 
         /// <summary>
-        /// Array holding textures of the options button
+        /// Array holding textures of the 1024x768 button
         /// </summary>
-        private Texture2D[] m_OptionenButton;
+        private Texture2D[] m_1024x768Button;
 
         /// <summary>
-        /// Array holding textures of the close button
+        /// Rectangle representing the 640x480 button
         /// </summary>
-        private Texture2D[] m_BeendenButton;
+        private Rectangle m_640x480ButtonRect;
 
         /// <summary>
-        /// Rectangle representing the start button
+        /// Rectangle representing the 800x600 button
         /// </summary>
-        private Rectangle m_StartButtonRect;
+        private Rectangle m_800x600ButtonRect;
 
         /// <summary>
-        /// Rectangle representing the options button
+        /// Rectangle representing the 1024x768 button
         /// </summary>
-        private Rectangle m_OptionenButtonRect;
-
-        /// <summary>
-        /// Rectangle representing the close button
-        /// </summary>
-        private Rectangle m_BeendenButtonRect;
+        private Rectangle m_1024x768ButtonRect;
 
         /// <summary>
         /// the input manager
@@ -65,9 +60,10 @@ namespace PictureRubber
         public bool m_Visible;
 
         /// <summary>
-        /// Counter for the Control of the Buttons, holding on a button will increase the correspondating element
+        /// Counter for the Control of the Resolution Buttons, holding on a button will increase the correspondating element
         /// </summary>
-        private int[] m_SelectedIndex;
+        private int[] m_SelectedResolution;
+
 
         /// <summary>
         /// waiting Delay
@@ -79,50 +75,46 @@ namespace PictureRubber
         /// </summary>
         private int m_CurrentDelay;
 
-        private float m_BlinkValue;
-        
         /// <summary>
         /// Initializes a new instance of PR_MainMenu
         /// </summary>
         /// <param name="_root">the root pointer</param>
         /// <param name="_input">the input manager</param>
-        public PR_MainMenu(PR_Main _root, PR_InputManager _input)
+        public PR_OptionsMenu(PR_Main _root, PR_InputManager _input)
         {
             this.m_Visible = true;
             this.m_CurrentDelay = 0;
-            this.m_SelectedIndex = new int[3];
-            this.m_SelectedIndex[0] = 0;
-            this.m_SelectedIndex[1] = 0;
-            this.m_SelectedIndex[2] = 0;
+            this.m_SelectedResolution = new int[3];
+            this.m_SelectedResolution[0] = 0;
+            this.m_SelectedResolution[1] = 0;
+            this.m_SelectedResolution[2] = 0;
 
-            this.m_BlinkValue = 0;
             this.m_Root = _root;
             this.m_InputManager = _input;
-            
-            this.m_MenuFrame = this.m_Root.Content.Load<Texture2D>("menu\\menu_frame_rainy");
-            this.m_rubber_glow = this.m_Root.Content.Load<Texture2D>("menu\\rubber_glow");
 
-            this.m_BeendenButton = new Texture2D[3];
-            this.m_OptionenButton = new Texture2D[3];
-            this.m_StartenButton = new Texture2D[3];
+            this.m_OptionsFrame = this.m_Root.Content.Load<Texture2D>("menu\\options_frame");
 
-            this.m_BeendenButton[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\beenden_normal");
-            this.m_BeendenButton[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\beenden_over");
-            this.m_BeendenButton[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\beenden_pressed");
+            this.m_640x480Button = new Texture2D[3];
+            this.m_800x600Button = new Texture2D[3];
+            this.m_1024x768Button = new Texture2D[3];
 
-            this.m_OptionenButton[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\optionen_normal");
-            this.m_OptionenButton[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\optionen_over");
-            this.m_OptionenButton[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\optionen_pressed");
+            this.m_640x480Button[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\options");
+            this.m_640x480Button[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\beenden_over");
+            this.m_640x480Button[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\beenden_pressed");
 
-            this.m_StartenButton[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\starten_normal");
-            this.m_StartenButton[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\starten_over");
-            this.m_StartenButton[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\starten_pressed");
+            this.m_800x600Button[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\optionen_normal");
+            this.m_800x600Button[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\optionen_over");
+            this.m_800x600Button[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\optionen_pressed");
+
+            this.m_1024x768Button[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\starten_normal");
+            this.m_1024x768Button[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\starten_over");
+            this.m_1024x768Button[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\starten_pressed");
 
             float value = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
 
-            this.m_StartButtonRect = new Rectangle((int)(400 * value), (int)(352 * value), (int)(this.m_StartenButton[0].Width*value), (int)(this.m_StartenButton[0].Height*value));
-            this.m_OptionenButtonRect = new Rectangle((int)(400 * value), (int)(492 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
-            this.m_BeendenButtonRect = new Rectangle((int)(400 * value), (int)(632 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
+            this.m_StartButtonRect = new Rectangle((int)(196 * value), (int)(552 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
+            this.m_OptionenButtonRect = new Rectangle((int)(196 * value), (int)(692 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
+            this.m_BeendenButtonRect = new Rectangle((int)(196 * value), (int)(832 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
         }
 
         /// <summary>
@@ -145,9 +137,6 @@ namespace PictureRubber
                         }
                     }
                 }
-                temp++;
-                temp = temp % 360;
-                this.m_BlinkValue = (((float)Math.Sin(MathHelper.ToRadians(temp)))+1) / 2.0f;
             }
         }
 
@@ -162,7 +151,6 @@ namespace PictureRubber
             }
             this.m_Delay = 0;
         }
-        int temp = 0;
 
         /// <summary>
         /// Draws the menu if visible
@@ -174,13 +162,10 @@ namespace PictureRubber
             {
                 Vector2 mousePosition = this.m_InputManager.GetMousePosition();
 
-                this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);                
+                this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                 Rectangle rec = new Rectangle(0, 0, this.m_Root.GraphicsDevice.Viewport.Width, this.m_Root.GraphicsDevice.Viewport.Height);
-                
+
                 this.m_Root.m_SpriteBatch.Draw(m_MenuFrame, rec, Microsoft.Xna.Framework.Color.White);
-                int temper = (int)(m_BlinkValue * 255);
-                
-                this.m_Root.m_SpriteBatch.Draw(m_rubber_glow, rec, new Microsoft.Xna.Framework.Color(255,255,255,temper));
                 bool intersects = false;
                 if (Intersects(mousePosition, m_StartButtonRect))
                 {
@@ -188,7 +173,7 @@ namespace PictureRubber
                     if (this.m_SelectedIndex[0] < 360)
                     {
                         this.m_Root.m_SpriteBatch.Draw(m_StartenButton[1], m_StartButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_SelectedIndex[0]+=3;
+                        this.m_SelectedIndex[0] += 2;
                     }
                     else
                     {
@@ -207,7 +192,7 @@ namespace PictureRubber
                     if (this.m_SelectedIndex[1] < 360)
                     {
                         this.m_Root.m_SpriteBatch.Draw(m_OptionenButton[1], m_OptionenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_SelectedIndex[1]+=3;
+                        this.m_SelectedIndex[1] += 2;
                     }
                     else
                     {
@@ -226,7 +211,7 @@ namespace PictureRubber
                     if (this.m_SelectedIndex[2] < 360)
                     {
                         this.m_Root.m_SpriteBatch.Draw(m_BeendenButton[1], m_BeendenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_SelectedIndex[2]+=3;
+                        this.m_SelectedIndex[2] += 2;
                     }
                     else
                     {
@@ -249,7 +234,8 @@ namespace PictureRubber
 
         private bool Intersects(Vector2 _position, Rectangle _rectangle)
         {
-            return _rectangle.Intersects(new Rectangle((int)_position.X,(int)_position.Y,1,1));
+            return _rectangle.Intersects(new Rectangle((int)_position.X, (int)_position.Y, 1, 1));
         }
     }
 }
+*/
