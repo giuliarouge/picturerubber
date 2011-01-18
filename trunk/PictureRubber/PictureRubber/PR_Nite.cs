@@ -24,8 +24,10 @@ namespace PictureRubber
             this.shouldRun = true;
 
             m_Context = new XnMOpenNIContext();
+            m_Context.SetSmoothing(0.3f);
             m_Context.Init();
- 
+
+
             m_PointDenoiser = new XnMPointDenoiser();
             m_PointDenoiser.PrimaryPointCreate += new EventHandler<PrimaryPointCreateEventArgs>(sessionManager_PrimaryPointCreate);
             m_PointDenoiser.PrimaryPointUpdate += new EventHandler<HandPointContextEventArgs>(sessionManager_PrimaryPointUpdate);
@@ -36,9 +38,7 @@ namespace PictureRubber
 
             m_SessionManager = new XnMSessionManager(m_Context, "Wave", "Wave");     
             m_SessionManager.AddListener(m_PointDenoiser);
-            m_SessionManager.AddListener(m_PushDetector);
-
-            
+            m_SessionManager.AddListener(m_PushDetector);            
 
             this.readerThread = new Thread(ReaderThread);
             this.readerThread.Start();

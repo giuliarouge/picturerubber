@@ -137,7 +137,7 @@ namespace PictureRubber
             this.m_CreateMouseTexture = false;
             this.m_IsGestureRunning = false;
             this.m_InitBlankTexture = true;
-            this.ShaderModus = RubberModus.Path;
+            this.ShaderModus = RubberModus.Realtime;
         }
 
 
@@ -212,6 +212,8 @@ namespace PictureRubber
             {
                 this.m_Intro.Play();
             }
+
+            //this.m_Graphics.ToggleFullScreen();
         }
 
         /// <summary>
