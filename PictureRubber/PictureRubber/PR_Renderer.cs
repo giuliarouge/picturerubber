@@ -140,6 +140,7 @@ namespace PictureRubber
 
             _texture = this.m_RenderTarget;
             this.m_RenderTarget = null;
+            GC.Collect();
         }
 
         /// <summary>
@@ -207,9 +208,9 @@ namespace PictureRubber
                 this.m_Graphics.SetRenderTarget(this.m_RenderTarget);
                 this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Transparent);
             }
-            catch (System.OutOfMemoryException e)
+            catch (Exception e)
             {
-                System.Console.Out.WriteLine("OutOfMemoryException " + e.Message);
+                System.Console.Out.WriteLine(e.Message);
             }
         }
 
@@ -223,7 +224,12 @@ namespace PictureRubber
             this.m_Graphics.SetRenderTarget(null);
 
             _texture = this.m_RenderTarget;
+            if (_texture == null)
+            {
+                System.Console.WriteLine();
+            }
             this.m_RenderTarget = null;
+            GC.Collect();
         }
 
         /// <summary>

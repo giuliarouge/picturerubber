@@ -104,62 +104,62 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="menu\buttons\beenden_normal.png">
+    <Compile Include="menu\buttons\main\beenden_normal.png">
       <Name>beenden_normal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\beenden_over.png">
+    <Compile Include="menu\buttons\main\beenden_over.png">
       <Name>beenden_over</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\beenden_pressed.png">
+    <Compile Include="menu\buttons\main\beenden_pressed.png">
       <Name>beenden_pressed</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\fotowand_normal.png">
+    <Compile Include="menu\buttons\main\fotowand_normal.png">
       <Name>fotowand_normal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\fotowand_over.png">
+    <Compile Include="menu\buttons\main\fotowand_over.png">
       <Name>fotowand_over</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\fotowand_pressed.png">
+    <Compile Include="menu\buttons\main\fotowand_pressed.png">
       <Name>fotowand_pressed</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\optionen_normal.png">
+    <Compile Include="menu\buttons\main\optionen_normal.png">
       <Name>optionen_normal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\optionen_over.png">
+    <Compile Include="menu\buttons\main\optionen_over.png">
       <Name>optionen_over</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\optionen_pressed.png">
+    <Compile Include="menu\buttons\main\optionen_pressed.png">
       <Name>optionen_pressed</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\starten_normal.png">
+    <Compile Include="menu\buttons\main\starten_normal.png">
       <Name>starten_normal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\starten_over.png">
+    <Compile Include="menu\buttons\main\starten_over.png">
       <Name>starten_over</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="menu\buttons\starten_pressed.png">
+    <Compile Include="menu\buttons\main\starten_pressed.png">
       <Name>starten_pressed</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -168,6 +168,163 @@
   <ItemGroup>
     <Compile Include="waiting_logo_part.png">
       <Name>waiting_logo_part</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="menu\background_rainy.png">
+      <Name>background_rainy</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\menu_frame_rainy.png">
+      <Name>menu_frame_rainy</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="waiting_logo_part_rainy.png">
+      <Name>waiting_logo_part_rainy</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="menu\rubber_glow.png">
+      <Name>rubber_glow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="menu\buttons\options\fullscreen_normal.png">
+      <Name>fullscreen_normal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\fullscreen_over.png">
+      <Name>fullscreen_over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\fullscreen_pressed.png">
+      <Name>fullscreen_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\path_normal.png">
+      <Name>path_normal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\path_over.png">
+      <Name>path_over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\path_pressed.png">
+      <Name>path_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\realtime_normal.png">
+      <Name>realtime_normal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\realtime_over.png">
+      <Name>realtime_over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\realtime_pressed.png">
+      <Name>realtime_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\res_1024_normal.png">
+      <Name>res_1024_normal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\res_1024_over.png">
+      <Name>res_1024_over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\res_1024_pressed.png">
+      <Name>res_1024_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\res_640_normal.png">
+      <Name>res_640_normal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\res_640_over.png">
+      <Name>res_640_over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\res_640_pressed.png">
+      <Name>res_640_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\res_800_normal.png">
+      <Name>res_800_normal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\res_800_over.png">
+      <Name>res_800_over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\res_800_pressed.png">
+      <Name>res_800_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\window_normal.png">
+      <Name>window_normal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\window_over.png">
+      <Name>window_over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\window_pressed.png">
+      <Name>window_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="menu\buttons\options\back_normal.png">
+      <Name>back_normal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\back_over.png">
+      <Name>back_over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="menu\buttons\options\back_pressed.png">
+      <Name>back_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="menu\options_frame.png">
+      <Name>options_frame</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

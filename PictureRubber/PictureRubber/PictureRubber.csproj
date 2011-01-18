@@ -129,6 +129,7 @@
     <Compile Include="PR_MenuBackground.cs" />
     <Compile Include="PR_Mouse.cs" />
     <Compile Include="PR_Nite.cs" />
+    <Compile Include="PR_OptionsMenu.cs" />
     <Compile Include="PR_Pictures.cs" />
     <Compile Include="PR_Program.cs" />
     <Compile Include="PR_Main.cs" />
@@ -164,6 +165,7 @@
     <Content Include="Readme.txt" />
     <None Include="App.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

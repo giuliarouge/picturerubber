@@ -52,6 +52,8 @@ namespace PictureRubber
                     this.m_Textures[i] = this.CreateTexture(this.m_Pictures[i]);
                 }
             }
+            //this.m_Pictures = null;
+            //GC.Collect();
             
         }
 

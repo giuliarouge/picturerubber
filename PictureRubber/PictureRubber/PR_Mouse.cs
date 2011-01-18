@@ -58,7 +58,7 @@ namespace PictureRubber
             try
             {
                 m_Texture = this.m_Root.Content.Load<Texture2D>("mouse");
-                m_WaitingTexture = this.m_Root.Content.Load<Texture2D>("waiting_logo_part");
+                m_WaitingTexture = this.m_Root.Content.Load<Texture2D>("waiting_logo_part_rainy");
                 this.RescaleTexture();
                 this.m_Root.IsMouseVisible = false;
             }

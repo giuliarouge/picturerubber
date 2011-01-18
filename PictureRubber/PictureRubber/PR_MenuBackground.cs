@@ -86,10 +86,10 @@ namespace PictureRubber
             this.m_Animations[1] = 0;
             this.m_AnimationDirection = AnimationDirection.Show;
 
-            this.m_Background = this.m_Root.Content.Load<Texture2D>("menu\\background");
+            this.m_Background = this.m_Root.Content.Load<Texture2D>("menu\\background_rainy");
             this.m_LeftLine = this.m_Root.Content.Load<Texture2D>("menu\\left_line");
             this.m_RightLine = this.m_Root.Content.Load<Texture2D>("menu\\right_line");
-            this.m_Rubber = this.m_Root.Content.Load<Texture2D>("menu\\rubber");
+            this.m_Rubber = this.m_Root.Content.Load<Texture2D>("menu\\rubber_glow");
         }
 
         /// <summary>
@@ -154,9 +154,9 @@ namespace PictureRubber
                 this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                 Rectangle rec = new Rectangle(0, 0, this.m_Root.GraphicsDevice.Viewport.Width, this.m_Root.GraphicsDevice.Viewport.Height);
                 this.m_Root.m_SpriteBatch.Draw(m_Background, rec, Microsoft.Xna.Framework.Color.White);
-                this.m_Root.m_SpriteBatch.Draw(m_LeftLine, rec, new Microsoft.Xna.Framework.Color(255, 255, 255, this.m_Animations[1]));
-                this.m_Root.m_SpriteBatch.Draw(m_RightLine, rec, new Microsoft.Xna.Framework.Color(255, 255, 255, this.m_Animations[0]));
-                this.m_Root.m_SpriteBatch.Draw(m_Rubber, rec, Microsoft.Xna.Framework.Color.White);
+            
+                //   this.m_Root.m_SpriteBatch.Draw(m_LeftLine, rec, new Microsoft.Xna.Framework.Color(255, 255, 255, this.m_Animations[1]));
+                //   this.m_Root.m_SpriteBatch.Draw(m_RightLine, rec, new Microsoft.Xna.Framework.Color(255, 255, 255, this.m_Animations[0]));
                 this.m_Root.m_SpriteBatch.End();
             }
         }
