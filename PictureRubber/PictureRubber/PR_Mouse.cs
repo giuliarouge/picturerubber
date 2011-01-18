@@ -40,11 +40,6 @@ namespace PictureRubber
         private float m_ScalingValue;
 
         /// <summary>
-        /// List of actual position of the mouse to generate a texture with rubbing areas
-        /// </summary>
-        private List<Vector2> m_MousePositions;
-
-        /// <summary>
         /// initializes mouse-class
         /// </summary>
         /// <param name="_root">instance of mainclass</param>
