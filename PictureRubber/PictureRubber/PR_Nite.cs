@@ -16,6 +16,9 @@ namespace PictureRubber
         private XnMPointDenoiser m_PointDenoiser;
         private XnMPushDetector m_PushDetector;
 
+        private bool shouldRun = false;
+        private Thread readerThread;
+
         public void NiteInitialize()
         {
             this.shouldRun = true;
@@ -84,9 +87,7 @@ namespace PictureRubber
         {
             Trace.WriteLine("Pushed!");
             // send LeftClick_Event
+            PR_InputManager.GetInstance().KinectGesture = !PR_InputManager.GetInstance().KinectGesture;
         }
-
-        private bool shouldRun = false;
-        private Thread readerThread;
     }
 }

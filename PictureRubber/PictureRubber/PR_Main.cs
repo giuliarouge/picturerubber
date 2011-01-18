@@ -117,14 +117,14 @@ namespace PictureRubber
         private bool m_CreateMouseTexture;
 
         /// <summary>
+        /// 
+        /// </summary>
+        private PR_Nite m_Nite;
+
+        /// <summary>
         /// Singleton instance
         /// </summary>
         private static PR_Main m_Object;
-        
-        /// <summary>
-        /// The new Kinect integration
-        /// </summary>
-        PR_Nite m_Nite;
 
         /// <summary>
         /// Initializes a new Instance of PR_Main
@@ -143,7 +143,7 @@ namespace PictureRubber
         /// <summary>
         /// static function to get only one isntance of PR_Main
         /// </summary>
-        /// <returns>the PR_Main-Static-Instance</returns>
+        /// <returns></returns>
         static public PR_Main GetInstance()
         {
             if (m_Object == null)
@@ -170,32 +170,24 @@ namespace PictureRubber
         /// </summary>
         [STAThread()]
         protected override void LoadContent()
-<<<<<<< .mine
         {
-            // test for integrating Nite
-            this.m_Nite = new PR_Nite();
-            this.m_Nite.NiteInitialize();
-            
-            m_Graphics.PreferredBackBufferHeight = 480;
-            if (this.m_Modus == Modus.Debug)
+            try
             {
-                m_Graphics.PreferredBackBufferWidth = 1280;
+                this.m_Nite = new PR_Nite();
+                this.m_Nite.NiteInitialize();
             }
-            else
+            catch
             {
-                m_Graphics.PreferredBackBufferWidth = 640;
+                System.Console.WriteLine("Bitte Kinect anschliessen");
             }
-            m_Graphics.ApplyChanges();
-=======
-        {            
+
             this.m_Graphics.PreferredBackBufferHeight = 480;
             this.m_Graphics.PreferredBackBufferWidth = 640;
 
             this.m_Graphics.ApplyChanges();
->>>>>>> .r38
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
-           
-            this.m_InputManager = new PR_InputManager();
+
+            this.m_InputManager = PR_InputManager.GetInstance();
 
             this.m_Menu = new PR_Menu(this.m_InputManager);
             this.ShowMenu = true;
@@ -226,12 +218,7 @@ namespace PictureRubber
         /// </summary>
         protected override void UnloadContent()
         {
-            
-        }
 
-        public void StopKinect()
-        {
-            this.m_Nite.Stop();
         }
 
         /// <summary>
@@ -316,15 +303,15 @@ namespace PictureRubber
                     if (this.IsGesture)
                     {
                         //if there was a gesture recognized, delete the areas of the image
-                        if(this.m_MouseShaderModus == RubberModus.Path)
+                        if (this.m_MouseShaderModus == RubberModus.Path)
                         {
                             this.m_InitBlankTexture = true;
                             this.RunningGesture = false;
                         }
                         this.ProcessAlphaFaderShader();
                         this.ResetValues();
-                    }             
-                    
+                    }
+
                     this.m_Pictures.Draw(_gameTime);
                     if (this.RunningGesture)
                     {
@@ -332,7 +319,7 @@ namespace PictureRubber
                         this.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                         this.m_SpriteBatch.Draw(this.m_BlankTexture,
                             new Rectangle(0, 0, this.m_BlankTexture.Width, this.m_BlankTexture.Height),
-                            new Color(0, 0, 0, 255/5));
+                            new Color(0, 0, 0, 255 / 5));
                         this.m_SpriteBatch.End();
                     }
                 }
@@ -427,6 +414,14 @@ namespace PictureRubber
             {
                 this.m_MouseShaderModus = value;
             }
+        }
+
+        /// <summary>
+        /// unset kinect
+        /// </summary>
+        public void DeleteKinect()
+        {
+            this.m_Nite.Stop();
         }
     }
 }
