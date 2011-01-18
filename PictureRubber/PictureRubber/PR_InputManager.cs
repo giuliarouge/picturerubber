@@ -9,6 +9,16 @@ namespace PictureRubber
 {
     public class PR_InputManager
     {
+
+        public enum GestureState
+        {
+            Before,
+            While,
+            After
+        };
+
+        private GestureState m_GestureState;
+
         /// <summary>
         /// The Root Pointer
         /// </summary>
@@ -51,7 +61,7 @@ namespace PictureRubber
         private PR_InputManager()
         {
             this.m_Root = PR_Main.GetInstance();
-            this.KinectGesture = false;
+            this.m_GestureState = GestureState.Before;
         }
 
         static public PR_InputManager GetInstance()
@@ -104,7 +114,7 @@ namespace PictureRubber
                 this.GetMousePosition().Y >= 0 &&
                 this.GetMousePosition().Y <= this.m_Root.GraphicsDevice.Viewport.Height) &&
                 ((this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu) ||
-                this.KinectGesture))
+                this.m_GestureState == GestureState.Before))
             {
                 if (this.m_Root.ShaderModus == PR_Main.RubberModus.Path)
                 {
@@ -120,8 +130,9 @@ namespace PictureRubber
             //rubbing gesture (end)
             if ((this.m_ActualMouseState.LeftButton == ButtonState.Released &&
                 this.m_LastMouseState.LeftButton == ButtonState.Pressed) ||
-                !this.KinectGesture)
+                this.m_GestureState == GestureState.After)
             {
+                this.m_GestureState = GestureState.Before;
                 if (this.m_Root.ShaderModus == PR_Main.RubberModus.Path)
                 {
                     this.m_Root.IsGesture = true;
@@ -163,15 +174,16 @@ namespace PictureRubber
         /// <summary>
         /// set or get status of kinect gesture
         /// </summary>
-        public bool KinectGesture
+        public void UpdateGesture()
         {
-            get
+            switch (this.m_GestureState)
             {
-                return this.m_KinectGestureRecognized;
-            }
-            set
-            {
-                this.m_KinectGestureRecognized = value;
+                case GestureState.Before: 
+                    this.m_GestureState = GestureState.While;
+                    break;
+                case GestureState.While:
+                    this.m_GestureState = GestureState.After;
+                    break;
             }
         }
     }

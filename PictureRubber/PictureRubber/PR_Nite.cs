@@ -87,7 +87,7 @@ namespace PictureRubber
         {
             Trace.WriteLine("Pushed!");
             // send LeftClick_Event
-            PR_InputManager.GetInstance().KinectGesture = !PR_InputManager.GetInstance().KinectGesture;
+            PR_InputManager.GetInstance().UpdateGesture();
         }
     }
 }
