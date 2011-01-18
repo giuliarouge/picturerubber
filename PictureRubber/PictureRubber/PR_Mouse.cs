@@ -54,7 +54,6 @@ namespace PictureRubber
             this.m_Root = PR_Main.GetInstance();
             this.m_InputManager = _input;
             this.m_ScalingValue = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
-            this.m_MousePositions = new List<Vector2>();
             try
             {
                 m_Texture = this.m_Root.Content.Load<Texture2D>("mouse");
@@ -111,25 +110,6 @@ namespace PictureRubber
                 this.m_WaitingTime = 0;
                 this.m_Root.m_SpriteBatch.End();
             }
-        }
-
-        /// <summary>
-        /// add a new value to the list of mouse-positions
-        /// </summary>
-        public Vector2 MousePosition
-        {
-            set
-            {
-                this.m_MousePositions.Add(value);
-            }
-        }
-
-        /// <summary>
-        /// clear all mouse-positions
-        /// </summary>
-        public void ResetMousePositions()
-        {
-            this.m_MousePositions.Clear();
         }
 
         /// <summary>
