@@ -41,9 +41,9 @@ namespace PictureRubber
         /// </summary>
         /// <param name="_root">the root pointer</param>
         /// <param name="_input">the input manager</param>
-        public PR_Menu(PR_Main _root, PR_InputManager _input)
+        public PR_Menu(PR_InputManager _input)
         {
-            this.m_Root = _root;
+            this.m_Root = PR_Main.GetInstance();
             this.m_InputManager = _input;
             this.m_Background = new PR_MenuBackground(this.m_Root);
             this.m_MainMenu = new PR_MainMenu(this.m_Root, this.m_InputManager);

@@ -37,9 +37,9 @@ namespace PictureRubber
         /// <summary>
         /// Initializes a new Instance of PR_Pictures
         /// </summary>
-        public PR_Pictures(PR_Main _root, string _folderPath, PR_Kinect _kinect)
+        public PR_Pictures(string _folderPath, PR_Kinect _kinect)
         {
-            this.m_Root = _root;
+            this.m_Root = PR_Main.GetInstance();
             this.m_Kinect = _kinect;
             this.m_FolderPath = _folderPath;
             if (!this.LoadPictures())

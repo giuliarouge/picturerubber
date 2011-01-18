@@ -76,7 +76,6 @@ float4 PS_AlphaFader(Input input) : COLOR0
 		!compareColors(textureColor, 0.0f))
 		{
 			//reduce saturation
-			//textureColor *= saturate(textureColor.a - alphaAmount/255);
 			textureColor -= alphaAmount/255.0;
 		}
 	}
@@ -88,7 +87,6 @@ float4 PS_AlphaFader(Input input) : COLOR0
 			!compareColors(textureColor, 0.0f))
 		{
 			//reduce saturation
-			//textureColor *= saturate(textureColor.a - alphaAmount/255);
 			textureColor -= alphaAmount/255.0;
 		}
 	}	

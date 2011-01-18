@@ -24,6 +24,7 @@ sampler2D MouseImage = sampler_state
   Texture = (mouseTexture);
 };
 
+//check if the actual point is inside the mousetexture
 bool isPointInRange(float2 _position)
 {
 	bool isInRange = false;
@@ -37,6 +38,7 @@ bool isPointInRange(float2 _position)
 	return isInRange;
 }
 
+//calculate the position inside the mousetexture
 float2 calculateMouseCoordinate(float2 _position)
 {
 	float x = (_position.x - topLeft.x) / (bottomRight.x - topLeft.x);
@@ -90,7 +92,6 @@ float4 PS_DynamicMouse(Input input) : COLOR0
 			textureColor = 1.0f;
 		}
 	}
-
     return textureColor;
 }
 
