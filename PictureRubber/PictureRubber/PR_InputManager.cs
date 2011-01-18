@@ -9,7 +9,9 @@ namespace PictureRubber
 {
     public class PR_InputManager
     {
-
+        /// <summary>
+        /// enum for status of kinect gesture
+        /// </summary>
         public enum GestureState
         {
             Before,
