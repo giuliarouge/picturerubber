@@ -53,9 +53,9 @@ namespace PictureRubber
         private PR_Renderer m_MouseTextureRenderer;
 
         /// <summary>
-        /// initial Texture for Mouse-Texture Shader
+        /// texture to generate rubber-areas
         /// </summary>
-        private Texture2D m_MouseTexture;
+        private Texture2D m_ModelTexture;
 
         /// <summary>
         /// real texture of the mouse seen on the screen
@@ -63,7 +63,7 @@ namespace PictureRubber
         private Texture2D m_RealMouseTexture;
 
         /// <summary>
-        /// texture to generate rubber-areas
+        /// initial Texture for Mouse-Texture Shader
         /// </summary>
         private Texture2D m_BlankTexture;
 
@@ -198,11 +198,11 @@ namespace PictureRubber
             this.m_Mouse = new PR_Mouse(this.m_InputManager);
 
             //create textures for shader and rubbing-araes
-            this.m_MouseTexture = new Texture2D(
+            this.m_BlankTexture = new Texture2D(
                 this.m_Graphics.GraphicsDevice,
                 this.m_Graphics.GraphicsDevice.Viewport.Width,
                 this.m_Graphics.GraphicsDevice.Viewport.Height);
-            this.m_BlankTexture = this.m_MouseTexture;
+            this.m_ModelTexture = this.m_BlankTexture;
             //initialize renderer
             this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice);
             this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice);
@@ -243,13 +243,13 @@ namespace PictureRubber
                 if (this.m_InitBlankTexture && this.m_MouseShaderModus == RubberModus.Path)
                 {
                     //draw a path, where the user wants to delete something of the image
-                    this.m_BlankTexture = this.m_MouseTexture;
+                    this.m_ModelTexture = this.m_BlankTexture;
                     this.m_InitBlankTexture = false;
                 }
                 else if (this.m_MouseShaderModus == RubberModus.Realtime)
                 {
                     //reset m_BlankTexture every update-call
-                    this.m_BlankTexture = this.m_MouseTexture;
+                    this.m_ModelTexture = this.m_BlankTexture;
                 }
                 //process DynamicMouse-Shader to calculate the texture
                 this.m_MouseTextureRenderer.SetRenderTarget(this.m_BlankTexture);
@@ -323,12 +323,9 @@ namespace PictureRubber
                     {
                         //draw a path, where the user wants to delete something of the image
                         this.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-                        if (this.m_BlankTexture != null)
-                        {
-                            this.m_SpriteBatch.Draw(this.m_BlankTexture,
-                                new Rectangle(0, 0, this.m_BlankTexture.Width, this.m_BlankTexture.Height),
-                                new Color(0, 0, 0, 255 / 5));
-                        }
+                        this.m_SpriteBatch.Draw(this.m_ModelTexture,
+                            new Rectangle(0, 0, this.m_ModelTexture.Width, this.m_ModelTexture.Height),
+                            new Color(0, 0, 0, 255 / 5));
                         this.m_SpriteBatch.End();
                     }
                 }
@@ -390,11 +387,11 @@ namespace PictureRubber
             {
                 if (i == texture.Count() - 1)
                 {
-                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_BlankTexture, m_AlphaAmount);
+                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_ModelTexture, m_AlphaAmount);
                 }
                 else
                 {
-                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_BlankTexture, m_AlphaAmount, texture[i + 1]);
+                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_ModelTexture, m_AlphaAmount, texture[i + 1]);
                 }
             }
         }
@@ -406,7 +403,6 @@ namespace PictureRubber
         {
             //reset values
             this.IsGesture = false;
-            this.m_Mouse.ResetMousePositions();
             GC.Collect();
         }
 

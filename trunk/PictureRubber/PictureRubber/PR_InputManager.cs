@@ -127,7 +127,6 @@ namespace PictureRubber
                 {
                     this.m_Root.IsGesture = true;
                 }
-                this.m_Root.Mouse.MousePosition = this.GetMousePosition();
             }
 
             //rubbing gesture (end)
