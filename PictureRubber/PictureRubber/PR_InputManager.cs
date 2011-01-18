@@ -101,6 +101,7 @@ namespace PictureRubber
             //Exiting of Program
             if (this.m_ActualKeyboardState.IsKeyDown(Keys.Escape))
             {
+                this.m_Root.DeleteKinect();
                 this.m_Root.Exit();
             }
 
@@ -116,7 +117,7 @@ namespace PictureRubber
                 this.GetMousePosition().Y >= 0 &&
                 this.GetMousePosition().Y <= this.m_Root.GraphicsDevice.Viewport.Height) &&
                 ((this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu) ||
-                this.m_GestureState == GestureState.Before))
+                this.m_GestureState == GestureState.While))
             {
                 if (this.m_Root.ShaderModus == PR_Main.RubberModus.Path)
                 {

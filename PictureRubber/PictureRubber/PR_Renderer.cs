@@ -193,17 +193,24 @@ namespace PictureRubber
         /// <param name="_texture">textureinformation for rendertarget</param>
         public void SetRenderTarget(Texture2D _texture)
         {
-            //initialize rendertarget
-            this.m_RenderTarget = new RenderTarget2D(
-                this.m_Graphics,
-                _texture.Width,
-                _texture.Height,
-                false,this.m_Graphics.DisplayMode.Format,
-                DepthFormat.Depth24Stencil8);
+            try
+            {
+                //initialize rendertarget
+                this.m_RenderTarget = new RenderTarget2D(
+                    this.m_Graphics,
+                    _texture.Width,
+                    _texture.Height,
+                    false, this.m_Graphics.DisplayMode.Format,
+                    DepthFormat.Depth24Stencil8);
 
-            //set the rendertarget to our texture
-            this.m_Graphics.SetRenderTarget(this.m_RenderTarget);
-            this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Transparent);
+                //set the rendertarget to our texture
+                this.m_Graphics.SetRenderTarget(this.m_RenderTarget);
+                this.m_Graphics.Clear(Microsoft.Xna.Framework.Color.Transparent);
+            }
+            catch
+            {
+                System.Console.WriteLine("Nicht genügend Speicher vorhanden");
+            }
         }
 
         /// <summary>

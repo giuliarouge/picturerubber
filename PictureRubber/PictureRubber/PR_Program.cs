@@ -12,6 +12,7 @@ namespace PictureRubber
         {
             PR_Main game = PR_Main.GetInstance();
             game.Run();
+            game.DeleteKinect();
         }
     }
 }

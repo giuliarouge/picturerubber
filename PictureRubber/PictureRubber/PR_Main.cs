@@ -140,6 +140,8 @@ namespace PictureRubber
             this.ShaderModus = RubberModus.Path;
         }
 
+
+
         /// <summary>
         /// static function to get only one isntance of PR_Main
         /// </summary>
