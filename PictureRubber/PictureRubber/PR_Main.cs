@@ -122,6 +122,11 @@ namespace PictureRubber
         private static PR_Main m_Object;
         
         /// <summary>
+        /// The new Kinect integration
+        /// </summary>
+        PR_Nite m_Nite;
+
+        /// <summary>
         /// Initializes a new Instance of PR_Main
         /// </summary>
         private PR_Main()
@@ -138,7 +143,7 @@ namespace PictureRubber
         /// <summary>
         /// static function to get only one isntance of PR_Main
         /// </summary>
-        /// <returns></returns>
+        /// <returns>the PR_Main-Static-Instance</returns>
         static public PR_Main GetInstance()
         {
             if (m_Object == null)
@@ -165,11 +170,29 @@ namespace PictureRubber
         /// </summary>
         [STAThread()]
         protected override void LoadContent()
+<<<<<<< .mine
+        {
+            // test for integrating Nite
+            this.m_Nite = new PR_Nite();
+            this.m_Nite.NiteInitialize();
+            
+            m_Graphics.PreferredBackBufferHeight = 480;
+            if (this.m_Modus == Modus.Debug)
+            {
+                m_Graphics.PreferredBackBufferWidth = 1280;
+            }
+            else
+            {
+                m_Graphics.PreferredBackBufferWidth = 640;
+            }
+            m_Graphics.ApplyChanges();
+=======
         {            
             this.m_Graphics.PreferredBackBufferHeight = 480;
             this.m_Graphics.PreferredBackBufferWidth = 640;
 
             this.m_Graphics.ApplyChanges();
+>>>>>>> .r38
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
            
             this.m_InputManager = new PR_InputManager();
@@ -204,6 +227,11 @@ namespace PictureRubber
         protected override void UnloadContent()
         {
             
+        }
+
+        public void StopKinect()
+        {
+            this.m_Nite.Stop();
         }
 
         /// <summary>

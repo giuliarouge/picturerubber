@@ -35,6 +35,8 @@ namespace PictureRubber
             m_SessionManager.AddListener(m_PointDenoiser);
             m_SessionManager.AddListener(m_PushDetector);
 
+            
+
             this.readerThread = new Thread(ReaderThread);
             this.readerThread.Start();
         }
@@ -49,6 +51,12 @@ namespace PictureRubber
             }
         }
 
+        public void Stop()
+        {
+            this.shouldRun = false;
+            this.readerThread.Abort();
+        }
+
         void sessionManager_PrimaryPointCreate(object sender, PrimaryPointCreateEventArgs e)
         {
             float x = e.HPC.Position.X;
@@ -59,7 +67,7 @@ namespace PictureRubber
 
         void sessionManager_PrimaryPointUpdate(object sender, HandPointContextEventArgs e)
         {
-            int x = (int)((System.Windows.SystemParameters.PrimaryScreenWidth / 4) + e.HPC.Position.X);
+            int x = (int)((System.Windows.SystemParameters.PrimaryScreenWidth / 2 ) + e.HPC.Position.X);
             int y = (int)((System.Windows.SystemParameters.PrimaryScreenHeight / 2) + e.HPC.Position.Y * -1);
             float z = e.HPC.Position.Z;
             Trace.WriteLine("Hand(" + x + ";" + y + ";" + z + ")");
