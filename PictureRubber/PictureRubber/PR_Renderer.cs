@@ -224,10 +224,6 @@ namespace PictureRubber
             this.m_Graphics.SetRenderTarget(null);
 
             _texture = this.m_RenderTarget;
-            if (_texture == null)
-            {
-                System.Console.WriteLine();
-            }
             this.m_RenderTarget = null;
             GC.Collect();
         }

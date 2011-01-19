@@ -61,6 +61,10 @@ namespace PictureRubber
             this.m_GestureState = GestureState.Before;
         }
 
+        /// <summary>
+        /// static function to get only one isntance of PR_Main
+        /// </summary>
+        /// <returns></returns>
         static public PR_InputManager GetInstance()
         {
             if (m_Object == null)

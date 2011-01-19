@@ -17,6 +17,37 @@ namespace PictureRubber
     /// </summary>
     public class PR_Main : Microsoft.Xna.Framework.Game
     {
+        //constants
+        /// <summary>
+        /// specify the alphaamount for alphafader-shader
+        /// </summary>
+        private const int c_AlphaAmount = 100;
+
+        /// <summary>
+        /// width of our application
+        /// </summary>
+        private const int c_AppWidth = 640;
+
+        /// <summary>
+        /// height of our application
+        /// </summary>
+        private const int c_AppHeight = 480;
+
+        /// <summary>
+        /// alpha value for path-modus
+        /// </summary>
+        private const int c_PathAlpha = 255 / 5;
+
+        /// <summary>
+        /// the gap a user needs to go forward to rub areas (in mm)
+        /// </summary>
+        private const int c_Gap = 200;
+
+        /// <summary>
+        /// minimal distance of a user to the kinect
+        /// </summary>
+        private const int c_MinimalDistance = 1000;
+
         /// <summary>
         /// The GraphicsDeviceManager
         /// </summary>
@@ -36,6 +67,16 @@ namespace PictureRubber
         /// The Pictures
         /// </summary>
         private PR_Pictures m_Pictures;
+
+        /// <summary>
+        /// copy of our image-textures
+        /// </summary>
+        private Texture2D[] m_PictureTextures;
+
+        /// <summary>
+        /// amount of textures
+        /// </summary>
+        private int m_TextureCount;
 
         /// <summary>
         /// The Mouse
@@ -66,11 +107,6 @@ namespace PictureRubber
         /// initial Texture for Mouse-Texture Shader
         /// </summary>
         private Texture2D m_BlankTexture;
-
-        /// <summary>
-        /// specify the alphaamount for alphafader-shader
-        /// </summary>
-        private const int m_AlphaAmount = 100;
 
         /// <summary>
         /// enumeration-type to specific the way, how the DynamicMouse-Shader works
@@ -117,9 +153,14 @@ namespace PictureRubber
         private bool m_CreateMouseTexture;
 
         /// <summary>
-        /// 
+        /// instance of PR_Nite to manage the Kinect
         /// </summary>
         private PR_Nite m_Nite;
+
+        /// <summary>
+        /// specify if the Kinect is connected or not
+        /// </summary>
+        private bool m_IsKinectConnected;
 
         /// <summary>
         /// Singleton instance
@@ -138,9 +179,7 @@ namespace PictureRubber
             this.m_IsGestureRunning = false;
             this.m_InitBlankTexture = true;
             this.ShaderModus = RubberModus.Path;
-        }
-
-
+        }        
 
         /// <summary>
         /// static function to get only one isntance of PR_Main
@@ -173,10 +212,12 @@ namespace PictureRubber
         [STAThread()]
         protected override void LoadContent()
         {
+            this.m_IsKinectConnected = false;
             try
             {
                 this.m_Nite = new PR_Nite();
                 this.m_Nite.NiteInitialize();
+                this.m_IsKinectConnected = true;
             }
             catch
             {
@@ -184,17 +225,21 @@ namespace PictureRubber
                 System.Console.WriteLine("Bitte Kinect anschliessen");
             }
 
-            this.m_Graphics.PreferredBackBufferHeight = 480;
-            this.m_Graphics.PreferredBackBufferWidth = 640;
-
+            this.m_Graphics.PreferredBackBufferHeight = c_AppHeight;
+            this.m_Graphics.PreferredBackBufferWidth = c_AppWidth;
             this.m_Graphics.ApplyChanges();
+
             this.m_SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             this.m_InputManager = PR_InputManager.GetInstance();
 
             this.m_Menu = new PR_Menu(this.m_InputManager);
             this.ShowMenu = true;
+            //create our pictures and save textures
             this.m_Pictures = new PR_Pictures("Images");
+            this.m_PictureTextures = this.m_Pictures.getTextures();
+            this.m_TextureCount = this.m_PictureTextures.Count();
+
             this.m_Mouse = new PR_Mouse(this.m_InputManager);
 
             //create textures for shader and rubbing-araes
@@ -307,23 +352,19 @@ namespace PictureRubber
                     if (this.IsGesture)
                     {
                         //if there was a gesture recognized, delete the areas of the image
-                        if (this.m_MouseShaderModus == RubberModus.Path)
-                        {
-                            this.m_InitBlankTexture = true;
-                            this.RunningGesture = false;
-                        }
                         this.ProcessAlphaFaderShader();
                         this.ResetValues();
                     }
-
+                    //draw our images
                     this.m_Pictures.Draw(_gameTime);
+
                     if (this.RunningGesture)
                     {
                         //draw a path, where the user wants to delete something of the image
                         this.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                         this.m_SpriteBatch.Draw(this.m_ModelTexture,
                             new Rectangle(0, 0, this.m_ModelTexture.Width, this.m_ModelTexture.Height),
-                            new Color(0, 0, 0, 255 / 5));
+                            new Color(0, 0, 0, c_PathAlpha));
                         this.m_SpriteBatch.End();
                     }
                 }
@@ -380,16 +421,23 @@ namespace PictureRubber
         private void ProcessAlphaFaderShader()
         {
             //delete areas AlphaFader-Shader
-            Texture2D[] texture = this.m_Pictures.getTextures();
-            for (int i = 1; i < texture.Count(); i++)
+            if (this.m_IsKinectConnected && this.m_MouseShaderModus == RubberModus.Realtime)
             {
-                if (i == texture.Count() - 1)
+                int index = this.CalculateTextureIndex();
+                this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount);
+            }
+            else
+            {
+                for (int i = 1; i < this.m_TextureCount; ++i)
                 {
-                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_ModelTexture, m_AlphaAmount);
-                }
-                else
-                {
-                    this.m_RubberRenderer.ApplyFilter(ref texture[i], this.m_ModelTexture, m_AlphaAmount, texture[i + 1]);
+                    if (i == this.m_TextureCount - 1)
+                    {
+                        this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[i], this.m_ModelTexture, c_AlphaAmount);
+                    }
+                    else
+                    {
+                        this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[i], this.m_ModelTexture, c_AlphaAmount, this.m_PictureTextures[i + 1]);
+                    }
                 }
             }
         }
@@ -401,6 +449,11 @@ namespace PictureRubber
         {
             //reset values
             this.IsGesture = false;
+            if (this.m_MouseShaderModus == RubberModus.Path)
+            {
+                this.m_InitBlankTexture = true;
+                this.RunningGesture = false;
+            }
             GC.Collect();
         }
 
@@ -425,7 +478,24 @@ namespace PictureRubber
         public void DeleteKinect()
         {
             if (this.m_Nite != null)
+            {
                 this.m_Nite.Stop();
+            }
+        }
+
+        /// <summary>
+        /// calculate the texture index a user is actuallz working on
+        /// </summary>
+        /// <returns></returns>
+        private int CalculateTextureIndex()
+        {
+            //initial z value == distance from kinect
+            int ZValue = 2000 - c_Gap;//this.m_Nite.GetInitialZValue()
+            //actual z value
+            int ActualZValue = this.m_Nite.ActualZ - c_MinimalDistance;
+            int Area = (ZValue - c_MinimalDistance) / this.m_TextureCount;
+            //return the index of the texture a user is working on
+            return ActualZValue % Area;
         }
     }
 }

@@ -19,6 +19,8 @@ namespace PictureRubber
         private bool shouldRun = false;
         private Thread readerThread;
 
+        private int m_ActualZValue;
+
         public void NiteInitialize()
         {
             this.shouldRun = true;
@@ -76,6 +78,7 @@ namespace PictureRubber
             Trace.WriteLine("Hand(" + x + ";" + y + ";" + z + ")");
             //Update Pointer Position
             PR_Glove.SetCursorPos(x, y);
+            this.ActualZ = (int)z;
         }
 
         void sessionManager_PrimaryPointDestroy(object sender, PointDestroyEventArgs e)
@@ -88,6 +91,18 @@ namespace PictureRubber
             Trace.WriteLine("Pushed!");
             // send LeftClick_Event
             PR_InputManager.GetInstance().UpdateGesture();
+        }
+
+        public int ActualZ
+        {
+            get
+            {
+                return this.m_ActualZValue;
+            }
+            set
+            {
+                this.m_ActualZValue = value;
+            }
         }
     }
 }
