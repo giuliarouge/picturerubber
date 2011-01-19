@@ -162,8 +162,6 @@ namespace PictureRubber
                     
                 this.m_Root.m_SpriteBatch.End();
             }
-        }
-
-        
+        }        
     }
 }

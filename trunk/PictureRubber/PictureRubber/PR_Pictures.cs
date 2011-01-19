@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 
 namespace PictureRubber
 {
-    class PR_Pictures
+    public class PR_Pictures
     {
         /// <summary>
         /// The Root Pointer
