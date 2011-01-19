@@ -178,7 +178,7 @@ namespace PictureRubber
             this.m_CreateMouseTexture = false;
             this.m_IsGestureRunning = false;
             this.m_InitBlankTexture = true;
-            this.ShaderModus = RubberModus.Path;
+            this.ShaderModus = RubberModus.Realtime;
         }        
 
         /// <summary>
@@ -253,7 +253,6 @@ namespace PictureRubber
             //initialize renderer
             this.m_RubberRenderer = new PR_Renderer("AlphaFader", "AlphaFader", this.m_Graphics.GraphicsDevice);
             this.m_MouseTextureRenderer = new PR_Renderer("DynamicMouse", "DynamicMouse", this.m_Graphics.GraphicsDevice);            
-
             this.m_Intro = new PR_Intro("intro");
             if (this.m_PlayIntro)
             {
@@ -329,6 +328,18 @@ namespace PictureRubber
             }
         }
 
+        public bool ShowOptions
+        {
+            get
+            {
+                return this.m_Menu.m_OptionsVisible;
+            }
+            set
+            {
+                this.m_Menu.m_OptionsVisible = value;
+            }
+        }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -366,7 +377,7 @@ namespace PictureRubber
                             new Rectangle(0, 0, this.m_ModelTexture.Width, this.m_ModelTexture.Height),
                             new Color(0, 0, 0, c_PathAlpha));
                         this.m_SpriteBatch.End();
-                    }
+                    }    
                 }
 
                 this.m_Mouse.Draw(_gameTime);
@@ -424,13 +435,16 @@ namespace PictureRubber
             if (this.m_IsKinectConnected && this.m_MouseShaderModus == RubberModus.Realtime)
             {
                 int index = this.CalculateTextureIndex();
-                if (index == this.m_TextureCount - 1)
+                if (index < this.m_TextureCount)
                 {
-                    this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount);
-                }
-                else
-                {
-                    this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount, this.m_PictureTextures[index + 1]);
+                    if (index == this.m_TextureCount - 1)
+                    {
+                        this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount);
+                    }
+                    else
+                    {
+                        this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount, this.m_PictureTextures[index + 1]);
+                    }
                 }
             }
             else
@@ -500,9 +514,13 @@ namespace PictureRubber
             int ZValue = 2000 - c_Gap;//this.m_Nite.GetInitialZValue()
             //actual z value
             int ActualZValue = this.ActualZ - c_MinimalDistance;
-            int Area = (ZValue - c_MinimalDistance) / this.m_TextureCount;
+            int Area = (ZValue - c_MinimalDistance) / (this.m_TextureCount-1);
             //return the index of the texture a user is working on
-            return ActualZValue % Area;
+            if (ActualZValue % Area == 0)
+            {
+                return ActualZValue / Area;
+            }
+            return (ActualZValue / Area) + 1;
         }
 
         /// <summary>

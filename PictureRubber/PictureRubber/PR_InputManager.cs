@@ -151,15 +151,49 @@ namespace PictureRubber
 
         public void HandleMenuInput(int _index)
         {
-            //do something
             switch (_index)
             {
                 case 0:
                     this.m_Root.ShowMenu = false;
                     break;
+                case 1:
+                    this.m_Root.ShowOptions = true;
+                    break;
                 case 2:
                     this.m_Root.DeleteKinect();
                     this.m_Root.Exit();
+                    break;
+            }
+        }
+
+        public void HandleOptionsInput(int _index)
+        {
+            switch (_index)
+            {
+                case 0:
+                    //Resolution 640x480
+                    break;
+                case 1:
+                    //Resolution 800x600
+                    break;
+                case 2:
+                    //Resolution 1024x768
+                    break;
+                case 3:
+                    //Fenstermodus
+                    break;
+                case 4:
+                    //VollbildModus
+                    break;
+                case 5:
+                    //EchtzeitModus
+                    break;
+                case 6:
+                    //PfadModus
+                    break;
+                case 7:
+                    //Zurueck
+                    this.m_Root.ShowOptions = false;
                     break;
             }
         }

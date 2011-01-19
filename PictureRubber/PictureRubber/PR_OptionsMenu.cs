@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,35 +20,12 @@ namespace PictureRubber
         private Texture2D m_OptionsFrame;
 
         /// <summary>
-        /// Array holding textures of the 640x480 button
+        /// The Menu Buttons
         /// </summary>
-        private Texture2D[] m_640x480Button;
+        private PR_MenuEntry[] m_MenuEntrys;
 
-        /// <summary>
-        /// Array holding textures of the 800x600 button
-        /// </summary>
-        private Texture2D[] m_800x600Button;
-
-        /// <summary>
-        /// Array holding textures of the 1024x768 button
-        /// </summary>
-        private Texture2D[] m_1024x768Button;
-
-        /// <summary>
-        /// Rectangle representing the 640x480 button
-        /// </summary>
-        private Rectangle m_640x480ButtonRect;
-
-        /// <summary>
-        /// Rectangle representing the 800x600 button
-        /// </summary>
-        private Rectangle m_800x600ButtonRect;
-
-        /// <summary>
-        /// Rectangle representing the 1024x768 button
-        /// </summary>
-        private Rectangle m_1024x768ButtonRect;
-
+        private int[] m_SelectedIndex;
+        
         /// <summary>
         /// the input manager
         /// </summary>
@@ -58,12 +35,6 @@ namespace PictureRubber
         /// Flag whether visible or not
         /// </summary>
         public bool m_Visible;
-
-        /// <summary>
-        /// Counter for the Control of the Resolution Buttons, holding on a button will increase the correspondating element
-        /// </summary>
-        private int[] m_SelectedResolution;
-
 
         /// <summary>
         /// waiting Delay
@@ -80,41 +51,36 @@ namespace PictureRubber
         /// </summary>
         /// <param name="_root">the root pointer</param>
         /// <param name="_input">the input manager</param>
-        public PR_OptionsMenu(PR_Main _root, PR_InputManager _input)
+        public PR_OptionsMenu()
         {
             this.m_Visible = true;
             this.m_CurrentDelay = 0;
-            this.m_SelectedResolution = new int[3];
-            this.m_SelectedResolution[0] = 0;
-            this.m_SelectedResolution[1] = 0;
-            this.m_SelectedResolution[2] = 0;
-
-            this.m_Root = _root;
-            this.m_InputManager = _input;
+            
+            this.m_Root = PR_Main.GetInstance();
+            this.m_InputManager = PR_InputManager.GetInstance();
 
             this.m_OptionsFrame = this.m_Root.Content.Load<Texture2D>("menu\\options_frame");
 
-            this.m_640x480Button = new Texture2D[3];
-            this.m_800x600Button = new Texture2D[3];
-            this.m_1024x768Button = new Texture2D[3];
+            this.m_MenuEntrys = new PR_MenuEntry[8];
+            //0 - Resolution 640x480
+            //1 - Resolution 800x600
+            //2 - Resolution 1024x768
+            //3 - Fenstermodus
+            //4 - Vollbild
+            //5 - EchtzeitModus
+            //6 - PfadModus
+            //7 - Zurueck
+            this.m_SelectedIndex = new int[8];
+            this.m_SelectedIndex.Initialize();
 
-            this.m_640x480Button[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\options");
-            this.m_640x480Button[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\beenden_over");
-            this.m_640x480Button[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\beenden_pressed");
-
-            this.m_800x600Button[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\optionen_normal");
-            this.m_800x600Button[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\optionen_over");
-            this.m_800x600Button[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\optionen_pressed");
-
-            this.m_1024x768Button[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\starten_normal");
-            this.m_1024x768Button[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\starten_over");
-            this.m_1024x768Button[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\starten_pressed");
-
-            float value = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
-
-            this.m_StartButtonRect = new Rectangle((int)(196 * value), (int)(552 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
-            this.m_OptionenButtonRect = new Rectangle((int)(196 * value), (int)(692 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
-            this.m_BeendenButtonRect = new Rectangle((int)(196 * value), (int)(832 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
+            this.m_MenuEntrys[0] = new PR_MenuEntry("menu\\buttons\\options\\res_640",new Point(346,296));
+            this.m_MenuEntrys[1] = new PR_MenuEntry("menu\\buttons\\options\\res_800", new Point(655, 296));
+            this.m_MenuEntrys[2] = new PR_MenuEntry("menu\\buttons\\options\\res_1024", new Point(964, 296));
+            this.m_MenuEntrys[3] = new PR_MenuEntry("menu\\buttons\\options\\window", new Point(496, 446));
+            this.m_MenuEntrys[4] = new PR_MenuEntry("menu\\buttons\\options\\fullscreen", new Point(805, 446));
+            this.m_MenuEntrys[5] = new PR_MenuEntry("menu\\buttons\\options\\realtime", new Point(496, 596));
+            this.m_MenuEntrys[6] = new PR_MenuEntry("menu\\buttons\\options\\path", new Point(805, 596));
+            this.m_MenuEntrys[7] = new PR_MenuEntry("menu\\buttons\\options\\back", new Point(546, 746));
         }
 
         /// <summary>
@@ -125,13 +91,13 @@ namespace PictureRubber
         {
             if (this.m_Visible)
             {
-                if (this.m_CurrentDelay >= this.m_Delay)
+                //if (this.m_CurrentDelay >= this.m_Delay)
                 {
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 8; i++)
                     {
                         if (this.m_SelectedIndex[i] >= 360)
                         {
-                            this.m_InputManager.HandleMenuInput(i);
+                            this.m_InputManager.HandleOptionsInput(i);
                             this.ClearUpCounter();
                             break;
                         }
@@ -145,7 +111,7 @@ namespace PictureRubber
         /// </summary>
         private void ClearUpCounter()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 8; i++)
             {
                 this.m_SelectedIndex[i] = 0;
             }
@@ -165,77 +131,39 @@ namespace PictureRubber
                 this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                 Rectangle rec = new Rectangle(0, 0, this.m_Root.GraphicsDevice.Viewport.Width, this.m_Root.GraphicsDevice.Viewport.Height);
 
-                this.m_Root.m_SpriteBatch.Draw(m_MenuFrame, rec, Microsoft.Xna.Framework.Color.White);
+                this.m_Root.m_SpriteBatch.Draw(m_OptionsFrame, rec, Microsoft.Xna.Framework.Color.White);
                 bool intersects = false;
-                if (Intersects(mousePosition, m_StartButtonRect))
+                for (int i = 0; i < 8; ++i)
                 {
-                    intersects = true;
-                    if (this.m_SelectedIndex[0] < 360)
+                    if (m_MenuEntrys[i].Intersects(mousePosition))
                     {
-                        this.m_Root.m_SpriteBatch.Draw(m_StartenButton[1], m_StartButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_SelectedIndex[0] += 2;
+                        intersects = true;
+                        if (this.m_SelectedIndex[i] < 360)
+                        {
+                            this.m_MenuEntrys[i].Draw(1);
+                            this.m_SelectedIndex[i] += 3;
+                        }
+                        else
+                        {
+                            this.m_MenuEntrys[i].Draw(2);
+                            this.m_CurrentDelay++;
+                        }
+                        this.m_Root.SetMouseWaitingTime(this.m_SelectedIndex[i]);
                     }
                     else
                     {
-                        this.m_Root.m_SpriteBatch.Draw(m_StartenButton[2], m_StartButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_CurrentDelay++;
+                        this.m_MenuEntrys[i].Draw(0);
                     }
-                    this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[0]);
                 }
-                else
-                {
-                    this.m_Root.m_SpriteBatch.Draw(m_StartenButton[0], m_StartButtonRect, Microsoft.Xna.Framework.Color.White);
-                }
-                if (Intersects(mousePosition, m_OptionenButtonRect))
-                {
-                    intersects = true;
-                    if (this.m_SelectedIndex[1] < 360)
-                    {
-                        this.m_Root.m_SpriteBatch.Draw(m_OptionenButton[1], m_OptionenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_SelectedIndex[1] += 2;
-                    }
-                    else
-                    {
-                        this.m_Root.m_SpriteBatch.Draw(m_OptionenButton[2], m_OptionenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_CurrentDelay++;
-                    }
-                    this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[1]);
-                }
-                else
-                {
-                    this.m_Root.m_SpriteBatch.Draw(m_OptionenButton[0], m_OptionenButtonRect, Microsoft.Xna.Framework.Color.White);
-                }
-                if (Intersects(mousePosition, m_BeendenButtonRect))
-                {
-                    intersects = true;
-                    if (this.m_SelectedIndex[2] < 360)
-                    {
-                        this.m_Root.m_SpriteBatch.Draw(m_BeendenButton[1], m_BeendenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_SelectedIndex[2] += 2;
-                    }
-                    else
-                    {
-                        this.m_Root.m_SpriteBatch.Draw(m_BeendenButton[2], m_BeendenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_CurrentDelay++;
-                    }
-                    this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[2]);
-                }
-                else
-                {
-                    this.m_Root.m_SpriteBatch.Draw(m_BeendenButton[0], m_BeendenButtonRect, Microsoft.Xna.Framework.Color.White);
-                }
-                if (intersects == false)
+                if (!intersects)
                 {
                     this.ClearUpCounter();
                 }
+                    
                 this.m_Root.m_SpriteBatch.End();
             }
         }
 
-        private bool Intersects(Vector2 _position, Rectangle _rectangle)
-        {
-            return _rectangle.Intersects(new Rectangle((int)_position.X, (int)_position.Y, 1, 1));
-        }
+        
     }
 }
-*/
