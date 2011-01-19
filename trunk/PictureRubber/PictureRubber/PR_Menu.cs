@@ -31,10 +31,17 @@ namespace PictureRubber
         /// </summary>
         private PR_InputManager m_InputManager;
 
+        private PR_OptionsMenu m_OptionsMenu;
+
         /// <summary>
         /// Flag if visible or not
         /// </summary>
         public bool m_Visible;
+
+        /// <summary>
+        /// Flag if the Options menu is shown, otherwise the main menu is shown
+        /// </summary>
+        public bool m_OptionsVisible;
 
         /// <summary>
         /// Initializes a new instance of PR_Menu
@@ -47,6 +54,8 @@ namespace PictureRubber
             this.m_InputManager = _input;
             this.m_Background = new PR_MenuBackground(this.m_Root);
             this.m_MainMenu = new PR_MainMenu(this.m_Root, this.m_InputManager);
+            this.m_OptionsMenu = new PR_OptionsMenu();
+            this.m_OptionsVisible = false;
         }
 
         /// <summary>
@@ -55,13 +64,29 @@ namespace PictureRubber
         /// <param name="_gameTime">the actual GameTime</param>
         public void Update(GameTime _gameTime)
         {
-            if (this.m_Visible && !this.m_MainMenu.m_Visible)
+            if (this.m_Visible && !this.m_OptionsVisible)
             {
                 this.m_MainMenu.m_Visible = true;
+            }
+            else
+            {
+                this.m_MainMenu.m_Visible = false;
             }
             if (this.m_MainMenu.m_Visible)
             {
                 this.m_MainMenu.Update(_gameTime);
+            }
+            if (this.m_OptionsMenu.m_Visible)
+            {
+                this.m_OptionsMenu.Update(_gameTime);
+            }
+            if (this.m_OptionsVisible)
+            {
+                this.m_OptionsMenu.m_Visible = true;
+            }
+            else
+            {
+                this.m_OptionsMenu.m_Visible = false;
             }
             m_Background.Update(_gameTime);
         }
@@ -79,6 +104,11 @@ namespace PictureRubber
                 {
                     this.m_MainMenu.Draw(_gameTime);
                 }
+                if (this.m_OptionsVisible)
+                {
+                    this.m_OptionsMenu.Draw(_gameTime);
+                }
+
             }
         }
     }

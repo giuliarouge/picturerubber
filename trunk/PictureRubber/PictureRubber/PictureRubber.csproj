@@ -127,6 +127,7 @@
     <Compile Include="PR_MainMenu.cs" />
     <Compile Include="PR_Menu.cs" />
     <Compile Include="PR_MenuBackground.cs" />
+    <Compile Include="PR_MenuEntry.cs" />
     <Compile Include="PR_Mouse.cs" />
     <Compile Include="PR_Nite.cs" />
     <Compile Include="PR_OptionsMenu.cs" />
