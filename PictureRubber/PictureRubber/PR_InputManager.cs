@@ -116,7 +116,8 @@ namespace PictureRubber
                 this.GetMousePosition().Y >= 0 &&
                 this.GetMousePosition().Y <= this.m_Root.GraphicsDevice.Viewport.Height) &&
                 ((this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu) ||
-                (this.m_GestureState == GestureState.While && !this.m_Root.ShowMenu)))
+                (this.m_GestureState == GestureState.While && !this.m_Root.ShowMenu) ||
+                (this.m_Root.m_IsKinectConnected && this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime && this.m_Root.ActualZ < this.m_Root.InitialZValue)))
             {
                 if (this.m_Root.ShaderModus == PR_Main.RubberModus.Path)
                 {

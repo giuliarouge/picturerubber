@@ -160,7 +160,7 @@ namespace PictureRubber
         /// <summary>
         /// specify if the Kinect is connected or not
         /// </summary>
-        private bool m_IsKinectConnected;
+        public bool m_IsKinectConnected;
 
         /// <summary>
         /// Singleton instance
@@ -424,7 +424,14 @@ namespace PictureRubber
             if (this.m_IsKinectConnected && this.m_MouseShaderModus == RubberModus.Realtime)
             {
                 int index = this.CalculateTextureIndex();
-                this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount);
+                if (index == this.m_TextureCount - 1)
+                {
+                    this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount);
+                }
+                else
+                {
+                    this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount, this.m_PictureTextures[index + 1]);
+                }
             }
             else
             {
@@ -492,10 +499,32 @@ namespace PictureRubber
             //initial z value == distance from kinect
             int ZValue = 2000 - c_Gap;//this.m_Nite.GetInitialZValue()
             //actual z value
-            int ActualZValue = this.m_Nite.ActualZ - c_MinimalDistance;
+            int ActualZValue = this.ActualZ - c_MinimalDistance;
             int Area = (ZValue - c_MinimalDistance) / this.m_TextureCount;
             //return the index of the texture a user is working on
             return ActualZValue % Area;
+        }
+
+        /// <summary>
+        /// get actual z-value from kinect
+        /// </summary>
+        public int ActualZ
+        {
+            get
+            {
+                return this.m_Nite.ActualZ;
+            }
+        }
+
+        /// <summary>
+        /// get the z-value where a user is able to delete ares in realtime-mode
+        /// </summary>
+        public int InitialZValue
+        {
+            get
+            {
+                return 2000 - c_Gap;
+            }
         }
     }
 }
