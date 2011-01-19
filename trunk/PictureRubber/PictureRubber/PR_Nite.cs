@@ -90,9 +90,15 @@ namespace PictureRubber
         {
             Trace.WriteLine("Pushed!");
             // send LeftClick_Event
-            PR_InputManager.GetInstance().UpdateGesture();
+            if ((PR_Main.GetInstance().ShaderModus == PR_Main.RubberModus.Path))
+            {
+                PR_InputManager.GetInstance().UpdateGesture();
+            }
         }
 
+        /// <summary>
+        /// gets or sets actual z-value
+        /// </summary>
         public int ActualZ
         {
             get
