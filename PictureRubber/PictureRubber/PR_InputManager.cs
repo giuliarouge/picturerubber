@@ -111,10 +111,7 @@ namespace PictureRubber
             }
 
             //rubbing gesture (start)
-            if ((this.GetMousePosition().X >= 0 &&
-                this.GetMousePosition().X <= this.m_Root.GraphicsDevice.Viewport.Width &&
-                this.GetMousePosition().Y >= 0 &&
-                this.GetMousePosition().Y <= this.m_Root.GraphicsDevice.Viewport.Height) &&
+            if ((this.IsMouseInScreen()) &&
                 ((this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu) ||
                 (this.m_GestureState == GestureState.While && !this.m_Root.ShowMenu) ||
                 (this.m_Root.m_IsKinectConnected && this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime && this.m_Root.Gestures.ActualZ < this.m_Root.Gestures.InitialZValue)))
@@ -130,7 +127,8 @@ namespace PictureRubber
             }
 
             //rubbing gesture (end)
-            if ((this.m_ActualMouseState.LeftButton == ButtonState.Released &&
+            if ((this.IsMouseInScreen()) &&
+                (this.m_ActualMouseState.LeftButton == ButtonState.Released &&
                 this.m_LastMouseState.LeftButton == ButtonState.Pressed) ||
                 this.m_GestureState == GestureState.After)
             {
@@ -144,11 +142,28 @@ namespace PictureRubber
                     this.m_Root.IsGesture = false;
                 }
             }
-
+            //safe mouse and keyboard states
             this.m_LastKeyboardState = this.m_ActualKeyboardState;
             this.m_LastMouseState = this.m_ActualMouseState;
         }
 
+        /// <summary>
+        /// checks if the actual mouse-position is inside the window
+        /// </summary>
+        /// <returns>true or false</returns>
+        private bool IsMouseInScreen()
+        {
+            Vector2 MousePosition = this.GetMousePosition();
+            return MousePosition.X >= 0 &&
+                MousePosition.X <= this.m_Root.GraphicsDevice.Viewport.Width &&
+                MousePosition.Y >= 0 &&
+                MousePosition.Y <= this.m_Root.GraphicsDevice.Viewport.Height;
+        }
+
+        /// <summary>
+        /// handle main-menu input
+        /// </summary>
+        /// <param name="_index">index of option</param>
         public void HandleMenuInput(int _index)
         {
             switch (_index)
@@ -166,6 +181,10 @@ namespace PictureRubber
             }
         }
 
+        /// <summary>
+        /// handle option-menu input
+        /// </summary>
+        /// <param name="_index">index of option</param>
         public void HandleOptionsInput(int _index)
         {
             switch (_index)
