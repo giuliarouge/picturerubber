@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace PictureRubber
 {
-    class PR_Nite
+    public class PR_Nite
     {
         private XnMOpenNIContext m_Context;
         private XnMSessionManager m_SessionManager;
@@ -28,7 +28,6 @@ namespace PictureRubber
             m_Context = new XnMOpenNIContext();
             m_Context.SetSmoothing(0.3f);
             m_Context.Init();
-
 
             m_PointDenoiser = new XnMPointDenoiser();
             m_PointDenoiser.PrimaryPointCreate += new EventHandler<PrimaryPointCreateEventArgs>(sessionManager_PrimaryPointCreate);
@@ -52,7 +51,9 @@ namespace PictureRubber
             {
                 uint rc = m_Context.Update();
                 if (rc == 0)
+                {
                     m_SessionManager.Update(m_Context);
+                }
             }
         }
 
@@ -84,6 +85,11 @@ namespace PictureRubber
         void sessionManager_PrimaryPointDestroy(object sender, PointDestroyEventArgs e)
         {
             Trace.WriteLine("~ID: " + e.ID);
+            //reset m_ModelTexture if the kinect lost the hand
+            if ((PR_Main.GetInstance().ShaderModus == PR_Main.RubberModus.Path))
+            {
+                PR_Main.GetInstance().Gestures.ResetGesture();
+            }
         }
 
         void pushDetector_Push(object sender, PushDetectorEventArgs e)
