@@ -86,12 +86,12 @@ namespace PictureRubber
                     this.m_InputManager.GetActualMouseState().Y - this.m_Texture.Height / 2, 
                     this.m_Texture.Width,
                     this.m_Texture.Height);
-                this.m_Root.m_SpriteBatch.Draw(m_Texture, rec, Microsoft.Xna.Framework.Color.White);
+                this.m_Root.m_SpriteBatch.Draw(this.m_Texture, rec, Microsoft.Xna.Framework.Color.White);
                 
-                for (int i = 0; i < this.m_WaitingTime / 45; i++)
+                for (int i = 0; i < this.m_WaitingTime / 45; ++i)
                 {
                     float angle = MathHelper.ToRadians(45.0f * i);
-                    this.m_Root.m_SpriteBatch.Draw(m_WaitingTexture,
+                    this.m_Root.m_SpriteBatch.Draw(this.m_WaitingTexture,
                         new Vector2(this.m_InputManager.GetActualMouseState().X, this.m_InputManager.GetActualMouseState().Y),
                         null,
                         Color.White,
@@ -105,15 +105,6 @@ namespace PictureRubber
                 this.m_WaitingTime = 0;
                 this.m_Root.m_SpriteBatch.End();
             }
-        }
-
-        /// <summary>
-        /// get the list of mouse-positions
-        /// </summary>
-        /// <returns>m_MousePositions</returns>
-        public List<Vector2> GetMousePositions()
-        {
-            return this.m_MousePositions;
         }
 
         /// <summary>
@@ -133,9 +124,15 @@ namespace PictureRubber
             GraphicsDevice graphics = this.m_Root.GraphicsDevice;
             int width = (int)(this.m_Texture.Width * this.m_ScalingValue);
             int height = (int)(this.m_Texture.Height * this.m_ScalingValue);
+
             //XNA 3.1 Code from here http://forums.create.msdn.com/forums/t/24124.aspx
             // Create the Render Target to draw the scaled Texture to 
-            RenderTarget2D renderTarget = new RenderTarget2D(graphics, width, height, false, graphics.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            RenderTarget2D renderTarget = new RenderTarget2D(graphics,
+                width,
+                height,
+                false,
+                graphics.DisplayMode.Format,
+                DepthFormat.Depth24Stencil8);
 
             graphics.SetRenderTarget(renderTarget);
 
@@ -156,6 +153,7 @@ namespace PictureRubber
             // Set the Texture To Return to the scaled Texture 
             this.m_Texture = renderTarget;
             renderTarget = null;
+            GC.Collect();
         }
     }
 }
