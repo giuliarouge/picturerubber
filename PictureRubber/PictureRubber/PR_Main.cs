@@ -31,7 +31,7 @@ namespace PictureRubber
         /// <summary>
         /// The GraphicsDeviceManager
         /// </summary>
-        private GraphicsDeviceManager m_Graphics;
+        public GraphicsDeviceManager m_Graphics;
 
         /// <summary>
         /// The Spritebatch
@@ -65,7 +65,7 @@ namespace PictureRubber
         /// <summary>
         /// variable which specify the actual shader modus
         /// </summary>
-        private RubberModus m_MouseShaderModus;
+        public RubberModus m_MouseShaderModus;
 
         /// <summary>
         /// instance of PR_GestureHandler to handle gesture input
@@ -413,6 +413,14 @@ namespace PictureRubber
             get
             {
                 return this.m_GestureHandler;
+            }
+        }
+
+        public PR_Menu Menu
+        {
+            get
+            {
+                return this.m_Menu;
             }
         }
     }

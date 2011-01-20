@@ -9,7 +9,7 @@ namespace PictureRubber
     /// <summary>
     /// The Menu Container
     /// </summary>
-    class PR_Menu
+    public class PR_Menu
     {
         /// <summary>
         /// the root Pointer
@@ -110,6 +110,12 @@ namespace PictureRubber
                 }
 
             }
+        }
+
+        public void RescaleMenuElements()
+        {
+            this.m_MainMenu.RescaleElements();
+            this.m_OptionsMenu.RescaleElements();
         }
     }
 }

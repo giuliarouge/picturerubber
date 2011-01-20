@@ -92,7 +92,6 @@ namespace PictureRubber
                 this.m_Root.GraphicsDevice.Viewport.Width,
                 this.m_Root.GraphicsDevice.Viewport.Height);
             this.m_ModelTexture = this.m_BlankTexture;
-            this.m_RealMouseTexture = this.m_Root.Mouse.GetMouseTexture();
             this.m_PictureTextures = this.m_Root.Pictures.getTextures();
             this.m_TextureCount = this.m_PictureTextures.Count();
         }
@@ -120,7 +119,7 @@ namespace PictureRubber
                 //process DynamicMouse-Shader to calculate the texture
                 this.m_MouseTextureRenderer.SetRenderTarget(this.m_ModelTexture);
                 this.m_MouseTextureRenderer.CreateMouseTexture(ref this.m_ModelTexture,
-                    this.m_RealMouseTexture,
+                    this.m_Root.Mouse.GetMouseTexture(),
                     PR_InputManager.GetInstance().GetMousePosition());
                 this.m_MouseTextureRenderer.ResetRenderTarget(ref this.m_ModelTexture);
             }
@@ -240,6 +239,15 @@ namespace PictureRubber
         {
             this.m_ModelTexture = this.m_BlankTexture;
             this.m_Root.RunningGesture = false;
+        }
+
+        public void RescaleElements()
+        {
+            this.m_BlankTexture = new Texture2D(
+                this.m_Root.GraphicsDevice,
+                this.m_Root.GraphicsDevice.Viewport.Width,
+                this.m_Root.GraphicsDevice.Viewport.Height);
+            this.m_ModelTexture = this.m_BlankTexture;
         }
     }
 }

@@ -19,6 +19,8 @@ namespace PictureRubber
         /// </summary>
         private Texture2D m_Texture;
 
+        private Texture2D m_ScaledTexture;
+
         /// <summary>
         /// The Waiting Part Texture
         /// </summary>
@@ -82,12 +84,11 @@ namespace PictureRubber
             {
                 this.m_Root.m_SpriteBatch.Begin();
                 Rectangle rec = new Rectangle(
-                    this.m_InputManager.GetActualMouseState().X - this.m_Texture.Width / 2,
-                    this.m_InputManager.GetActualMouseState().Y - this.m_Texture.Height / 2, 
-                    this.m_Texture.Width,
-                    this.m_Texture.Height);
-                this.m_Root.m_SpriteBatch.Draw(this.m_Texture, rec, Microsoft.Xna.Framework.Color.White);
-                
+                    this.m_InputManager.GetActualMouseState().X - this.m_ScaledTexture.Width / 2,
+                    this.m_InputManager.GetActualMouseState().Y - this.m_ScaledTexture.Height / 2, 
+                    this.m_ScaledTexture.Width,
+                    this.m_ScaledTexture.Height);
+                    this.m_Root.m_SpriteBatch.Draw(this.m_ScaledTexture, rec, Microsoft.Xna.Framework.Color.White);
                 for (int i = 0; i < this.m_WaitingTime / 45; ++i)
                 {
                     float angle = MathHelper.ToRadians(45.0f * i);
@@ -113,14 +114,15 @@ namespace PictureRubber
         /// <returns>m_Texture</returns>
         public Texture2D GetMouseTexture()
         {
-            return this.m_Texture;
+            return this.m_ScaledTexture;
         }
 
         /// <summary>
         /// rescale mouse texture
         /// </summary>
-        private void RescaleTexture()
+        public void RescaleTexture()
         {
+            this.m_ScalingValue = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
             GraphicsDevice graphics = this.m_Root.GraphicsDevice;
             int width = (int)(this.m_Texture.Width * this.m_ScalingValue);
             int height = (int)(this.m_Texture.Height * this.m_ScalingValue);
@@ -151,9 +153,9 @@ namespace PictureRubber
             graphics.SetRenderTarget(null);
 
             // Set the Texture To Return to the scaled Texture 
-            this.m_Texture = renderTarget;
+            this.m_ScaledTexture = renderTarget;
             renderTarget = null;
-            GC.Collect();
+            //GC.Collect();
         }
     }
 }
