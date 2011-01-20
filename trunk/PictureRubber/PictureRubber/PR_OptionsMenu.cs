@@ -133,7 +133,7 @@ namespace PictureRubber
 
                 this.m_Root.m_SpriteBatch.Draw(m_OptionsFrame, rec, Microsoft.Xna.Framework.Color.White);
                 bool intersects = false;
-                for (int i = 0; i < 8; ++i)
+                for (int i = 0; i < this.m_MenuEntrys.Length; ++i)
                 {
                     if (m_MenuEntrys[i].Intersects(mousePosition))
                     {
@@ -162,6 +162,14 @@ namespace PictureRubber
                     
                 this.m_Root.m_SpriteBatch.End();
             }
-        }        
+        }
+
+        public void RescaleElements()
+        {
+            for (int i = 0; i < this.m_MenuEntrys.Length; ++i)
+            {
+                this.m_MenuEntrys[i].RescaleButton();
+            }
+        }
     }
 }

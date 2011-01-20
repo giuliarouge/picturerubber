@@ -191,24 +191,56 @@ namespace PictureRubber
             {
                 case 0:
                     //Resolution 640x480
+                    this.m_Root.m_Graphics.PreferredBackBufferWidth = 640;
+                    this.m_Root.m_Graphics.PreferredBackBufferHeight = 480;
+                    this.m_Root.m_Graphics.ApplyChanges();
+                    this.m_Root.Mouse.RescaleTexture();
+                    this.m_Root.Menu.RescaleMenuElements();
+                    this.m_Root.Gestures.RescaleElements();
                     break;
                 case 1:
                     //Resolution 800x600
+                    this.m_Root.m_Graphics.PreferredBackBufferWidth = 800;
+                    this.m_Root.m_Graphics.PreferredBackBufferHeight = 600;
+                    this.m_Root.m_Graphics.ApplyChanges();
+                    this.m_Root.Mouse.RescaleTexture();
+                    this.m_Root.Menu.RescaleMenuElements();
+                    this.m_Root.Gestures.RescaleElements();
                     break;
                 case 2:
                     //Resolution 1024x768
+                    this.m_Root.m_Graphics.PreferredBackBufferWidth = 1024;
+                    this.m_Root.m_Graphics.PreferredBackBufferHeight = 768;
+                    this.m_Root.m_Graphics.ApplyChanges();
+                    this.m_Root.Mouse.RescaleTexture();
+                    this.m_Root.Menu.RescaleMenuElements();
+                    this.m_Root.Gestures.RescaleElements();
                     break;
                 case 3:
                     //Fenstermodus
+                    if (this.m_Root.m_Graphics.IsFullScreen)
+                    {
+                        this.m_Root.m_Graphics.ToggleFullScreen();
+                        this.m_Root.m_Graphics.ApplyChanges();
+                        this.m_Root.Mouse.RescaleTexture();
+                    }                        
                     break;
                 case 4:
                     //VollbildModus
+                    if (!this.m_Root.m_Graphics.IsFullScreen)
+                    {
+                        this.m_Root.m_Graphics.ToggleFullScreen();
+                        this.m_Root.m_Graphics.ApplyChanges();
+                        this.m_Root.Mouse.RescaleTexture();
+                    }  
                     break;
                 case 5:
                     //EchtzeitModus
+                    this.m_Root.m_MouseShaderModus = PR_Main.RubberModus.Realtime;
                     break;
                 case 6:
                     //PfadModus
+                    this.m_Root.m_MouseShaderModus = PR_Main.RubberModus.Path;
                     break;
                 case 7:
                     //Zurueck

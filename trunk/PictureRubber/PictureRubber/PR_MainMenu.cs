@@ -25,34 +25,9 @@ namespace PictureRubber
         private Texture2D m_rubber_glow;
 
         /// <summary>
-        /// Array holding textures of the start button
+        /// Array holding the menu elements
         /// </summary>
-        private Texture2D[] m_StartenButton;
-
-        /// <summary>
-        /// Array holding textures of the options button
-        /// </summary>
-        private Texture2D[] m_OptionenButton;
-
-        /// <summary>
-        /// Array holding textures of the close button
-        /// </summary>
-        private Texture2D[] m_BeendenButton;
-
-        /// <summary>
-        /// Rectangle representing the start button
-        /// </summary>
-        private Rectangle m_StartButtonRect;
-
-        /// <summary>
-        /// Rectangle representing the options button
-        /// </summary>
-        private Rectangle m_OptionenButtonRect;
-
-        /// <summary>
-        /// Rectangle representing the close button
-        /// </summary>
-        private Rectangle m_BeendenButtonRect;
+        private PR_MenuEntry[] m_MenuEntrys;
 
         /// <summary>
         /// the input manager
@@ -102,27 +77,10 @@ namespace PictureRubber
             this.m_MenuFrame = this.m_Root.Content.Load<Texture2D>("menu\\menu_frame_rainy");
             this.m_rubber_glow = this.m_Root.Content.Load<Texture2D>("menu\\rubber_glow");
 
-            this.m_BeendenButton = new Texture2D[3];
-            this.m_OptionenButton = new Texture2D[3];
-            this.m_StartenButton = new Texture2D[3];
-
-            this.m_BeendenButton[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\beenden_normal");
-            this.m_BeendenButton[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\beenden_over");
-            this.m_BeendenButton[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\beenden_pressed");
-
-            this.m_OptionenButton[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\optionen_normal");
-            this.m_OptionenButton[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\optionen_over");
-            this.m_OptionenButton[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\optionen_pressed");
-
-            this.m_StartenButton[0] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\starten_normal");
-            this.m_StartenButton[1] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\starten_over");
-            this.m_StartenButton[2] = this.m_Root.Content.Load<Texture2D>("menu\\buttons\\main\\starten_pressed");
-
-            float value = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
-
-            this.m_StartButtonRect = new Rectangle((int)(400 * value), (int)(352 * value), (int)(this.m_StartenButton[0].Width*value), (int)(this.m_StartenButton[0].Height*value));
-            this.m_OptionenButtonRect = new Rectangle((int)(400 * value), (int)(492 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
-            this.m_BeendenButtonRect = new Rectangle((int)(400 * value), (int)(632 * value), (int)(this.m_StartenButton[0].Width * value), (int)(this.m_StartenButton[0].Height * value));
+            this.m_MenuEntrys = new PR_MenuEntry[3];
+            this.m_MenuEntrys[0] = new PR_MenuEntry("menu\\buttons\\main\\starten",new Point(400,352));
+            this.m_MenuEntrys[1] = new PR_MenuEntry("menu\\buttons\\main\\optionen",new Point(400,492));
+            this.m_MenuEntrys[2] = new PR_MenuEntry("menu\\buttons\\main\\beenden",new Point(400,632));
         }
 
         /// <summary>
@@ -174,75 +132,38 @@ namespace PictureRubber
             {
                 Vector2 mousePosition = this.m_InputManager.GetMousePosition();
 
-                this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);                
+                this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                 Rectangle rec = new Rectangle(0, 0, this.m_Root.GraphicsDevice.Viewport.Width, this.m_Root.GraphicsDevice.Viewport.Height);
-                
+
                 this.m_Root.m_SpriteBatch.Draw(m_MenuFrame, rec, Microsoft.Xna.Framework.Color.White);
-                int temper = (int)(m_BlinkValue * 255);
-                
-                this.m_Root.m_SpriteBatch.Draw(m_rubber_glow, rec, new Microsoft.Xna.Framework.Color(255,255,255,temper));
                 bool intersects = false;
-                if (Intersects(mousePosition, m_StartButtonRect))
+                for (int i = 0; i < this.m_MenuEntrys.Length; ++i)
                 {
-                    intersects = true;
-                    if (this.m_SelectedIndex[0] < 360)
+                    if (m_MenuEntrys[i].Intersects(mousePosition))
                     {
-                        this.m_Root.m_SpriteBatch.Draw(m_StartenButton[1], m_StartButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_SelectedIndex[0]+=3;
+                        intersects = true;
+                        if (this.m_SelectedIndex[i] < 360)
+                        {
+                            this.m_MenuEntrys[i].Draw(1);
+                            this.m_SelectedIndex[i] += 3;
+                        }
+                        else
+                        {
+                            this.m_MenuEntrys[i].Draw(2);
+                            this.m_CurrentDelay++;
+                        }
+                        this.m_Root.SetMouseWaitingTime(this.m_SelectedIndex[i]);
                     }
                     else
                     {
-                        this.m_Root.m_SpriteBatch.Draw(m_StartenButton[2], m_StartButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_CurrentDelay++;
+                        this.m_MenuEntrys[i].Draw(0);
                     }
-                    this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[0]);
                 }
-                else
-                {
-                    this.m_Root.m_SpriteBatch.Draw(m_StartenButton[0], m_StartButtonRect, Microsoft.Xna.Framework.Color.White);
-                }
-                if (Intersects(mousePosition, m_OptionenButtonRect))
-                {
-                    intersects = true;
-                    if (this.m_SelectedIndex[1] < 360)
-                    {
-                        this.m_Root.m_SpriteBatch.Draw(m_OptionenButton[1], m_OptionenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_SelectedIndex[1]+=3;
-                    }
-                    else
-                    {
-                        this.m_Root.m_SpriteBatch.Draw(m_OptionenButton[2], m_OptionenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_CurrentDelay++;
-                    }
-                    this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[1]);
-                }
-                else
-                {
-                    this.m_Root.m_SpriteBatch.Draw(m_OptionenButton[0], m_OptionenButtonRect, Microsoft.Xna.Framework.Color.White);
-                }
-                if (Intersects(mousePosition, m_BeendenButtonRect))
-                {
-                    intersects = true;
-                    if (this.m_SelectedIndex[2] < 360)
-                    {
-                        this.m_Root.m_SpriteBatch.Draw(m_BeendenButton[1], m_BeendenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_SelectedIndex[2]+=3;
-                    }
-                    else
-                    {
-                        this.m_Root.m_SpriteBatch.Draw(m_BeendenButton[2], m_BeendenButtonRect, Microsoft.Xna.Framework.Color.White);
-                        this.m_CurrentDelay++;
-                    }
-                    this.m_Root.SetMouseWaitingTime((int)this.m_SelectedIndex[2]);
-                }
-                else
-                {
-                    this.m_Root.m_SpriteBatch.Draw(m_BeendenButton[0], m_BeendenButtonRect, Microsoft.Xna.Framework.Color.White);
-                }
-                if (intersects == false)
+                if (!intersects)
                 {
                     this.ClearUpCounter();
                 }
+
                 this.m_Root.m_SpriteBatch.End();
             }
         }
@@ -250,6 +171,14 @@ namespace PictureRubber
         private bool Intersects(Vector2 _position, Rectangle _rectangle)
         {
             return _rectangle.Intersects(new Rectangle((int)_position.X,(int)_position.Y,1,1));
+        }
+
+        public void RescaleElements()
+        {
+            for (int i = 0; i < this.m_MenuEntrys.Length; ++i)
+            {
+                this.m_MenuEntrys[i].RescaleButton();
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace PictureRubber
         private PR_Main m_Root;
         private Texture2D[] m_Textures;
         private Rectangle m_ButtonRectangle;
+        private Point m_Position;
 
         public PR_MenuEntry(string _buttonPath, Point _position)
         {
@@ -20,9 +21,8 @@ namespace PictureRubber
             this.m_Textures[0] = this.m_Root.Content.Load<Texture2D>(_buttonPath + "_normal");
             this.m_Textures[1] = this.m_Root.Content.Load<Texture2D>(_buttonPath + "_over");
             this.m_Textures[2] = this.m_Root.Content.Load<Texture2D>(_buttonPath + "_pressed");
-            float value = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
-            this.m_ButtonRectangle = new Rectangle(
-                (int)(_position.X * value), (int)(_position.Y * value), (int)(this.m_Textures[0].Width * value), (int)(this.m_Textures[0].Height * value));
+            this.m_Position = _position;
+            this.RescaleButton();
         }
 
         public bool Intersects(Vector2 _position)
@@ -33,6 +33,13 @@ namespace PictureRubber
         public void Draw(int _index)
         {
             this.m_Root.m_SpriteBatch.Draw(this.m_Textures[_index], this.m_ButtonRectangle, Microsoft.Xna.Framework.Color.White);
+        }
+
+        public void RescaleButton()
+        {
+            float value = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
+            this.m_ButtonRectangle = new Rectangle(
+                (int)(this.m_Position.X * value), (int)(this.m_Position.Y * value), (int)(this.m_Textures[0].Width * value), (int)(this.m_Textures[0].Height * value));
         }
     }
 }
