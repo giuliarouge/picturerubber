@@ -19,7 +19,7 @@ namespace PictureRubber
         private bool shouldRun = false;
         private Thread readerThread;
 
-        private int m_ActualZValue;
+        private int m_CurrentZValue;
 
         public void NiteInitialize()
         {
@@ -79,7 +79,7 @@ namespace PictureRubber
             Trace.WriteLine("Hand(" + x + ";" + y + ";" + z + ")");
             //Update Pointer Position
             PR_Glove.SetCursorPos(x, y);
-            this.ActualZ = (int)z;
+            this.CurrentZ = (int)z;
         }
 
         void sessionManager_PrimaryPointDestroy(object sender, PointDestroyEventArgs e)
@@ -105,15 +105,15 @@ namespace PictureRubber
         /// <summary>
         /// gets or sets actual z-value
         /// </summary>
-        public int ActualZ
+        public int CurrentZ
         {
             get
             {
-                return this.m_ActualZValue;
+                return this.m_CurrentZValue;
             }
             set
             {
-                this.m_ActualZValue = value;
+                this.m_CurrentZValue = value;
             }
         }
     }
