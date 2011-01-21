@@ -20,6 +20,7 @@ namespace PictureRubber
         private Thread readerThread;
 
         private int m_CurrentZValue;
+        private int m_Distance;
 
         public void NiteInitialize()
         {
@@ -69,6 +70,8 @@ namespace PictureRubber
             float y = e.HPC.Position.Y;
             float z = e.HPC.Position.Z;
             Trace.WriteLine("StartCoord(" + x + ";" + y + ";" + z + ")");
+            this.m_Distance = (int)z;
+
         }
 
         void sessionManager_PrimaryPointUpdate(object sender, HandPointContextEventArgs e)
@@ -114,6 +117,13 @@ namespace PictureRubber
             set
             {
                 this.m_CurrentZValue = value;
+            }
+        }
+        public int getDistance
+        {
+            get
+            {
+                return this.m_Distance;
             }
         }
     }
