@@ -37,14 +37,14 @@ namespace PictureRubber
         private MouseState m_LastMouseState;
 
         /// <summary>
-        /// The actual Keyboard State
+        /// The current Keyboard State
         /// </summary>
-        private KeyboardState m_ActualKeyboardState;
+        private KeyboardState m_CurrentKeyboardState;
 
         /// <summary>
-        /// The actual Mouse State
+        /// The current Mouse State
         /// </summary>
-        private MouseState m_ActualMouseState;
+        private MouseState m_CurrentMouseState;
 
         /// <summary>
         /// object for singleton
@@ -75,12 +75,12 @@ namespace PictureRubber
         }
 
         /// <summary>
-        /// get actual mousestate
+        /// get current mousestate
         /// </summary>
-        /// <returns>m_ActualMouseState</returns>
-        public MouseState GetActualMouseState()
+        /// <returns>m_currentMouseState</returns>
+        public MouseState GetCurrentMouseState()
         {
-            return this.m_ActualMouseState;
+            return this.m_CurrentMouseState;
         }
 
         /// <summary>
@@ -94,27 +94,27 @@ namespace PictureRubber
         
         public void HandleInput(GameTime _gameTime)
         {
-            this.m_ActualKeyboardState = Keyboard.GetState();
-            this.m_ActualMouseState = Mouse.GetState();
+            this.m_CurrentKeyboardState = Keyboard.GetState();
+            this.m_CurrentMouseState = Mouse.GetState();
 
             //Exiting of Program
-            if (this.m_ActualKeyboardState.IsKeyDown(Keys.Escape))
+            if (this.m_CurrentKeyboardState.IsKeyDown(Keys.Escape))
             {
                 this.m_Root.DeleteKinect();
                 this.m_Root.Exit();
             }
 
             //manually start game
-            if (this.m_ActualKeyboardState.IsKeyDown(Keys.S) && this.m_LastKeyboardState.IsKeyUp(Keys.S))
+            if (this.m_CurrentKeyboardState.IsKeyDown(Keys.S) && this.m_LastKeyboardState.IsKeyUp(Keys.S))
             {
                 this.m_Root.ShowMenu = false;
             }
 
             //rubbing gesture (start)
             if ((this.IsMouseInScreen()) &&
-                ((this.m_ActualMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu) ||
+                ((this.m_CurrentMouseState.LeftButton == ButtonState.Pressed && !this.m_Root.ShowMenu) ||
                 (this.m_GestureState == GestureState.While && !this.m_Root.ShowMenu) ||
-                (this.m_Root.m_IsKinectConnected && this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime && this.m_Root.Gestures.ActualZ < this.m_Root.Gestures.InitialZValue)))
+                (this.m_Root.m_IsKinectConnected && this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime && this.m_Root.Gestures.currentZ < this.m_Root.Gestures.KinectDistance)))
             {
                 if (this.m_Root.ShaderModus == PR_Main.RubberModus.Path)
                 {
@@ -128,7 +128,7 @@ namespace PictureRubber
 
             //rubbing gesture (end)
             if ((this.IsMouseInScreen()) &&
-                (this.m_ActualMouseState.LeftButton == ButtonState.Released &&
+                (this.m_CurrentMouseState.LeftButton == ButtonState.Released &&
                 this.m_LastMouseState.LeftButton == ButtonState.Pressed) ||
                 this.m_GestureState == GestureState.After)
             {
@@ -143,12 +143,12 @@ namespace PictureRubber
                 }
             }
             //safe mouse and keyboard states
-            this.m_LastKeyboardState = this.m_ActualKeyboardState;
-            this.m_LastMouseState = this.m_ActualMouseState;
+            this.m_LastKeyboardState = this.m_CurrentKeyboardState;
+            this.m_LastMouseState = this.m_CurrentMouseState;
         }
 
         /// <summary>
-        /// checks if the actual mouse-position is inside the window
+        /// checks if the current mouse-position is inside the window
         /// </summary>
         /// <returns>true or false</returns>
         private bool IsMouseInScreen()
@@ -250,12 +250,12 @@ namespace PictureRubber
         }
 
         /// <summary>
-        /// get actual mouse-position on the screen
+        /// get current mouse-position on the screen
         /// </summary>
         /// <returns></returns>
         public Vector2 GetMousePosition()
         {
-            return new Vector2(this.m_ActualMouseState.X, this.m_ActualMouseState.Y);
+            return new Vector2(this.m_CurrentMouseState.X, this.m_CurrentMouseState.Y);
         }
 
         /// <summary>

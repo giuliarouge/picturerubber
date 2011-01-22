@@ -19,6 +19,9 @@ namespace PictureRubber
         /// </summary>
         private Texture2D m_Texture;
 
+        /// <summary>
+        /// texture which will be drawn on the screen
+        /// </summary>
         private Texture2D m_ScaledTexture;
 
         /// <summary>
@@ -41,6 +44,8 @@ namespace PictureRubber
         /// </summary>
         private float m_ScalingValue;
 
+        private SpriteFont m_Font;
+
         /// <summary>
         /// initializes mouse-class
         /// </summary>
@@ -53,10 +58,11 @@ namespace PictureRubber
             this.m_ScalingValue = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
             try
             {
-                m_Texture = this.m_Root.Content.Load<Texture2D>("mouse");
-                m_WaitingTexture = this.m_Root.Content.Load<Texture2D>("waiting_logo_part_rainy");
-                this.RescaleTexture();
+                this.m_Texture = this.m_Root.Content.Load<Texture2D>("mouse");
+                this.m_WaitingTexture = this.m_Root.Content.Load<Texture2D>("waiting_logo_part_rainy");
+                this.m_Font = this.m_Root.Content.Load<SpriteFont>("Arial");
                 this.m_Root.IsMouseVisible = false;
+                this.RescaleTexture();
             }
             catch (Exception e)
             {
@@ -77,23 +83,50 @@ namespace PictureRubber
         /// <summary>
         /// draw method for mouse
         /// </summary>
-        /// <param name="_gameTime">actual gametime</param>
+        /// <param name="_gameTime">current gametime</param>
         public void Draw(GameTime _gameTime)
         {
             if (!this.m_Root.IsMouseVisible)
             {
+                Vector2 MousePosition = new Vector2(this.m_InputManager.GetCurrentMouseState().X, this.m_InputManager.GetCurrentMouseState().Y);
                 this.m_Root.m_SpriteBatch.Begin();
                 Rectangle rec = new Rectangle(
-                    this.m_InputManager.GetActualMouseState().X - this.m_ScaledTexture.Width / 2,
-                    this.m_InputManager.GetActualMouseState().Y - this.m_ScaledTexture.Height / 2, 
+                    (int)MousePosition.X - this.m_ScaledTexture.Width / 2,
+                    (int)MousePosition.Y - this.m_ScaledTexture.Height / 2, 
                     this.m_ScaledTexture.Width,
                     this.m_ScaledTexture.Height);
-                    this.m_Root.m_SpriteBatch.Draw(this.m_ScaledTexture, rec, Microsoft.Xna.Framework.Color.White);
+                //draw mouse-texture and texture number
+                this.m_Root.m_SpriteBatch.Draw(this.m_ScaledTexture, rec, Microsoft.Xna.Framework.Color.White);
+                if (!this.m_Root.ShowMenu && this.m_Root.m_IsKinectConnected && this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime)
+                {
+                    int index = this.m_Root.Gestures.TextureIndex;
+                    String text;
+                    if (index > 0 && index < this.m_Root.Gestures.TextureCount)
+                    {
+                        text = index.ToString();
+                    }
+                    else
+                    {
+                        text = "-";
+                    }
+                    MousePosition -= (this.m_Font.MeasureString(text) / 2);
+                    MousePosition.Y += 15;
+                    this.m_Root.m_SpriteBatch.DrawString(this.m_Font,
+                        text,
+                        MousePosition,
+                        Microsoft.Xna.Framework.Color.Green,
+                        0.0f,
+                        Vector2.Zero,
+                        this.m_ScalingValue,
+                        SpriteEffects.None,
+                        0);
+                }
+
                 for (int i = 0; i < this.m_WaitingTime / 45; ++i)
                 {
                     float angle = MathHelper.ToRadians(45.0f * i);
                     this.m_Root.m_SpriteBatch.Draw(this.m_WaitingTexture,
-                        new Vector2(this.m_InputManager.GetActualMouseState().X, this.m_InputManager.GetActualMouseState().Y),
+                        new Vector2(this.m_InputManager.GetCurrentMouseState().X, this.m_InputManager.GetCurrentMouseState().Y),
                         null,
                         Color.White,
                         angle,
@@ -155,7 +188,7 @@ namespace PictureRubber
             // Set the Texture To Return to the scaled Texture 
             this.m_ScaledTexture = renderTarget;
             renderTarget = null;
-            //GC.Collect();
+            GC.Collect();
         }
     }
 }

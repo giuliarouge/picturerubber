@@ -148,7 +148,7 @@ namespace PictureRubber
         /// </summary>
         /// <param name="_texture">output texture</param>
         /// <param name="_mouseTexture">ingame mouse texture</param>
-        /// <param name="_actualPosition"></param>
+        /// <param name="_currentPosition"></param>
         /// <param name="_startPosition"></param>
         public void CreateMouseTexture(ref Texture2D _texture, Texture2D _mouseTexture, Vector2 _mousePosition)
         {            
@@ -189,7 +189,7 @@ namespace PictureRubber
         }
 
         /// <summary>
-        /// set actual rendertarget
+        /// set current rendertarget
         /// </summary>
         /// <param name="_texture">textureinformation for rendertarget</param>
         public void SetRenderTarget(Texture2D _texture)

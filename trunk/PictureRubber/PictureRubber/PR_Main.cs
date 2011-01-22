@@ -63,7 +63,7 @@ namespace PictureRubber
         };
 
         /// <summary>
-        /// variable which specify the actual shader modus
+        /// variable which specify the current shader modus
         /// </summary>
         public RubberModus m_MouseShaderModus;
 
@@ -130,7 +130,7 @@ namespace PictureRubber
             this.m_CreateMouseTexture = false;
             this.m_IsGestureRunning = false;
             this.m_InitBlankTexture = true;
-            this.ShaderModus = RubberModus.Path;
+            this.ShaderModus = RubberModus.Realtime;
         }        
 
         /// <summary>
@@ -358,7 +358,7 @@ namespace PictureRubber
         }
 
         /// <summary>
-        /// gets or sets the actual shadermodus
+        /// gets or sets the current shadermodus
         /// </summary>
         public RubberModus ShaderModus
         {
