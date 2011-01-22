@@ -86,7 +86,7 @@ namespace PictureRubber
         /// <summary>
         /// Updates the Menu if visible
         /// </summary>
-        /// <param name="_gameTime">the actual gametime</param>
+        /// <param name="_gameTime">the current gametime</param>
         public void Update(GameTime _gameTime)
         {
             if (this.m_Visible)
@@ -125,7 +125,7 @@ namespace PictureRubber
         /// <summary>
         /// Draws the menu if visible
         /// </summary>
-        /// <param name="_gameTime">the actual gametime</param>
+        /// <param name="_gameTime">the current gametime</param>
         public void Draw(GameTime _gameTime)
         {
             if (this.m_Visible)

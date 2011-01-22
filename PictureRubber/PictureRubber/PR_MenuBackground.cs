@@ -48,7 +48,7 @@ namespace PictureRubber
         private int m_AnimationDelay;
 
         /// <summary>
-        /// the actual animation point counter
+        /// the current animation point counter
         /// </summary>
         private int m_CurrentAnimationDelay;
 
@@ -95,7 +95,7 @@ namespace PictureRubber
         /// <summary>
         /// Updates the MenuBackground Animation if the menu is visible
         /// </summary>
-        /// <param name="_gameTime">The actual GameTime</param>
+        /// <param name="_gameTime">The current GameTime</param>
         public void Update(GameTime _gameTime)
         {
             if (this.m_Visible)
@@ -146,14 +146,14 @@ namespace PictureRubber
         /// <summary>
         /// Draws the menu background if visible
         /// </summary>
-        /// <param name="_gameTime">The actual GameTime</param>
+        /// <param name="_gameTime">The current GameTime</param>
         public void Draw(GameTime _gameTime)
         {
             if (this.m_Visible)
             {
                 this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                 Rectangle rec = new Rectangle(0, 0, this.m_Root.GraphicsDevice.Viewport.Width, this.m_Root.GraphicsDevice.Viewport.Height);
-                this.m_Root.m_SpriteBatch.Draw(m_Background, rec, Microsoft.Xna.Framework.Color.White);
+                this.m_Root.m_SpriteBatch.Draw(this.m_Background, rec, Microsoft.Xna.Framework.Color.White);
             
                 //   this.m_Root.m_SpriteBatch.Draw(m_LeftLine, rec, new Microsoft.Xna.Framework.Color(255, 255, 255, this.m_Animations[1]));
                 //   this.m_Root.m_SpriteBatch.Draw(m_RightLine, rec, new Microsoft.Xna.Framework.Color(255, 255, 255, this.m_Animations[0]));

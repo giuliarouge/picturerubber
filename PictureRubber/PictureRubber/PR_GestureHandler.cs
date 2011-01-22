@@ -61,11 +61,6 @@ namespace PictureRubber
         private Texture2D m_BlankTexture;
 
         /// <summary>
-        /// real texture of the mouse seen on the screen
-        /// </summary>
-        private Texture2D m_RealMouseTexture;
-
-        /// <summary>
         /// copy of our image-textures
         /// </summary>
         private Texture2D[] m_PictureTextures;
@@ -74,6 +69,11 @@ namespace PictureRubber
         /// amount of textures
         /// </summary>
         private int m_TextureCount;
+
+        /// <summary>
+        /// speficies the current texture index for realtime-mode when a kinect ist connected
+        /// </summary>
+        private int m_TextureIndex;
 
         #endregion
 
@@ -146,16 +146,16 @@ namespace PictureRubber
             //delete areas AlphaFader-Shader
             if (this.m_Root.m_IsKinectConnected && this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime)
             {
-                int index = this.CalculateTextureIndex();
-                if (index >= 0 && index < this.m_TextureCount)
+                this.CalculateTextureIndex();
+                if (this.m_TextureIndex > 0 && this.m_TextureIndex < this.m_TextureCount)
                 {
-                    if (index == this.m_TextureCount - 1)
+                    if (this.m_TextureIndex == this.m_TextureCount - 1)
                     {
-                        this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount);
+                        this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[this.m_TextureIndex], this.m_ModelTexture, c_AlphaAmount);
                     }
                     else
                     {
-                        this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[index], this.m_ModelTexture, c_AlphaAmount, this.m_PictureTextures[index + 1]);
+                        this.m_RubberRenderer.ApplyFilter(ref this.m_PictureTextures[this.m_TextureIndex], this.m_ModelTexture, c_AlphaAmount, this.m_PictureTextures[this.m_TextureIndex + 1]);
                     }
                 }
             }
@@ -191,44 +191,43 @@ namespace PictureRubber
         }
 
         /// <summary>
-        /// calculate the texture index a user is actually working on
+        /// calculate the texture index a user is currently working on
         /// </summary>
         /// <returns></returns>
-        private int CalculateTextureIndex()
+        private void CalculateTextureIndex()
         {
             //initial z value == distance from kinect
-            int ZValue = 2000 - c_Gap;//this.m_Nite.GetInitialZValue()
-            //actual z value
-            int ActualZValue = this.ActualZ - c_MinimalDistance;
+            int ZValue = this.m_Root.Kinect.Distance - c_Gap;
+            //current z value
+            int currentZValue = this.currentZ - c_MinimalDistance;
             int Area = (ZValue - c_MinimalDistance) / (this.m_TextureCount - 1);
             //return the index of the texture a user is working on
-            if (ActualZValue % Area == 0)
+            if (currentZValue % Area == 0)
             {
-                return ActualZValue / Area;
+                this.m_TextureIndex = currentZValue / Area;
             }
-            return (ActualZValue / Area) + 1;
+            this.m_TextureIndex = (currentZValue / Area) + 1;
         }
 
         /// <summary>
-        /// get actual z-value from kinect
+        /// get current z-value from kinect
         /// </summary>
-        public int ActualZ
+        public int currentZ
         {
             get
             {
-                return this.m_Root.Kinect.ActualZ;
+                return this.m_Root.Kinect.CurrentZ;
             }
         }
 
         /// <summary>
         /// get the z-value where a user is able to delete ares in realtime-mode
         /// </summary>
-        public int InitialZValue
+        public int KinectDistance
         {
             get
             {
-                //return this.m_Root.Kinect.InitialZValue;
-                return 2000 - c_Gap;
+                return this.m_Root.Kinect.Distance - c_Gap;
             }
         }
 
@@ -241,6 +240,9 @@ namespace PictureRubber
             this.m_Root.RunningGesture = false;
         }
 
+        /// <summary>
+        /// if the viewport changed it is neccassary to rescale all elements
+        /// </summary>
         public void RescaleElements()
         {
             this.m_BlankTexture = new Texture2D(
@@ -248,6 +250,32 @@ namespace PictureRubber
                 this.m_Root.GraphicsDevice.Viewport.Width,
                 this.m_Root.GraphicsDevice.Viewport.Height);
             this.m_ModelTexture = this.m_BlankTexture;
+        }
+
+        /// <summary>
+        /// set and get the current texture index a user is working on with the kinect in realtime-modus
+        /// </summary>
+        public int TextureIndex
+        {
+            get
+            {
+                return this.m_TextureIndex;
+            }
+            set
+            {
+                this.m_TextureIndex = value;
+            }
+        }
+        
+        /// <summary>
+        /// get the number of textures drawn on the screen
+        /// </summary>
+        public int TextureCount
+        {
+            get
+            {
+                return this.m_TextureCount;
+            }
         }
     }
 }

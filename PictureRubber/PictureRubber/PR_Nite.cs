@@ -22,9 +22,16 @@ namespace PictureRubber
         private int m_CurrentZValue;
         private int m_Distance;
 
+        private Vector2 m_LastPosition;
+        private Vector2 m_BeforeLastPosition;
+        private Vector2 m_CurrentPosition;
+
         public void NiteInitialize()
         {
             this.shouldRun = true;
+            this.m_LastPosition = new Vector2();
+            this.m_BeforeLastPosition = new Vector2();
+            this.m_CurrentPosition = new Vector2();
 
             m_Context = new XnMOpenNIContext();
             m_Context.SetSmoothing(0.3f);
@@ -76,13 +83,16 @@ namespace PictureRubber
 
         void sessionManager_PrimaryPointUpdate(object sender, HandPointContextEventArgs e)
         {
-            int x = (int)((System.Windows.SystemParameters.PrimaryScreenWidth / 2 ) + e.HPC.Position.X);
-            int y = (int)((System.Windows.SystemParameters.PrimaryScreenHeight / 2) + e.HPC.Position.Y * -1);
+            this.m_CurrentPosition.X = (int)((System.Windows.SystemParameters.PrimaryScreenWidth / 2 ) + e.HPC.Position.X);
+            this.m_CurrentPosition.Y = (int)((System.Windows.SystemParameters.PrimaryScreenHeight / 2) + e.HPC.Position.Y * -1);
             float z = e.HPC.Position.Z;
-            Trace.WriteLine("Hand(" + x + ";" + y + ";" + z + ")");
+            //Trace.WriteLine("Hand(" + x + ";" + y + ";" + z + ")");
             //Update Pointer Position
-            PR_Glove.SetCursorPos(x, y);
+            this.m_CurrentPosition = (this.m_CurrentPosition + this.m_BeforeLastPosition + this.m_LastPosition) / 3;
+            PR_Glove.SetCursorPos((int)this.m_CurrentPosition.X, (int)this.m_CurrentPosition.Y);
             this.CurrentZ = (int)z;
+            this.m_BeforeLastPosition = this.m_LastPosition;
+            this.m_LastPosition = this.m_CurrentPosition;
         }
 
         void sessionManager_PrimaryPointDestroy(object sender, PointDestroyEventArgs e)
@@ -106,7 +116,7 @@ namespace PictureRubber
         }
 
         /// <summary>
-        /// gets or sets actual z-value
+        /// gets or sets current z-value
         /// </summary>
         public int CurrentZ
         {
@@ -119,7 +129,11 @@ namespace PictureRubber
                 this.m_CurrentZValue = value;
             }
         }
-        public int getDistance
+
+        /// <summary>
+        /// get the distance from user to kinect
+        /// </summary>
+        public int Distance
         {
             get
             {
