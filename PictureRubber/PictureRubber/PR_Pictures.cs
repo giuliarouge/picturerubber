@@ -32,6 +32,8 @@ namespace PictureRubber
         /// </summary>
         private Texture2D[] m_Textures;
 
+        private PR_OverlayButtons m_OverlayButtons;
+
         /// <summary>
         /// Initializes a new Instance of PR_Pictures
         /// </summary>
@@ -52,6 +54,7 @@ namespace PictureRubber
                     this.m_Textures[i] = this.CreateTexture(this.m_Pictures[i]);
                 }
             }
+            this.m_OverlayButtons = new PR_OverlayButtons();
             //this.m_Pictures = null;
             //GC.Collect();
             
@@ -82,6 +85,20 @@ namespace PictureRubber
         public Texture2D[] getTextures()
         {
             return this.m_Textures;
+        }
+
+        public void ResetTextures()
+        {
+            for (int i = 0; i < this.m_Pictures.Length; i++)
+            {
+                this.m_Textures[i] = this.CreateTexture(this.m_Pictures[i]);
+            }
+            GC.Collect();
+        }
+
+        public void Update()
+        {
+            this.m_OverlayButtons.Update();
         }
 
         /// <summary>
@@ -155,6 +172,7 @@ namespace PictureRubber
                     this.m_Root.m_SpriteBatch.Draw(tex, rec, Microsoft.Xna.Framework.Color.White);
             }
             this.m_Root.m_SpriteBatch.End();
+            this.m_OverlayButtons.Draw();
         }
     }
 }

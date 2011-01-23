@@ -181,6 +181,21 @@ namespace PictureRubber
             }
         }
 
+        public void HandleOverlayInput(int _index)
+        {
+            switch (_index)
+            {
+                case 0:
+                    //Menu
+                    this.m_Root.ShowMenu = true;
+                    break;
+                case 1:
+                    //Reset
+                    this.m_Root.Pictures.ResetTextures();
+                    break;
+            }
+        }
+
         /// <summary>
         /// handle option-menu input
         /// </summary>

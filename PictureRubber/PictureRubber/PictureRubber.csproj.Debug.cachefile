@@ -50,6 +50,8 @@ Content\AlphaFader.xnb
 Content\DynamicMouse.xnb
 Content\intro.xnb
 Content\Arial.xnb
+Content\menu\menu.xnb
+Content\menu\refresh.xnb
 Content\intro.wmv
 CLNUIDevice.dll
 data\openni.xml
