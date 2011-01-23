@@ -21,6 +21,7 @@ namespace PictureRubber
 
         private int m_CurrentZValue;
         private int m_Distance;
+        private bool m_HandRecognized;
 
         private Vector2 m_LastPosition;
         private Vector2 m_BeforeLastPosition;
@@ -32,6 +33,7 @@ namespace PictureRubber
             this.m_LastPosition = new Vector2();
             this.m_BeforeLastPosition = new Vector2();
             this.m_CurrentPosition = new Vector2();
+            m_HandRecognized = false;
 
             m_Context = new XnMOpenNIContext();
             m_Context.SetSmoothing(0.3f);
@@ -78,6 +80,7 @@ namespace PictureRubber
             float z = e.HPC.Position.Z;
             Trace.WriteLine("StartCoord(" + x + ";" + y + ";" + z + ")");
             this.m_Distance = (int)z;
+            this.m_HandRecognized = true;
 
         }
 
@@ -103,6 +106,7 @@ namespace PictureRubber
             {
                 PR_Main.GetInstance().Gestures.ResetGesture();
             }
+            this.m_HandRecognized = false;
         }
 
         void pushDetector_Push(object sender, PushDetectorEventArgs e)
@@ -127,6 +131,20 @@ namespace PictureRubber
             set
             {
                 this.m_CurrentZValue = value;
+            }
+        }
+        /// <summary>
+        /// gets or sets bool for the hand being recognized (or not)
+        /// </summary>
+        public bool is_HandRecognized
+        {
+            get
+            {
+                return this.m_HandRecognized;
+            }
+            set
+            {
+                this.m_HandRecognized = value;
             }
         }
 
