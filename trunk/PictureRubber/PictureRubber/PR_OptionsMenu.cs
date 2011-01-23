@@ -46,6 +46,8 @@ namespace PictureRubber
         /// </summary>
         private int m_CurrentDelay;
 
+        private bool[] m_ActiveOptions;
+
         /// <summary>
         /// Initializes a new instance of PR_MainMenu
         /// </summary>
@@ -55,7 +57,7 @@ namespace PictureRubber
         {
             this.m_Visible = true;
             this.m_CurrentDelay = 0;
-            
+
             this.m_Root = PR_Main.GetInstance();
             this.m_InputManager = PR_InputManager.GetInstance();
 
@@ -73,7 +75,7 @@ namespace PictureRubber
             this.m_SelectedIndex = new int[8];
             this.m_SelectedIndex.Initialize();
 
-            this.m_MenuEntrys[0] = new PR_MenuEntry("menu\\buttons\\options\\res_640",new Point(346,296));
+            this.m_MenuEntrys[0] = new PR_MenuEntry("menu\\buttons\\options\\res_640", new Point(346, 296));
             this.m_MenuEntrys[1] = new PR_MenuEntry("menu\\buttons\\options\\res_800", new Point(655, 296));
             this.m_MenuEntrys[2] = new PR_MenuEntry("menu\\buttons\\options\\res_1024", new Point(964, 296));
             this.m_MenuEntrys[3] = new PR_MenuEntry("menu\\buttons\\options\\window", new Point(496, 446));
@@ -81,6 +83,15 @@ namespace PictureRubber
             this.m_MenuEntrys[5] = new PR_MenuEntry("menu\\buttons\\options\\realtime", new Point(496, 596));
             this.m_MenuEntrys[6] = new PR_MenuEntry("menu\\buttons\\options\\path", new Point(805, 596));
             this.m_MenuEntrys[7] = new PR_MenuEntry("menu\\buttons\\options\\back", new Point(546, 746));
+
+            this.m_ActiveOptions = new bool[7];
+            this.m_ActiveOptions[0] = true;
+            this.m_ActiveOptions[1] = false;
+            this.m_ActiveOptions[2] = false;
+            this.m_ActiveOptions[3] = true;
+            this.m_ActiveOptions[4] = false;
+            this.m_ActiveOptions[5] = true;
+            this.m_ActiveOptions[6] = false;
         }
 
         /// <summary>
@@ -98,6 +109,7 @@ namespace PictureRubber
                         if (this.m_SelectedIndex[i] >= 360)
                         {
                             this.m_InputManager.HandleOptionsInput(i);
+                            this.SetOptionActive(i);
                             this.ClearUpCounter();
                             break;
                         }
@@ -152,7 +164,21 @@ namespace PictureRubber
                     }
                     else
                     {
-                        this.m_MenuEntrys[i].Draw(0);
+                        if (i < this.m_ActiveOptions.Length)
+                        {
+                            if (this.m_ActiveOptions[i])
+                            {
+                                this.m_MenuEntrys[i].Draw(2);
+                            }
+                            else
+                            {
+                                this.m_MenuEntrys[i].Draw(0);
+                            }
+                        }
+                        else
+                        {
+                            this.m_MenuEntrys[i].Draw(0);
+                        }
                     }
                 }
                 if (!intersects)
@@ -169,6 +195,44 @@ namespace PictureRubber
             for (int i = 0; i < this.m_MenuEntrys.Length; ++i)
             {
                 this.m_MenuEntrys[i].RescaleButton();
+            }
+        }
+
+        public void SetOptionActive(int _index)
+        {
+            switch (_index)
+            {
+                case 0:
+                    this.m_ActiveOptions[0] = true;
+                    this.m_ActiveOptions[1] = false;
+                    this.m_ActiveOptions[2] = false;
+                    break;
+                case 1:
+                    this.m_ActiveOptions[0] = false;
+                    this.m_ActiveOptions[1] = true;
+                    this.m_ActiveOptions[2] = false;
+                    break;
+                case 2:
+                    this.m_ActiveOptions[0] = false;
+                    this.m_ActiveOptions[1] = false;
+                    this.m_ActiveOptions[2] = true;
+                    break;
+                case 3:
+                    this.m_ActiveOptions[3] = true;
+                    this.m_ActiveOptions[4] = false;
+                    break;
+                case 4:
+                    this.m_ActiveOptions[3] = false;
+                    this.m_ActiveOptions[4] = true;
+                    break;
+                case 5:
+                    this.m_ActiveOptions[5] = true;
+                    this.m_ActiveOptions[6] = false;
+                    break;
+                case 6:
+                    this.m_ActiveOptions[5] = false;
+                    this.m_ActiveOptions[6] = true;
+                    break;
             }
         }
     }
