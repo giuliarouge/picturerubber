@@ -108,7 +108,6 @@ namespace PictureRubber
                 {
                     this.m_OptionsMenu.Draw(_gameTime);
                 }
-
             }
         }
 
