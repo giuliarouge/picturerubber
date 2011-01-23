@@ -10,10 +10,15 @@ namespace PictureRubber
     class PR_OverlayButtons
     {
         private PR_Main m_Root;
+
+        private Texture2D m_WaveAdvice;
         private Texture2D m_MenuButton;
         private Texture2D m_ResetButton;
+        private Rectangle m_WaveRect;
         private Rectangle m_MenuRect;
         private Rectangle m_ResetRect;
+        private PR_Nite nite;
+
         private int m_MenuAlpha;
         private int m_ResetAlpha;
         private int m_WaitingTime;
@@ -24,6 +29,8 @@ namespace PictureRubber
             this.m_Root = PR_Main.GetInstance();
             this.m_MenuButton = this.m_Root.Content.Load<Texture2D>("menu\\menu");
             this.m_ResetButton = this.m_Root.Content.Load<Texture2D>("menu\\refresh");
+            this.m_WaveAdvice = this.m_Root.Content.Load<Texture2D>("menu\\wave");
+
             this.RescaleButtons();
             this.m_MenuAlpha = 0;
             this.m_ResetAlpha = 0;
@@ -88,20 +95,31 @@ namespace PictureRubber
 
         public void RescaleButtons()
         {
+            nite = new PR_Nite();
             float value = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
             Point ResetPosition = new Point(0, 0);
             Point MenuPosition = new Point(1600 - this.m_MenuButton.Width, 0);
+            Point WavePosition = new Point(800-this.m_WaveAdvice.Width/2, 200);
             this.m_ResetRect = new Rectangle(
                 (int)(ResetPosition.X * value), (int)(ResetPosition.Y * value), (int)(this.m_ResetButton.Width * value), (int)(this.m_ResetButton.Height * value));
             this.m_MenuRect = new Rectangle(
                 (int)(MenuPosition.X * value), (int)(MenuPosition.Y * value), (int)(this.m_MenuButton.Width * value), (int)(this.m_MenuButton.Height * value));
+            this.m_WaveRect = new Rectangle(
+                (int)(WavePosition.X * value), (int)(WavePosition.Y * value), (int)(this.m_WaveAdvice.Width * value), (int)(this.m_WaveAdvice.Height * value));
         }
 
         public void Draw()
         {
             this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            this.m_Root.m_SpriteBatch.Draw(this.m_MenuButton,this.m_MenuRect,new Color(255,255,255,this.m_MenuAlpha));
-            this.m_Root.m_SpriteBatch.Draw(this.m_ResetButton, this.m_ResetRect, new Color(255, 255, 255, this.m_ResetAlpha));
+            if (nite.is_HandRecognized)
+            {
+                this.m_Root.m_SpriteBatch.Draw(this.m_MenuButton, this.m_MenuRect, new Color(255, 255, 255, this.m_MenuAlpha));
+                this.m_Root.m_SpriteBatch.Draw(this.m_ResetButton, this.m_ResetRect, new Color(255, 255, 255, this.m_ResetAlpha));
+            }
+            else
+            {
+                this.m_Root.m_SpriteBatch.Draw(this.m_WaveAdvice, m_WaveRect, new Color(255, 255, 255, 200));
+            }
             this.m_Root.m_SpriteBatch.End();
         }
     }

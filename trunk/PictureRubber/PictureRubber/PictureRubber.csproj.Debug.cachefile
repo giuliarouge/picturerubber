@@ -46,12 +46,13 @@ Content\menu\buttons\options\back_normal.xnb
 Content\menu\buttons\options\back_over.xnb
 Content\menu\buttons\options\back_pressed.xnb
 Content\menu\options_frame.xnb
+Content\menu\menu.xnb
+Content\menu\refresh.xnb
 Content\AlphaFader.xnb
 Content\DynamicMouse.xnb
 Content\intro.xnb
 Content\Arial.xnb
-Content\menu\menu.xnb
-Content\menu\refresh.xnb
+Content\menu\wave.xnb
 Content\intro.wmv
 CLNUIDevice.dll
 data\openni.xml
