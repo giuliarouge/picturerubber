@@ -79,7 +79,11 @@ namespace PictureRubber
 
         public bool Intersects(Vector2 _position, Rectangle _rec)
         {
-            return _rec.Intersects(new Rectangle((int)_position.X, (int)_position.Y, 1, 1));
+            if (!this.m_Root.IsGesture && !this.m_Root.RunningGesture)
+            {
+                return _rec.Intersects(new Rectangle((int)_position.X, (int)_position.Y, 1, 1));
+            }
+            return false;
         }
 
         public void RescaleButtons()

@@ -115,6 +115,7 @@ namespace PictureRubber
         {
             this.m_MainMenu.RescaleElements();
             this.m_OptionsMenu.RescaleElements();
+            this.m_Root.Pictures.RescaleOverlayButtons();
         }
     }
 }

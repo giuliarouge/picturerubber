@@ -188,6 +188,7 @@ namespace PictureRubber
                 case 0:
                     //Menu
                     this.m_Root.ShowMenu = true;
+                    //this.m_Root.Pictures.ResetTextures();
                     break;
                 case 1:
                     //Reset

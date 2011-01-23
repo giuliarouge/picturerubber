@@ -96,6 +96,11 @@ namespace PictureRubber
             GC.Collect();
         }
 
+        public void RescaleOverlayButtons()
+        {
+            this.m_OverlayButtons.RescaleButtons();
+        }
+
         public void Update()
         {
             this.m_OverlayButtons.Update();
