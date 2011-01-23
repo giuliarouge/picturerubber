@@ -132,6 +132,7 @@
     <Compile Include="PR_Mouse.cs" />
     <Compile Include="PR_Nite.cs" />
     <Compile Include="PR_OptionsMenu.cs" />
+    <Compile Include="PR_OverlayButtons.cs" />
     <Compile Include="PR_Pictures.cs" />
     <Compile Include="PR_Program.cs" />
     <Compile Include="PR_Main.cs" />

@@ -219,7 +219,8 @@ namespace PictureRubber
         {
             this.m_InputManager.HandleInput(_gameTime);
             this.m_Menu.Update(_gameTime);
-
+            if (!this.ShowMenu)
+                this.m_Pictures.Update();
             this.m_GestureHandler.Update();
 
             base.Update(_gameTime);
