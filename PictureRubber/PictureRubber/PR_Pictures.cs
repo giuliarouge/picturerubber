@@ -82,9 +82,16 @@ namespace PictureRubber
         /// get all available textures
         /// </summary>
         /// <returns></returns>
-        public Texture2D[] getTextures()
+        public Texture2D[] Textures
         {
-            return this.m_Textures;
+            get
+            {
+                return this.m_Textures;
+            }
+            set
+            {
+                this.m_Textures = value;
+            }
         }
 
         public void ResetTextures()
@@ -94,6 +101,7 @@ namespace PictureRubber
                 this.m_Textures[i] = this.CreateTexture(this.m_Pictures[i]);
             }
             GC.Collect();
+            this.m_Root.Gestures.SetTextures(this.m_Textures);
         }
 
         public void RescaleOverlayButtons()
