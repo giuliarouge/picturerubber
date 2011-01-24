@@ -81,10 +81,10 @@ float4 PS_DynamicMouse(Input input) : COLOR0
 	//get pixelcolor
 	textureColor = tex2D(BackgroundImage, input.TexCoord0);
 	
-	float2 actualShaderPosition = input.TexCoord0;
-	if(isPointInRange(actualShaderPosition))
+	float2 currentShaderPosition = input.TexCoord0;
+	if(isPointInRange(currentShaderPosition))
 	{
-		float2 texturCoordinate = calculateMouseCoordinate(actualShaderPosition);
+		float2 texturCoordinate = calculateMouseCoordinate(currentShaderPosition);
 		mouseColor = tex2D(MouseImage, texturCoordinate);
 		if(mouseColor.a != 0.0f &&
 			compareColors(textureColor, 0.0f))
