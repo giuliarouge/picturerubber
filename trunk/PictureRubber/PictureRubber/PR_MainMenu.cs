@@ -137,33 +137,41 @@ namespace PictureRubber
                 this.m_Root.m_SpriteBatch.Draw(m_MenuFrame, rec, Microsoft.Xna.Framework.Color.White);
                 this.m_Root.m_SpriteBatch.Draw(m_rubber_glow, rec, new Color(255, 255, 255, (int)(this.m_BlinkValue * 255)));
                 bool intersects = false;
-                for (int i = 0; i < this.m_MenuEntrys.Length; ++i)
+                if (!m_Root.m_IsKinectConnected || m_Root.Kinect.is_HandRecognized)
                 {
-                    if (m_MenuEntrys[i].Intersects(mousePosition))
+                    for (int i = 0; i < this.m_MenuEntrys.Length; ++i)
                     {
-                        intersects = true;
-                        if (this.m_SelectedIndex[i] < 360)
+                        if (m_MenuEntrys[i].Intersects(mousePosition))
                         {
-                            this.m_MenuEntrys[i].Draw(1);
-                            this.m_SelectedIndex[i] += 3;
+                            intersects = true;
+                            if (this.m_SelectedIndex[i] < 360)
+                            {
+                                this.m_MenuEntrys[i].Draw(1);
+                                this.m_SelectedIndex[i] += 3;
+                            }
+                            else
+                            {
+                                this.m_MenuEntrys[i].Draw(2);
+                                this.m_CurrentDelay++;
+                            }
+                            this.m_Root.SetMouseWaitingTime(this.m_SelectedIndex[i]);
                         }
                         else
                         {
-                            this.m_MenuEntrys[i].Draw(2);
-                            this.m_CurrentDelay++;
+                            this.m_MenuEntrys[i].Draw(0);
                         }
-                        this.m_Root.SetMouseWaitingTime(this.m_SelectedIndex[i]);
                     }
-                    else
+                    if (!intersects)
                     {
-                        this.m_MenuEntrys[i].Draw(0);
+                        this.ClearUpCounter();
                     }
                 }
-                if (!intersects)
+                else
                 {
-                    this.ClearUpCounter();
+                    this.m_Root.m_SpriteBatch.End();
+                    this.m_Root.Pictures.getOverlayButtons.Draw();
+                    this.m_Root.m_SpriteBatch.Begin();
                 }
-
                 this.m_Root.m_SpriteBatch.End();
             }
         }

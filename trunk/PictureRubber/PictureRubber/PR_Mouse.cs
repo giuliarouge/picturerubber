@@ -100,22 +100,19 @@ namespace PictureRubber
                 if (!this.m_Root.ShowMenu && this.m_Root.m_IsKinectConnected && this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime)
                 {
                     int index = this.m_Root.Gestures.TextureIndex;
-                    String text;
-                    if (index >= 0 && index < this.m_Root.Gestures.TextureCount)
+                    String text="";
+                    if (index > 0 && index < this.m_Root.Gestures.TextureCount)
                     {
 
                         text = (this.m_Root.Gestures.TextureCount-index).ToString();
                     }
-                    else
-                    {
-                        text = "-";
-                    }
                     MousePosition -= (this.m_Font.MeasureString(text) / 2);
-                    MousePosition.Y += 15;
+                    MousePosition.Y += 12;
+                    MousePosition.X += 5;
                     this.m_Root.m_SpriteBatch.DrawString(this.m_Font,
                         text,
                         MousePosition,
-                        Microsoft.Xna.Framework.Color.Green,
+                        Microsoft.Xna.Framework.Color.Black,
                         0.0f,
                         Vector2.Zero,
                         this.m_ScalingValue,

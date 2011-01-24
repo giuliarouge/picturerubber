@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace PictureRubber
 {
-    class PR_OverlayButtons
+    public class PR_OverlayButtons
     {
         private PR_Main m_Root;
 

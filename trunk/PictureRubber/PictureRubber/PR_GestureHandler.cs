@@ -94,6 +94,7 @@ namespace PictureRubber
             this.m_ModelTexture = this.m_BlankTexture;
             this.m_PictureTextures = this.m_Root.Pictures.Textures;
             this.m_TextureCount = this.m_PictureTextures.Count();
+            this.m_TextureIndex = -1;
         }
 
         /// <summary>
@@ -147,7 +148,7 @@ namespace PictureRubber
             if (this.m_Root.m_IsKinectConnected && this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime)
             {
                 this.CalculateTextureIndex();
-                if (this.m_TextureIndex >= 0 && this.m_TextureIndex < this.m_TextureCount)
+                if (this.m_TextureIndex > 0 && this.m_TextureIndex < this.m_TextureCount)
                 {
                     if (this.m_TextureIndex == this.m_TextureCount - 1)
                     {
@@ -161,7 +162,7 @@ namespace PictureRubber
             }
             else
             {
-                for (int i = 0; i < this.m_TextureCount; ++i)
+                for (int i = 1; i < this.m_TextureCount; ++i)
                 {
                     if (i == this.m_TextureCount - 1)
                     {
@@ -200,7 +201,7 @@ namespace PictureRubber
             int ZValue = this.m_Root.Kinect.Distance - c_Gap;
             //current z value
             int currentZValue = this.currentZ - c_MinimalDistance;
-            int Area = (ZValue - c_MinimalDistance) / (this.m_TextureCount);
+            int Area = (ZValue - c_MinimalDistance) / (this.m_TextureCount - 1);
             //return the index of the texture a user is working on
             if (currentZValue % Area == 0)
             {
