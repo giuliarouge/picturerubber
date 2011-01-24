@@ -236,6 +236,7 @@ namespace PictureRubber
                     break;
                 case 3:
                     //Fenstermodus
+                    this.m_Root.Gestures.SaveTextures();
                     if (this.m_Root.m_Graphics.IsFullScreen)
                     {
                         this.m_Root.m_Graphics.ToggleFullScreen();
@@ -245,6 +246,7 @@ namespace PictureRubber
                     break;
                 case 4:
                     //VollbildModus
+                    this.m_Root.Gestures.SaveTextures();
                     if (!this.m_Root.m_Graphics.IsFullScreen)
                     {
                         this.m_Root.m_Graphics.ToggleFullScreen();
