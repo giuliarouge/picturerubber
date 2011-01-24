@@ -101,9 +101,10 @@ namespace PictureRubber
                 {
                     int index = this.m_Root.Gestures.TextureIndex;
                     String text;
-                    if (index > 0 && index < this.m_Root.Gestures.TextureCount)
+                    if (index >= 0 && index < this.m_Root.Gestures.TextureCount)
                     {
-                        text = index.ToString();
+
+                        text = (this.m_Root.Gestures.TextureCount-index).ToString();
                     }
                     else
                     {

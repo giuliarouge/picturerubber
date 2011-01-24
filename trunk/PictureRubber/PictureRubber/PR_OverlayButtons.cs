@@ -40,7 +40,7 @@ namespace PictureRubber
         }
 
         /// <summary>
-        /// Clears the counter m_SelectedIndex
+        /// Clears the counter m_WatingTime
         /// </summary>
         private void ResetCounter()
         {

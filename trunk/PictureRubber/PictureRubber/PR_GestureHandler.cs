@@ -147,7 +147,7 @@ namespace PictureRubber
             if (this.m_Root.m_IsKinectConnected && this.m_Root.ShaderModus == PR_Main.RubberModus.Realtime)
             {
                 this.CalculateTextureIndex();
-                if (this.m_TextureIndex > 0 && this.m_TextureIndex < this.m_TextureCount)
+                if (this.m_TextureIndex >= 0 && this.m_TextureIndex < this.m_TextureCount)
                 {
                     if (this.m_TextureIndex == this.m_TextureCount - 1)
                     {
@@ -161,7 +161,7 @@ namespace PictureRubber
             }
             else
             {
-                for (int i = 1; i < this.m_TextureCount; ++i)
+                for (int i = 0; i < this.m_TextureCount; ++i)
                 {
                     if (i == this.m_TextureCount - 1)
                     {
@@ -200,13 +200,16 @@ namespace PictureRubber
             int ZValue = this.m_Root.Kinect.Distance - c_Gap;
             //current z value
             int currentZValue = this.currentZ - c_MinimalDistance;
-            int Area = (ZValue - c_MinimalDistance) / (this.m_TextureCount - 1);
+            int Area = (ZValue - c_MinimalDistance) / (this.m_TextureCount);
             //return the index of the texture a user is working on
             if (currentZValue % Area == 0)
             {
                 this.m_TextureIndex = currentZValue / Area;
             }
-            this.m_TextureIndex = (currentZValue / Area) + 1;
+            else
+            {
+                this.m_TextureIndex = (currentZValue / Area) + 1;
+            }
         }
 
         /// <summary>
@@ -243,6 +246,7 @@ namespace PictureRubber
         {
             this.m_ModelTexture = this.m_BlankTexture;
             this.m_Root.RunningGesture = false;
+            this.m_TextureIndex = -1;
         }
 
         /// <summary>
@@ -255,10 +259,9 @@ namespace PictureRubber
                 this.m_Root.GraphicsDevice.Viewport.Width,
                 this.m_Root.GraphicsDevice.Viewport.Height);
             this.m_ModelTexture = this.m_BlankTexture;
-            this.SaveTextures();
         }
 
-        private void SaveTextures()
+        public void SaveTextures()
         {
             Texture2D[] textures = new Texture2D[this.m_TextureCount];
             int count = 0;
@@ -266,7 +269,9 @@ namespace PictureRubber
             {
                 Microsoft.Xna.Framework.Color[] textureData = new Color[texture.Width * texture.Height];
                 texture.GetData<Microsoft.Xna.Framework.Color>(textureData);
+                textures[count] = new Texture2D(this.m_Root.GraphicsDevice,texture.Width,texture.Height);
                 textures[count].SetData<Microsoft.Xna.Framework.Color>(textureData);
+                count++;
             }
             this.m_PictureTextures = null;
             this.m_PictureTextures = textures;
