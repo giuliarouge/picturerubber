@@ -92,7 +92,7 @@ namespace PictureRubber
                 this.m_Root.GraphicsDevice.Viewport.Width,
                 this.m_Root.GraphicsDevice.Viewport.Height);
             this.m_ModelTexture = this.m_BlankTexture;
-            this.m_PictureTextures = this.m_Root.Pictures.getTextures();
+            this.m_PictureTextures = this.m_Root.Pictures.Textures;
             this.m_TextureCount = this.m_PictureTextures.Count();
         }
 
@@ -220,6 +220,11 @@ namespace PictureRubber
             }
         }
 
+        public void SetTextures(Texture2D[] textures)
+        {
+            this.m_PictureTextures = textures;
+        }
+
         /// <summary>
         /// get the z-value where a user is able to delete ares in realtime-mode
         /// </summary>
@@ -265,6 +270,7 @@ namespace PictureRubber
             }
             this.m_PictureTextures = null;
             this.m_PictureTextures = textures;
+            this.m_Root.Pictures.Textures = this.m_PictureTextures;
         }
 
         /// <summary>
