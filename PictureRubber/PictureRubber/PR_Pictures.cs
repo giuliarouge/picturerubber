@@ -34,7 +34,7 @@ namespace PictureRubber
 
         private PR_OverlayButtons m_OverlayButtons;
 
-        private PR_VideoBackground m_Background;
+        //private PR_VideoBackground m_Background;
 
         /// <summary>
         /// Initializes a new Instance of PR_Pictures
@@ -94,6 +94,14 @@ namespace PictureRubber
             set
             {
                 this.m_Textures = value;
+            }
+        }
+
+        public PR_OverlayButtons getOverlayButtons
+        {
+            get
+            {
+                return this.m_OverlayButtons;
             }
         }
 
