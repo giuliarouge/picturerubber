@@ -262,6 +262,9 @@ namespace PictureRubber
             this.m_ModelTexture = this.m_BlankTexture;
         }
 
+        /// <summary>
+        /// if window will be resized, the textures need to be copied otherwise they get lost
+        /// </summary>
         public void SaveTextures()
         {
             Texture2D[] textures = new Texture2D[this.m_TextureCount];
@@ -273,8 +276,8 @@ namespace PictureRubber
                 textures[count] = new Texture2D(this.m_Root.GraphicsDevice,texture.Width,texture.Height);
                 textures[count].SetData<Microsoft.Xna.Framework.Color>(textureData);
                 count++;
+                textureData = null;
             }
-            this.m_PictureTextures = null;
             this.m_PictureTextures = textures;
             this.m_Root.Pictures.Textures = this.m_PictureTextures;
         }
