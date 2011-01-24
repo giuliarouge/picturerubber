@@ -206,6 +206,7 @@ namespace PictureRubber
             {
                 case 0:
                     //Resolution 640x480
+                    this.m_Root.Gestures.SaveTextures();
                     this.m_Root.m_Graphics.PreferredBackBufferWidth = 640;
                     this.m_Root.m_Graphics.PreferredBackBufferHeight = 480;
                     this.m_Root.m_Graphics.ApplyChanges();
@@ -215,6 +216,7 @@ namespace PictureRubber
                     break;
                 case 1:
                     //Resolution 800x600
+                    this.m_Root.Gestures.SaveTextures();
                     this.m_Root.m_Graphics.PreferredBackBufferWidth = 800;
                     this.m_Root.m_Graphics.PreferredBackBufferHeight = 600;
                     this.m_Root.m_Graphics.ApplyChanges();
@@ -224,6 +226,7 @@ namespace PictureRubber
                     break;
                 case 2:
                     //Resolution 1024x768
+                    this.m_Root.Gestures.SaveTextures();
                     this.m_Root.m_Graphics.PreferredBackBufferWidth = 1024;
                     this.m_Root.m_Graphics.PreferredBackBufferHeight = 768;
                     this.m_Root.m_Graphics.ApplyChanges();

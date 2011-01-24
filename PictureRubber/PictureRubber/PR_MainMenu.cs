@@ -134,8 +134,8 @@ namespace PictureRubber
 
                 this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                 Rectangle rec = new Rectangle(0, 0, this.m_Root.GraphicsDevice.Viewport.Width, this.m_Root.GraphicsDevice.Viewport.Height);
-
                 this.m_Root.m_SpriteBatch.Draw(m_MenuFrame, rec, Microsoft.Xna.Framework.Color.White);
+                this.m_Root.m_SpriteBatch.Draw(m_rubber_glow, rec, new Color(255, 255, 255, (int)(this.m_BlinkValue * 255)));
                 bool intersects = false;
                 for (int i = 0; i < this.m_MenuEntrys.Length; ++i)
                 {

@@ -86,6 +86,8 @@ namespace PictureRubber
 
         void sessionManager_PrimaryPointUpdate(object sender, HandPointContextEventArgs e)
         {
+            this.m_BeforeLastPosition = this.m_LastPosition;
+            this.m_LastPosition = this.m_CurrentPosition;
             this.m_CurrentPosition.X = (int)((System.Windows.SystemParameters.PrimaryScreenWidth / 2 ) + e.HPC.Position.X);
             this.m_CurrentPosition.Y = (int)((System.Windows.SystemParameters.PrimaryScreenHeight / 2) + e.HPC.Position.Y * -1);
             float z = e.HPC.Position.Z;
@@ -94,8 +96,7 @@ namespace PictureRubber
             this.m_CurrentPosition = (this.m_CurrentPosition + this.m_BeforeLastPosition + this.m_LastPosition) / 3;
             PR_Glove.SetCursorPos((int)this.m_CurrentPosition.X, (int)this.m_CurrentPosition.Y);
             this.CurrentZ = (int)z;
-            this.m_BeforeLastPosition = this.m_LastPosition;
-            this.m_LastPosition = this.m_CurrentPosition;
+            
         }
 
         void sessionManager_PrimaryPointDestroy(object sender, PointDestroyEventArgs e)
@@ -126,7 +127,10 @@ namespace PictureRubber
         {
             get
             {
-                return this.m_CurrentZValue;
+                if (is_HandRecognized)
+                    return this.m_CurrentZValue;
+                else
+                    return 0;
             }
             set
             {
