@@ -17,7 +17,7 @@ namespace PictureRubber
         private Rectangle m_WaveRect;
         private Rectangle m_MenuRect;
         private Rectangle m_ResetRect;
-        private PR_Nite nite;
+        private PR_Nite m_Nite;
 
         private int m_MenuAlpha;
         private int m_ResetAlpha;
@@ -30,6 +30,7 @@ namespace PictureRubber
             this.m_MenuButton = this.m_Root.Content.Load<Texture2D>("menu\\menu");
             this.m_ResetButton = this.m_Root.Content.Load<Texture2D>("menu\\refresh");
             this.m_WaveAdvice = this.m_Root.Content.Load<Texture2D>("menu\\wave");
+            this.m_Nite = this.m_Root.Kinect;
 
             this.RescaleButtons();
             this.m_MenuAlpha = 0;
@@ -95,7 +96,6 @@ namespace PictureRubber
 
         public void RescaleButtons()
         {
-            nite = new PR_Nite();
             float value = this.m_Root.GraphicsDevice.Viewport.Width / 1600f;
             Point ResetPosition = new Point(0, 0);
             Point MenuPosition = new Point(1600 - this.m_MenuButton.Width, 0);
@@ -111,14 +111,19 @@ namespace PictureRubber
         public void Draw()
         {
             this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            if (nite.is_HandRecognized)
+            if (this.m_Root.m_IsKinectConnected && this.m_Nite.is_HandRecognized)
             {
                 this.m_Root.m_SpriteBatch.Draw(this.m_MenuButton, this.m_MenuRect, new Color(255, 255, 255, this.m_MenuAlpha));
                 this.m_Root.m_SpriteBatch.Draw(this.m_ResetButton, this.m_ResetRect, new Color(255, 255, 255, this.m_ResetAlpha));
             }
-            else
+            else if (this.m_Root.m_IsKinectConnected)
             {
                 this.m_Root.m_SpriteBatch.Draw(this.m_WaveAdvice, m_WaveRect, new Color(255, 255, 255, 200));
+            }
+            else
+            {
+                this.m_Root.m_SpriteBatch.Draw(this.m_MenuButton, this.m_MenuRect, new Color(255, 255, 255, this.m_MenuAlpha));
+                this.m_Root.m_SpriteBatch.Draw(this.m_ResetButton, this.m_ResetRect, new Color(255, 255, 255, this.m_ResetAlpha));
             }
             this.m_Root.m_SpriteBatch.End();
         }

@@ -250,6 +250,21 @@ namespace PictureRubber
                 this.m_Root.GraphicsDevice.Viewport.Width,
                 this.m_Root.GraphicsDevice.Viewport.Height);
             this.m_ModelTexture = this.m_BlankTexture;
+            this.SaveTextures();
+        }
+
+        private void SaveTextures()
+        {
+            Texture2D[] textures = new Texture2D[this.m_TextureCount];
+            int count = 0;
+            foreach (Texture2D texture in this.m_PictureTextures)
+            {
+                Microsoft.Xna.Framework.Color[] textureData = new Color[texture.Width * texture.Height];
+                texture.GetData<Microsoft.Xna.Framework.Color>(textureData);
+                textures[count].SetData<Microsoft.Xna.Framework.Color>(textureData);
+            }
+            this.m_PictureTextures = null;
+            this.m_PictureTextures = textures;
         }
 
         /// <summary>
