@@ -34,7 +34,7 @@ namespace PictureRubber
 
         private PR_OverlayButtons m_OverlayButtons;
 
-        //private PR_VideoBackground m_Background;
+        private PR_VideoBackground m_Background;
 
         /// <summary>
         /// Initializes a new Instance of PR_Pictures
@@ -57,7 +57,7 @@ namespace PictureRubber
                 }
             }
             this.m_OverlayButtons = new PR_OverlayButtons();
-            //this.m_Background = new PR_VideoBackground("intro");
+            this.m_Background = new PR_VideoBackground("intro");
             //this.m_Pictures = null;
             //GC.Collect();
             
@@ -183,7 +183,7 @@ namespace PictureRubber
         /// <param name="_gameTime"></param>
         public void Draw(GameTime _gameTime)
         {
-            //this.m_Background.Draw(_gameTime);
+            this.m_Background.Draw(_gameTime);
             this.m_Root.m_SpriteBatch.Begin();
             Microsoft.Xna.Framework.Rectangle rec = new Microsoft.Xna.Framework.Rectangle(
                 0,
