@@ -26,7 +26,7 @@ namespace PictureRubber
         private Vector2 m_LastPosition;
         private Vector2 m_BeforeLastPosition;
         private Vector2 m_CurrentPosition;
-
+       
         public void NiteInitialize()
         {
             this.shouldRun = true;
@@ -40,6 +40,7 @@ namespace PictureRubber
             m_Context.Init();
 
             m_PointDenoiser = new XnMPointDenoiser();
+            m_PointDenoiser.FarRatio = 0.3f;
             m_PointDenoiser.PrimaryPointCreate += new EventHandler<PrimaryPointCreateEventArgs>(sessionManager_PrimaryPointCreate);
             m_PointDenoiser.PrimaryPointUpdate += new EventHandler<HandPointContextEventArgs>(sessionManager_PrimaryPointUpdate);
             m_PointDenoiser.PrimaryPointDestroy += new EventHandler<PointDestroyEventArgs>(sessionManager_PrimaryPointDestroy);
