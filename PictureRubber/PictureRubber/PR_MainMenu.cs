@@ -137,8 +137,6 @@ namespace PictureRubber
                 this.m_Root.m_SpriteBatch.Draw(m_MenuFrame, rec, Microsoft.Xna.Framework.Color.White);
                 this.m_Root.m_SpriteBatch.Draw(m_rubber_glow, rec, new Color(255, 255, 255, (int)(this.m_BlinkValue * 255)));
                 bool intersects = false;
-                if (!m_Root.m_IsKinectConnected || m_Root.Kinect.is_HandRecognized)
-                {
                     for (int i = 0; i < this.m_MenuEntrys.Length; ++i)
                     {
                         if (m_MenuEntrys[i].Intersects(mousePosition))
@@ -165,13 +163,6 @@ namespace PictureRubber
                     {
                         this.ClearUpCounter();
                     }
-                }
-                else
-                {
-                    this.m_Root.m_SpriteBatch.End();
-                    this.m_Root.Pictures.getOverlayButtons.Draw();
-                    this.m_Root.m_SpriteBatch.Begin();
-                }
                 this.m_Root.m_SpriteBatch.End();
             }
         }

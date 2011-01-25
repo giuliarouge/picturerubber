@@ -126,7 +126,7 @@ namespace PictureRubber
         {
             this.m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            this.m_PlayIntro = false;
+            this.m_PlayIntro = true;
             this.m_CreateMouseTexture = false;
             this.m_IsGestureRunning = false;
             this.m_InitBlankTexture = true;

@@ -159,8 +159,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="waiting_logo_part.png">
-      <Name>waiting_logo_part</Name>
+    <Compile Include="black.png">
+      <Name>black</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

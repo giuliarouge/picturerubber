@@ -100,13 +100,20 @@ namespace PictureRubber
             if (this.m_Visible)
             {
                 this.m_Background.Draw(_gameTime);
-                if (this.m_MainMenu.m_Visible)
+                if (!m_Root.m_IsKinectConnected || m_Root.Kinect.is_HandRecognized)
                 {
-                    this.m_MainMenu.Draw(_gameTime);
+                    if (this.m_MainMenu.m_Visible)
+                    {
+                        this.m_MainMenu.Draw(_gameTime);
+                    }
+                    if (this.m_OptionsVisible)
+                    {
+                        this.m_OptionsMenu.Draw(_gameTime);
+                    }
                 }
-                if (this.m_OptionsVisible)
+                else
                 {
-                    this.m_OptionsMenu.Draw(_gameTime);
+                    this.m_Root.Pictures.getOverlayButtons.Draw();
                 }
             }
         }

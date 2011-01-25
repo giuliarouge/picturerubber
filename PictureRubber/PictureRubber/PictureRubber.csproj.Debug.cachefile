@@ -16,7 +16,6 @@ Content\menu\buttons\main\optionen_pressed.xnb
 Content\menu\buttons\main\starten_normal.xnb
 Content\menu\buttons\main\starten_over.xnb
 Content\menu\buttons\main\starten_pressed.xnb
-Content\waiting_logo_part.xnb
 Content\menu\background_rainy.xnb
 Content\menu\menu_frame_rainy.xnb
 Content\waiting_logo_part_rainy.xnb
@@ -53,6 +52,7 @@ Content\AlphaFader.xnb
 Content\DynamicMouse.xnb
 Content\intro.xnb
 Content\Arial.xnb
+Content\black.xnb
 Content\intro.wmv
 data\openni.xml
 Images\1.jpg
