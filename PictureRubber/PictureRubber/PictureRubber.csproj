@@ -159,7 +159,9 @@
     <Content Include="Images\5.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ManagedNite.dll" />
+    <Content Include="ManagedNite.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Readme.txt" />
     <None Include="App.config">
       <SubType>Designer</SubType>

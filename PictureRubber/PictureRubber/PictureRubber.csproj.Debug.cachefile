@@ -54,11 +54,11 @@ Content\DynamicMouse.xnb
 Content\intro.xnb
 Content\Arial.xnb
 Content\intro.wmv
-CLNUIDevice.dll
 data\openni.xml
-Images\001.png
-Images\002.png
-Images\003.png
-Images\004.png
-Images\005.png
+Images\1.jpg
+Images\2.jpg
+Images\3.jpg
+Images\4.jpg
+Images\5.jpg
+ManagedNite.dll
 App.config
