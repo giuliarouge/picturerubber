@@ -18,7 +18,7 @@ namespace PictureRubber
         /// <summary>
         /// specify the alphaamount for alphafader-shader
         /// </summary>
-        private const int c_AlphaAmount = 100;
+        private const int c_AlphaAmount = 255;
 
         /// <summary>
         /// the gap a user needs to go forward to rub areas (in mm)
