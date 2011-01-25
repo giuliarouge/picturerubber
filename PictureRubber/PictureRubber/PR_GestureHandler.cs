@@ -134,7 +134,7 @@ namespace PictureRubber
             //draw a path, where the user wants to delete something of the image
             this.m_Root.m_SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             this.m_Root.m_SpriteBatch.Draw(this.m_ModelTexture,
-                new Rectangle(0, 0, this.m_ModelTexture.Width, this.m_ModelTexture.Height),
+                 new Rectangle(0, 0, this.m_ModelTexture.Width, this.m_ModelTexture.Height),
                 new Color(0, 0, 0, c_PathAlpha));
             this.m_Root.m_SpriteBatch.End();
         }
